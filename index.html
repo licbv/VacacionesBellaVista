@@ -62,9 +62,6 @@ h3 { margin: 0 0 14px; font-size: 15px; color: var(--pers-navy); font-weight: 70
 .kp b { display: block; font-size: 24px; color: var(--pers-navy); font-weight: 800; line-height: 1.2; }
 .kp span { color: var(--pers-muted); font-size: 12px; font-weight: 500; }
 
-.two { display: grid; grid-template-columns: 1fr 320px; gap: 16px; }
-@media (max-width: 1100px) { .two { grid-template-columns: 1fr; } }
-
 /* Tabla Heatmap */
 .wrap { overflow: auto; max-height: 70vh; border-radius: 10px; border: 1px solid var(--pers-border); }
 table { border-collapse: separate; border-spacing: 0; width: 100%; }
@@ -113,7 +110,7 @@ input[type=text], select { border: 1px solid var(--pers-border); background: #ff
 .tb input { width: 100%; }
 .item-box { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; background: #F8FAFC; padding: 8px 12px; border-radius: 8px; }
 
-.tech-detail { background: #F0FDFA; border: 1px solid #99F6E4; padding: 12px; border-radius: 8px; margin-top: 10px; }
+.tech-detail { background: #F0FDFA; border: 1px solid #99F6E4; padding: 16px; border-radius: 12px; }
 ol { margin: 0; padding-left: 18px; }
 li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
 li:hover { color: var(--pers-blue); }
@@ -321,7 +318,7 @@ function dash(){
     .map(([c,i]) => `<li onclick="SEL=${i};render()"><b>Semana del ${lab(W[i])}</b><br><span style="color:var(--pers-blue);font-weight:700">${c} técnicos</span> (${Math.round(c/N*100)}% del total)</li>`).join('')
     || '<li>Sin vacaciones programadas en este año.</li>';
 
-  const det = SEL == null ? '' : `<div class="card tech-detail"><h3>Detalle Semana ${lab(W[SEL])} (${DIST === 'ALL' ? 'Todos los Distritos' : 'Distrito ' + e(DIST)})</h3>${
+  const det = SEL == null ? '' : `<div class="card tech-detail" style="margin:0"><h3>Detalle Semana ${lab(W[SEL])} (${DIST === 'ALL' ? 'Todos los Distritos' : 'Distrito ' + e(DIST)})</h3>${
     activeOffices.map(o => {
       const n = activeTechs.filter(t => t.o === o.n && t.w.includes(K[SEL]));
       return n.length ? `<p style="margin:4px 0"><b>${e(o.n)}</b> [${e(o.d)}] (${n.length}):${n.map(t => `<span class="wk-chip">${e(t.n)}</span>`).join(' ')}</p>` : '';
@@ -344,51 +341,57 @@ function dash(){
     <div class="card" style="border-left-color:${over ? 'var(--danger)' : 'var(--pers-cyan)'}"><b>${over}</b><span>Semanas s/ umbral (${S.u}%)</span></div>
   </div>
 
-  <div class="two">
-    <div class="card">
-      <h3>Matriz de Ausentismo por Oficina (${S.y})</h3>
-      <div class="wrap">
-        <table class="hm">
-          <thead>
-            <tr><th class="r" rowspan="2">Oficina / Distrito</th>${mh(W)}<th class="m" rowspan="2">Σ Total</th></tr>
-            <tr>${W.map(t=>`<th title="${lab(t)}">${fmt(t)}</th>`).join('')}</tr>
-          </thead>
-          <tbody>
-            ${R.map(r=>`
-              <tr>
-                <th class="r">
-                  ${e(r.o)}${DIST==='ALL'?`<span class="badge-dist">${e(r.d)}</span>`:''}
-                  <small>${r.n} téc.</small>
-                </th>
-                ${r.c.map((c,i)=>cell(c, r.n, `${r.o} [${r.d}]: ${c}/${r.n} téc. (${r.n?Math.round(c/r.n*100):0}%) · ${lab(W[i])}`, -1)).join('')}
-                <th>${r.c.reduce((a,b)=>a+b,0)}</th>
-              </tr>
-            `).join('')}
-          </tbody>
-          <tfoot>
-            <tr class="district-total">
-              <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL SELECCIÓN <small style="color:#A5B4FC">${calcTechs.length}</small></th>
-              ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
-              <th style="background:var(--pers-navy); color:#fff">${sum}</th>
+  <div class="card">
+    <h3>Matriz de Ausentismo por Oficina (${S.y})</h3>
+    <div class="wrap">
+      <table class="hm">
+        <thead>
+          <tr><th class="r" rowspan="2">Oficina / Distrito</th>${mh(W)}<th class="m" rowspan="2">Σ Total</th></tr>
+          <tr>${W.map(t=>`<th title="${lab(t)}">${fmt(t)}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          ${R.map(r=>`
+            <tr>
+              <th class="r">
+                ${e(r.o)}${DIST==='ALL'?`<span class="badge-dist">${e(r.d)}</span>`:''}
+                <small>${r.n} téc.</small>
+              </th>
+              ${r.c.map((c,i)=>cell(c, r.n, `${r.o} [${r.d}]: ${c}/${r.n} téc. (${r.n?Math.round(c/r.n*100):0}%) · ${lab(W[i])}`, -1)).join('')}
+              <th>${r.c.reduce((a,b)=>a+b,0)}</th>
             </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div class="lg">
-        <span><i style="background:#E6FAFF; border:1px solid #007799"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
-        <span><i style="background:#FEF3C7; border:1px solid #92400E"></i>Cerca del Umbral</span>
-        <span><i style="background:#FEE2E2; border:1px solid #B91C1C"></i>Alerta (&gt;${S.u}%)</span>
-        <span>Haz clic en la fila de TOTALES para ver el detalle de técnicos.</span>
-      </div>
+          `).join('')}
+        </tbody>
+        <tfoot>
+          <tr class="district-total">
+            <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL TÉCNICOS <small style="color:#A5B4FC">${calcTechs.length}</small></th>
+            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
+            <th style="background:var(--pers-navy); color:#fff">${sum}</th>
+          </tr>
+          <tr>
+            <th class="r">% Ausentismo</th>
+            ${tot.map(v=>`<td>${v ? Math.round(v/N*100)+'%' : ''}</td>`).join('')}
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
+    <div class="lg">
+      <span><i style="background:#E6FAFF; border:1px solid #007799"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
+      <span><i style="background:#FEF3C7; border:1px solid #92400E"></i>Cerca del Umbral</span>
+      <span><i style="background:#FEE2E2; border:1px solid #B91C1C"></i>Alerta (&gt;${S.u}%)</span>
+      <span>Haz clic en cualquier celda de la fila TOTAL TÉCNICOS para ver el detalle de la semana.</span>
+    </div>
+  </div>
 
-    <div>
-      <div class="card">
-        <h3>Semanas con Mayor Salida</h3>
-        <ol>${top}</ol>
-      </div>
-      ${det}
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;">
+    <div class="card" style="margin:0">
+      <h3>Semanas con Mayor Salida</h3>
+      <ol>${top}</ol>
     </div>
+    ${det ? det : `<div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:center; color:var(--pers-muted);">
+      <h3 style="color:var(--pers-navy)">Detalle de Semana Seleccionada</h3>
+      <p style="margin:0">Haz clic en la fila de <b>TOTAL TÉCNICOS</b> en la tabla para ver qué técnicos están de vacaciones en esa semana específica.</p>
+    </div>`}
   </div>`;
 }
 
