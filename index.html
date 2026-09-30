@@ -319,7 +319,7 @@ const isExcludedOffice = o => {
 let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null;
-let hasUnsavedChanges = false; // Bandera para detectar cambios pendientes
+let hasUnsavedChanges = false;
 
 function logAction(act) {
   if (!Array.isArray(S.logs)) S.logs = [];
@@ -379,14 +379,15 @@ async function loadData(manual = false) {
       await saveData();
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
-    hasUnsavedChanges = false; // Al sincronizar se limpian los cambios pendientes
+    hasUnsavedChanges = false;
     setSyncStatus('ok', 'Sincronizado');
-    checkSavedSession();
   } catch(err) {
     console.error('Error al cargar de JSONBin:', err);
+    normalizeData();
     setSyncStatus('err', 'Sin conexión');
-    checkSavedSession();
   }
+  // Verificar sesión una vez cargados los datos
+  checkSavedSession();
 }
 
 async function saveData() {
@@ -401,7 +402,7 @@ async function saveData() {
       body: JSON.stringify(S)
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    hasUnsavedChanges = false; // Al guardar se marca como sincronizado
+    hasUnsavedChanges = false;
     setSyncStatus('ok', 'Guardado en Nube');
     setTimeout(() => setSyncStatus('ok', 'Sincronizado'), 2000);
   } catch(err) {
@@ -424,9 +425,7 @@ function checkSavedSession() {
       }
     } catch(e) {}
   }
-  if (!currentUser) {
-    showLoginUI();
-  }
+  showLoginUI();
 }
 
 function showAppUI() {
@@ -477,7 +476,6 @@ function doLogout() {
   showLoginUI();
 }
 
-// Advertir si intenta cerrar la pestaña o recargar con cambios sin guardar
 window.addEventListener('beforeunload', function (e) {
   if (hasUnsavedChanges) {
     e.preventDefault();
@@ -557,7 +555,6 @@ const cell=(c,n,tt,i,isDistrict=false)=>{
   return `<td style="background:${bg};color:${fg};${extraClass}" title="${e(tt)}" class="${SEL==i?'sel':''}" ${i>=0?`onclick="SEL=${i};render()"`:''}>${c||''}</td>`;
 };
 
-// Helper Filtros
 function getFilteredOffices() {
   return DIST === 'ALL' ? S.o : S.o.filter(o => o.d === DIST);
 }
