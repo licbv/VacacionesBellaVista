@@ -178,6 +178,7 @@ const SEED = {
 
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const isSup = o => String(o || '').trim().toLowerCase() === 'supervisores';
 
 let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
@@ -300,14 +301,19 @@ function dash(){
   const W=wk(S.y), K=W.map(iso);
   const activeOffices = getFilteredOffices();
   const activeTechs = getFilteredTechs();
-  const N = activeTechs.length || 1, u = S.u / 100;
+
+  // Excluir "Supervisores" para el cálculo general de porcentaje y dotación base
+  const calcTechs = activeTechs.filter(t => !isSup(t.o));
+  const calcOffices = activeOffices.filter(o => !isSup(o.n));
+  const N = calcTechs.length || 1, u = S.u / 100;
 
   const R = activeOffices.map(o => {
     const ts = activeTechs.filter(t => t.o === o.n);
     return { o: o.n, d: o.d, n: ts.length, c: K.map(k => ts.filter(t => t.w.includes(k)).length) };
   });
 
-  const tot = K.map((_,i) => R.reduce((a,r) => a + r.c[i], 0));
+  // Totales por semana excluyendo la oficina Supervisores
+  const tot = K.map((_,i) => R.reduce((a,r) => isSup(r.o) ? a : a + r.c[i], 0));
   const mx = Math.max(...tot), pk = tot.indexOf(mx), sum = tot.reduce((a,b) => a + b, 0);
   const over = tot.filter(x => x / N > u).length;
 
@@ -331,8 +337,8 @@ function dash(){
   </div>
 
   <div class="kp district">
-    <div class="card"><b>${activeTechs.length}</b><span>Técnicos Totales</span></div>
-    <div class="card"><b>${activeOffices.length}</b><span>Oficinas Técnicas</span></div>
+    <div class="card"><b>${calcTechs.length}</b><span>Técnicos Totales</span></div>
+    <div class="card"><b>${calcOffices.length}</b><span>Oficinas Técnicas</span></div>
     <div class="card"><b>${sum}</b><span>Semanas Asignadas (${S.y})</span></div>
     <div class="card"><b>${mx ? Math.round(mx/N*100) + '%' : '-'}</b><span>Pico Max: ${mx} téc. (${pk >= 0 ? fmt(W[pk]) : ''})</span></div>
     <div class="card" style="border-left-color:${over ? 'var(--danger)' : 'var(--pers-cyan)'}"><b>${over}</b><span>Semanas s/ umbral (${S.u}%)</span></div>
@@ -361,7 +367,7 @@ function dash(){
           </tbody>
           <tfoot>
             <tr class="district-total">
-              <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL SELECCIÓN <small style="color:#A5B4FC">${activeTechs.length}</small></th>
+              <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL SELECCIÓN <small style="color:#A5B4FC">${calcTechs.length}</small></th>
               ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
               <th style="background:var(--pers-navy); color:#fff">${sum}</th>
             </tr>
@@ -397,8 +403,11 @@ function plan(){
   }
 
   const ts = (F === 'ALL') ? activeTechs : activeTechs.filter(t => t.o === F);
-  const n = ts.length || 1;
-  const c = K.map(k => ts.filter(t => t.w.includes(k)).length);
+  
+  // Si estamos en la vista general (ALL), filtramos "Supervisores" del cálculo de totales y %
+  const calcTs = (F === 'ALL') ? ts.filter(t => !isSup(t.o)) : ts;
+  const n = calcTs.length || 1;
+  const c = K.map(k => calcTs.filter(t => t.w.includes(k)).length);
 
   return `
   <div class="tabs">
@@ -445,8 +454,8 @@ function plan(){
         </tbody>
         <tfoot>
           <tr>
-            <th class="r">Técnicos de Vacaciones<small>${ts.length} total</small></th>
-            ${c.map((v,i)=>cell(v, ts.length, `${v}/${ts.length} téc. · ${lab(W[i])}`, -1)).join('')}
+            <th class="r">Técnicos de Vacaciones<small>${calcTs.length} total</small></th>
+            ${c.map((v,i)=>cell(v, calcTs.length, `${v}/${calcTs.length} téc. · ${lab(W[i])}`, -1)).join('')}
             <th>${c.reduce((a,b)=>a+b,0)}</th>
           </tr>
           <tr>
@@ -683,13 +692,10 @@ function imp(i){
 }
 
 function init(){
-  normalizeData();
   loadData();
 }
 
-setInterval(() => loadData(false), 30000);
-
-init();
+window.onload = init;
 </script>
 </body>
 </html>
