@@ -304,7 +304,7 @@ function dash(){
   const activeOffices = getFilteredOffices();
   const activeTechs = getFilteredTechs();
 
-  // Excluir "Supervisores" e itinerantes/especiales ("ms*") del cálculo general de % y dotación
+  // Excluir "Supervisores" e itinerantes/especiales ("ms*") del cálculo general
   const calcTechs = activeTechs.filter(t => !isExcludedOffice(t.o));
   const calcOffices = activeOffices.filter(o => !isExcludedOffice(o.n));
   const N = calcTechs.length || 1, u = S.u / 100;
@@ -314,7 +314,6 @@ function dash(){
     return { o: o.n, d: o.d, n: ts.length, c: K.map(k => ts.filter(t => t.w.includes(k)).length) };
   });
 
-  // Totales por semana excluyendo oficinas omitidas
   const tot = K.map((_,i) => R.reduce((a,r) => isExcludedOffice(r.o) ? a : a + r.c[i], 0));
   const mx = Math.max(...tot), pk = tot.indexOf(mx), sum = tot.reduce((a,b) => a + b, 0);
   const over = tot.filter(x => x / N > u).length;
@@ -416,8 +415,6 @@ function plan(){
   }
 
   const ts = (F === 'ALL') ? activeTechs : activeTechs.filter(t => t.o === F);
-  
-  // Si estamos en la vista general (ALL), filtramos "Supervisores" y "ms*" del cálculo
   const calcTs = (F === 'ALL') ? ts.filter(t => !isExcludedOffice(t.o)) : ts;
   const n = calcTs.length || 1;
   const c = K.map(k => calcTs.filter(t => t.w.includes(k)).length);
@@ -582,9 +579,34 @@ function render(){
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
-function tog(id,k){
-  const t=S.t.find(t=>t.id==id), i=t.w.indexOf(k);
-  if(i<0) t.w.push(k); else t.w.splice(i,1);
+/* FUNCION TOGGLE CON CONTROL DE LÍMITES (MÁX 2 POR OFICINA / MÁX 9 GENERAL) */
+function tog(id, k){
+  const t = S.t.find(t => t.id == id);
+  if (!t) return;
+  const i = t.w.indexOf(k);
+
+  if (i < 0) {
+    // Si la oficina no está excluida (no es 'Supervisores' ni arranca con 'ms'), aplicamos las restricciones
+    if (!isExcludedOffice(t.o)) {
+      // 1. Límite de máximo 2 técnicos por oficina en la misma semana
+      const officeCount = S.t.filter(x => x.o === t.o && x.w.includes(k)).length;
+      if (officeCount >= 2) {
+        alert(`⚠️ Límite por Oficina Alcanzado:\nLa oficina "${t.o}" ya tiene 2 técnicos en vacaciones en esta semana.`);
+        return;
+      }
+
+      // 2. Límite de máximo 9 técnicos simultáneos a nivel general
+      const globalCount = S.t.filter(x => !isExcludedOffice(x.o) && x.w.includes(k)).length;
+      if (globalCount >= 9) {
+        alert(`⚠️ Límite General Alcanzado:\nSe ha alcanzado el cupo máximo de 9 técnicos simultáneos en vacaciones para esta semana (excluyendo Supervisores y MS).`);
+        return;
+      }
+    }
+    t.w.push(k);
+  } else {
+    t.w.splice(i, 1);
+  }
+
   render();
   saveData();
 }
