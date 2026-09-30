@@ -64,6 +64,13 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Sego
 .btn-login:active { transform: translateY(1px); }
 .login-err { color: var(--danger); font-size: 12px; font-weight: 700; margin-top: 14px; display: none; background: #FEE2E2; padding: 8px; border-radius: 8px; }
 
+/* Modal de Cambio de Contraseña */
+#pwd-modal {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(11, 19, 43, 0.6); backdrop-filter: blur(4px);
+  z-index: 2000; display: none; align-items: center; justify-content: center;
+}
+
 /* Header App */
 header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
 .brand { display: flex; align-items: center; gap: 12px; margin-right: 12px; }
@@ -163,14 +170,12 @@ li:hover { color: var(--pers-blue); }
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logos">
-      <!-- Movistar SVG Logo (Fiel a imagen original) -->
       <svg width="52" height="42" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M 6,52 C 3,32 11,8 27,8 C 38,8 37,38 46,38 C 54,38 52,10 66,10 C 82,10 90,30 86,52 C 84,60 74,60 76,50 C 79,38 76,22 68,22 C 60,22 55,40 45,58 C 39,58 35,40 28,22 C 21,22 17,38 18,50 C 19,60 8,60 6,52 Z" fill="#0052FF"/>
       </svg>
 
       <div class="brand-divider"></div>
 
-      <!-- Personal SVG Logo (Fiel a imagen original) -->
       <svg width="135" height="44" viewBox="0 0 160 52" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="160" height="52" rx="6" fill="#00A3E0"/>
         <text x="80" y="35" fill="#FFFFFF" font-family="'Inter', -apple-system, Arial, sans-serif" font-weight="700" font-size="27" letter-spacing="-0.8" text-anchor="middle">personal</text>
@@ -191,6 +196,38 @@ li:hover { color: var(--pers-blue); }
       </div>
       <button type="submit" class="btn-login">Iniciar Sesión</button>
       <div id="l-err" class="login-err">Usuario o contraseña incorrectos.</div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR CONTRASEÑA -->
+<div id="pwd-modal">
+  <div class="card" style="width:380px; max-width:92%; background:#fff; padding:24px; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.3); margin:0;">
+    <h3 style="margin-top:0; color:var(--pers-navy);">🔑 Cambiar mi Contraseña</h3>
+    <p style="color:var(--pers-muted); font-size:12px; margin-top:-6px; margin-bottom:18px;">
+      Actualizá tu clave de acceso personal al sistema.
+    </p>
+
+    <form onsubmit="saveNewPwd(event)">
+      <div class="field-group">
+        <label>Contraseña Actual</label>
+        <input id="pwd-old" type="password" placeholder="Tu contraseña actual">
+      </div>
+      <div class="field-group">
+        <label>Nueva Contraseña</label>
+        <input id="pwd-new" type="password" placeholder="Ingresá la nueva clave" required>
+      </div>
+      <div class="field-group">
+        <label>Confirmar Nueva Contraseña</label>
+        <input id="pwd-confirm" type="password" placeholder="Repetí la nueva clave" required>
+      </div>
+      
+      <div id="pwd-err" style="color:var(--danger); font-weight:700; font-size:12px; background:#FEE2E2; padding:8px; border-radius:8px; margin-bottom:14px; display:none;"></div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button type="button" onclick="$('#pwd-modal').style.display='none'" style="background:#E2E8F0; color:var(--pers-navy); border:0;">Cancelar</button>
+        <button type="submit" class="btn">Guardar Clave</button>
+      </div>
     </form>
   </div>
 </div>
@@ -219,6 +256,7 @@ li:hover { color: var(--pers-blue); }
   <span class="sp"></span>
 
   <div id="u-badge" class="user-badge"></div>
+  <button onclick="openChangePwdModal()" title="Cambiar mi Contraseña">🔑 Contraseña</button>
   <button onclick="doLogout()" title="Cerrar Sesión">🚪 Salir</button>
 
   <div class="sync-badge">
@@ -237,9 +275,10 @@ li:hover { color: var(--pers-blue); }
   <label>Umbral %</label>
   <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20; saveData(); render()">
   
-  <button onclick="csv()">📥 CSV</button>
-  <button onclick="dl('vacaciones-personal.json',JSON.stringify(S),'application/json')">💾 Backup</button>
-  <button onclick="$('#fi').click()">📂 Cargar</button>
+  <!-- BOTONES EXCLUSIVOS DE ADMINISTRADORES -->
+  <button id="btn-admin-csv" onclick="csv()" style="display:none;">📥 CSV</button>
+  <button id="btn-admin-backup" onclick="dl('vacaciones-personal.json',JSON.stringify(S),'application/json')" style="display:none;">💾 Backup</button>
+  <button id="btn-admin-load" onclick="$('#fi').click()" style="display:none;">📂 Cargar</button>
   <input id="fi" type="file" accept=".json" hidden onchange="imp(this)">
 </header>
 
@@ -272,7 +311,6 @@ const SEED = {
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
-// Regla de exclusión: Supervisores u oficinas que comiencen con 'ms'
 const isExcludedOffice = o => {
   const s = String(o || '').trim().toLowerCase();
   return s === 'supervisores' || s.startsWith('ms');
@@ -280,7 +318,7 @@ const isExcludedOffice = o => {
 
 let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
-let currentUser = null; // { u: "kruki", r: "admin" }
+let currentUser = null;
 
 function logAction(act) {
   if (!Array.isArray(S.logs)) S.logs = [];
@@ -291,7 +329,7 @@ function logAction(act) {
     a: act,
     t: timestamp
   });
-  if (S.logs.length > 300) S.logs.pop(); // Mantiene los últimos 300 eventos
+  if (S.logs.length > 300) S.logs.pop();
 }
 
 function normalizeData() {
@@ -300,10 +338,12 @@ function normalizeData() {
   }
   if (!Array.isArray(S.users) || S.users.length === 0) {
     S.users = [{ u: "kruki", p: "", r: "admin" }];
+  } else {
+    if (!S.users.some(x => x.u.toLowerCase() === 'kruki')) {
+      S.users.push({ u: "kruki", p: "", r: "admin" });
+    }
   }
-  if (!Array.isArray(S.logs)) {
-    S.logs = [];
-  }
+  if (!Array.isArray(S.logs)) S.logs = [];
   if (Array.isArray(S.o)) {
     S.o = S.o.map(of => {
       if (typeof of === 'string') return { n: of, d: "Bella Vista" };
@@ -339,10 +379,11 @@ async function loadData(manual = false) {
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
     setSyncStatus('ok', 'Sincronizado');
-    if (currentUser) render();
+    checkSavedSession();
   } catch(err) {
     console.error('Error al cargar de JSONBin:', err);
     setSyncStatus('err', 'Sin conexión');
+    checkSavedSession();
   }
 }
 
@@ -366,7 +407,38 @@ async function saveData() {
   }
 }
 
-/* LOGICA DE LOGEO */
+/* MANEJO DE SESIÓN PERSISTENTE */
+function checkSavedSession() {
+  const savedUserJson = sessionStorage.getItem('vacations_user');
+  if (savedUserJson) {
+    try {
+      const uSaved = JSON.parse(savedUserJson);
+      const found = S.users.find(x => x.u.toLowerCase() === uSaved.u.toLowerCase());
+      if (found) {
+        currentUser = found;
+        showAppUI();
+        return;
+      }
+    } catch(e) {}
+  }
+  if (!currentUser) {
+    showLoginUI();
+  }
+}
+
+function showAppUI() {
+  $('#login-screen').style.display = 'none';
+  $('#main-header').style.display = 'flex';
+  $('#app').style.display = 'block';
+  render();
+}
+
+function showLoginUI() {
+  $('#login-screen').style.display = 'flex';
+  $('#main-header').style.display = 'none';
+  $('#app').style.display = 'none';
+}
+
 function doLogin(evt) {
   evt.preventDefault();
   const uInput = $('#l-user').value.trim().toLowerCase();
@@ -375,15 +447,13 @@ function doLogin(evt) {
   normalizeData();
   const found = S.users.find(x => x.u.toLowerCase() === uInput);
 
-  if (found && found.p === pInput) {
+  if (found && (found.p || '') === pInput) {
     currentUser = found;
+    sessionStorage.setItem('vacations_user', JSON.stringify({ u: found.u }));
     logAction('Inició sesión en el sistema');
     saveData();
-    $('#login-screen').style.display = 'none';
-    $('#main-header').style.display = 'flex';
-    $('#app').style.display = 'block';
     $('#l-err').style.display = 'none';
-    render();
+    showAppUI();
   } else {
     $('#l-err').style.display = 'block';
   }
@@ -392,12 +462,53 @@ function doLogin(evt) {
 function doLogout() {
   if (currentUser) logAction('Cerró sesión');
   saveData();
+  sessionStorage.removeItem('vacations_user');
   currentUser = null;
-  $('#login-screen').style.display = 'flex';
-  $('#main-header').style.display = 'none';
-  $('#app').style.display = 'none';
   $('#l-user').value = '';
   $('#l-pass').value = '';
+  showLoginUI();
+}
+
+/* MODAL CAMBIO DE CONTRASEÑA */
+function openChangePwdModal() {
+  $('#pwd-old').value = '';
+  $('#pwd-new').value = '';
+  $('#pwd-confirm').value = '';
+  $('#pwd-err').style.display = 'none';
+  $('#pwd-modal').style.display = 'flex';
+}
+
+function saveNewPwd(evt) {
+  evt.preventDefault();
+  const oldP = $('#pwd-old').value.trim();
+  const newP = $('#pwd-new').value.trim();
+  const confP = $('#pwd-confirm').value.trim();
+  const errDiv = $('#pwd-err');
+
+  if (currentUser.p && oldP !== currentUser.p) {
+    errDiv.textContent = 'La contraseña actual no es correcta.';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (!newP) {
+    errDiv.textContent = 'La nueva contraseña no puede estar vacía.';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (newP !== confP) {
+    errDiv.textContent = 'Las nuevas contraseñas no coinciden.';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  currentUser.p = newP;
+  const uObj = S.users.find(x => x.u.toLowerCase() === currentUser.u.toLowerCase());
+  if (uObj) uObj.p = newP;
+
+  logAction('Cambió su propia contraseña');
+  saveData();
+  $('#pwd-modal').style.display = 'none';
+  alert('✅ Contraseña actualizada correctamente.');
 }
 
 const wk=y=>{ let d=Date.UTC(y,0,1); while(new Date(d).getUTCDay()!=1) d+=864e5; return [...Array(52)].map((_,i)=>d+i*6048e5); };
@@ -513,7 +624,7 @@ function dash(){
         <tfoot>
           <tr class="district-total">
             <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL TÉCNICOS <small style="color:#A5B4FC">${calcTechs.length}</small></th>
-            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
+            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)\%) ·${lab(W[i])}`, i, true)).join('')}
             <th style="background:var(--pers-navy); color:#fff">${sum}</th>
           </tr>
           <tr>
@@ -875,6 +986,11 @@ function renderHeaderSelects(){
     $('#u-badge').innerHTML = `👤 ${e(currentUser.u)} <span class="role-chip">${e(currentUser.r)}</span>`;
     $('#btn-u-nav').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-l-nav').style.display = isAdm ? 'inline-flex' : 'none';
+    
+    // Ocultar o mostrar botones de CSV, Backup y Cargar según el rol
+    $('#btn-admin-csv').style.display = isAdm ? 'inline-flex' : 'none';
+    $('#btn-admin-backup').style.display = isAdm ? 'inline-flex' : 'none';
+    $('#btn-admin-load').style.display = isAdm ? 'inline-flex' : 'none';
   }
 }
 
