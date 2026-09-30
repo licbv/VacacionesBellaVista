@@ -386,7 +386,6 @@ async function loadData(manual = false) {
     setSyncStatus('err', 'Sin conexión');
   }
   
-  // Refrescar vistas si ya está logueado
   if (currentUser) {
     render();
   }
@@ -424,13 +423,13 @@ function checkSavedSession() {
       if (found) {
         currentUser = found;
         showAppUI();
-        loadData(); // Cargar datos actualizados en segundo plano
+        loadData();
         return;
       }
     } catch(e) {}
   }
   showLoginUI();
-  loadData(); // Cargar datos en segundo plano mientras está en login
+  loadData();
 }
 
 function showAppUI() {
@@ -460,7 +459,7 @@ function doLogin(evt) {
     logAction('Inició sesión en el sistema');
     $('#l-err').style.display = 'none';
     showAppUI();
-    saveData(); // Guardar en nube de forma asíncrona sin bloquear el login
+    saveData();
   } else {
     $('#l-err').style.display = 'block';
   }
@@ -646,7 +645,7 @@ function dash(){
         <tfoot>
           <tr class="district-total">
             <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL TÉCNICOS <small style="color:#A5B4FC">${calcTechs.length}</small></th>
-            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)\%) ·${lab(W[i])}`, i, true)).join('')}
+            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
             <th style="background:var(--pers-navy); color:#fff">${sum}</th>
           </tr>
           <tr>
@@ -965,7 +964,7 @@ function logView() {
   <div class="card">
     <h3>
       <span>📋 Historial de Actividad y Auditoría (${logs.length} registros)</span>
-      <button class="del" onclick="clearLogs()">🗑️ Limpiar Historial</button>
+      <button class="del" onclick="clearLogs()">🗑️️ Limpiar Historial</button>
     </h3>
     <p style="color:var(--pers-muted); margin-top:-8px; margin-bottom:16px;">
       Registro de auditoría en tiempo real de todas las acciones, asignaciones y modificaciones realizadas por los usuarios.
