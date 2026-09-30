@@ -29,45 +29,47 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Sego
 /* Pantalla de Login */
 #login-screen {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: linear-gradient(135deg, #0B132B 0%, #1E293B 50%, #002244 100%);
+  background: radial-gradient(circle at 50% 20%, #1E293B 0%, #0B132B 70%, #030712 100%);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
 .login-box {
-  background: #ffffff; border-radius: 20px; padding: 36px; width: 380px; max-width: 90%;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px; padding: 40px 36px; width: 420px; max-width: 90%;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 30px rgba(0, 210, 255, 0.15);
+  text-align: center;
 }
-.login-logos { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; }
-.logo-badge {
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 18px; color: #fff; padding: 8px 16px; border-radius: 12px;
+
+.login-logos {
+  display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 24px;
 }
-.logo-movistar { background: linear-gradient(135deg, #00B140 0%, #00802B 100%); box-shadow: 0 4px 10px rgba(0,177,64,0.3); }
-.logo-personal { background: linear-gradient(135deg, #00D2FF 0%, #0052FF 100%); box-shadow: 0 4px 10px rgba(0,210,255,0.3); }
+.brand-divider {
+  width: 1px; height: 36px; background: var(--pers-border); opacity: 0.8;
+}
 
-.login-box h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; color: var(--pers-navy); }
-.login-box p { margin: 0 0 24px; font-size: 13px; color: var(--pers-muted); }
+.login-box h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; color: var(--pers-navy); letter-spacing: -0.5px; }
+.login-box p { margin: 0 0 26px; font-size: 13px; color: var(--pers-muted); }
 
-.field-group { text-align: left; margin-bottom: 16px; }
-.field-group label { display: block; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; color: var(--pers-navy); }
-.field-group input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--pers-border); font-size: 13px; }
-.field-group input:focus { outline: none; border-color: var(--pers-blue); box-shadow: 0 0 0 3px rgba(0,82,255,0.15); }
+.field-group { text-align: left; margin-bottom: 18px; }
+.field-group label { display: block; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; color: var(--pers-navy); letter-spacing: 0.5px; }
+.field-group input { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--pers-border); font-size: 13px; transition: all 0.2s; }
+.field-group input:focus { outline: none; border-color: var(--pers-blue); box-shadow: 0 0 0 3px rgba(0,82,255,0.18); }
 
 .btn-login {
-  width: 100%; padding: 12px; border: 0; border-radius: 12px;
-  background: linear-gradient(135deg, var(--pers-blue) 0%, #0032B3 100%);
+  width: 100%; padding: 13px; border: 0; border-radius: 12px;
+  background: linear-gradient(135deg, var(--pers-blue) 0%, #0036B3 100%);
   color: #fff; font-weight: 800; font-size: 14px; cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,82,255,0.3); transition: transform 0.1s, filter 0.1s;
+  box-shadow: 0 4px 14px rgba(0,82,255,0.35); transition: all 0.15s ease; margin-top: 6px;
 }
-.btn-login:hover { filter: brightness(1.1); }
-.btn-login:active { transform: scale(0.98); }
-.login-err { color: var(--danger); font-size: 12px; font-weight: 700; margin-top: 14px; display: none; }
+.btn-login:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-login:active { transform: translateY(1px); }
+.login-err { color: var(--danger); font-size: 12px; font-weight: 700; margin-top: 14px; display: none; background: #FEE2E2; padding: 8px; border-radius: 8px; }
 
 /* Header App */
-header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
-.brand { display: flex; align-items: center; gap: 10px; margin-right: 15px; }
-.brand-logos-sm { display: flex; gap: 6px; }
-.brand-sm { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #fff; }
-h1 { font-size: 18px; margin: 0; font-weight: 800; letter-spacing: -0.4px; }
+header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
+.brand { display: flex; align-items: center; gap: 12px; margin-right: 12px; }
+.brand-logos-hdr { display: flex; align-items: center; gap: 8px; }
+h1 { font-size: 17px; margin: 0; font-weight: 800; letter-spacing: -0.4px; color: #fff; }
 
 /* Botones & Controls */
 button, select, input { font-family: inherit; font-size: 12px; border: 1px solid var(--pers-border); border-radius: 20px; padding: 6px 14px; transition: all .15s ease; }
@@ -162,11 +164,43 @@ li:hover { color: var(--pers-blue); }
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logos">
-      <div class="logo-badge logo-movistar">M</div>
-      <div class="logo-badge logo-personal">personal</div>
+      <!-- Movistar SVG Logo -->
+      <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="moviGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#80E310"/>
+            <stop offset="50%" stop-color="#00B140"/>
+            <stop offset="100%" stop-color="#007A29"/>
+          </linearGradient>
+          <filter id="glowMovi" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#00B140" flood-opacity="0.4"/>
+          </filter>
+        </defs>
+        <rect width="64" height="64" rx="16" fill="#0B132B"/>
+        <path d="M 14,46 C 13,32 17,18 25,18 C 32,18 31,38 35,38 C 39,38 38,18 45,18 C 53,18 55,32 52,46 C 51,51 45,51 46,44 C 48,34 47,26 44,26 C 41,26 39,38 34,48 C 30,48 28,34 25,26 C 22,26 20,34 21,44 C 22,51 15,51 14,46 Z" fill="url(#moviGrad)" filter="url(#glowMovi)"/>
+      </svg>
+
+      <div class="brand-divider"></div>
+
+      <!-- Personal SVG Logo -->
+      <svg width="130" height="46" viewBox="0 0 160 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="persGrad" x1="0" y1="0" x2="160" y2="52" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00E5FF"/>
+            <stop offset="100%" stop-color="#0052FF"/>
+          </linearGradient>
+          <filter id="glowPers" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#00D2FF" flood-opacity="0.35"/>
+          </filter>
+        </defs>
+        <rect width="160" height="52" rx="14" fill="url(#persGrad)" filter="url(#glowPers)"/>
+        <text x="76" y="34" fill="#FFFFFF" font-family="'Inter', system-ui, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.8" text-anchor="middle">personal</text>
+        <circle cx="134" cy="22" r="3.5" fill="#00FFD1"/>
+      </svg>
     </div>
+
     <h2>Sistema de Vacaciones</h2>
-    <p>Ingresá tus credenciales para continuar</p>
+    <p>Ingresá tus credenciales de acceso</p>
 
     <form onsubmit="doLogin(event)">
       <div class="field-group">
@@ -186,9 +220,22 @@ li:hover { color: var(--pers-blue); }
 <!-- HEADER DE LA APLICACIÓN -->
 <header id="main-header" style="display:none;">
   <div class="brand">
-    <div class="brand-logos-sm">
-      <div class="brand-sm logo-movistar">M</div>
-      <div class="brand-sm logo-personal">p</div>
+    <div class="brand-logos-hdr">
+      <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
+        <rect width="64" height="64" rx="14" fill="#0B132B"/>
+        <path d="M 14,46 C 13,32 17,18 25,18 C 32,18 31,38 35,38 C 39,38 38,18 45,18 C 53,18 55,32 52,46 C 51,51 45,51 46,44 C 48,34 47,26 44,26 C 41,26 39,38 34,48 C 30,48 28,34 25,26 C 22,26 20,34 21,44 C 22,51 15,51 14,46 Z" fill="#00B140"/>
+      </svg>
+      <svg width="78" height="30" viewBox="0 0 160 52" fill="none">
+        <rect width="160" height="52" rx="12" fill="url(#hdrPersGrad)"/>
+        <defs>
+          <linearGradient id="hdrPersGrad" x1="0" y1="0" x2="160" y2="52" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00D2FF"/>
+            <stop offset="100%" stop-color="#0052FF"/>
+          </linearGradient>
+        </defs>
+        <text x="76" y="34" fill="#FFFFFF" font-family="'Inter', system-ui, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.8" text-anchor="middle">personal</text>
+        <circle cx="134" cy="22" r="3.5" fill="#00FFD1"/>
+      </svg>
     </div>
     <h1>Sistema de Vacaciones</h1>
   </div>
@@ -332,7 +379,7 @@ async function saveData() {
   }
 }
 
-/* --- LOGICA DE AUTENTICACION Y LOGGEO --- */
+/* LOGICA DE LOGEO */
 function doLogin(evt) {
   evt.preventDefault();
   const uInput = $('#l-user').value.trim().toLowerCase();
@@ -768,7 +815,6 @@ function renderHeaderSelects(){
   $('#ys').innerHTML = [2026,2027,2028,2029,2030].map(y => `<option ${y==S.y?'selected':''}>${y}</option>`).join('');
   $('#u').value = S.u;
 
-  // Header User Badge & Admin Navigation
   if (currentUser) {
     const isAdm = currentUser.r === 'admin';
     $('#u-badge').innerHTML = `👤 ${e(currentUser.u)} <span class="role-chip">${e(currentUser.r)}</span>`;
