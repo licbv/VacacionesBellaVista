@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestión de Vacaciones - Movistar - Personal</title>
+<title>Sistema de Vacaciones - Movistar / Personal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -18,18 +18,55 @@
   --pers-text: #0F172A;
   --pers-muted: #64748B;
   --pers-border: #E2E8F0;
+  --movi-green: #00B140;
   --danger: #EF4444;
   --warning: #F59E0B;
   --pers-green: #10B981;
-  --pers-green-bg: #ECFDF5;
 }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--pers-bg); color: var(--pers-text); font-size: 13px; }
 
-/* Header Personal */
+/* Pantalla de Login */
+#login-screen {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: linear-gradient(135deg, #0B132B 0%, #1E293B 50%, #002244 100%);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.login-box {
+  background: #ffffff; border-radius: 20px; padding: 36px; width: 380px; max-width: 90%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center;
+}
+.login-logos { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; }
+.logo-badge {
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 18px; color: #fff; padding: 8px 16px; border-radius: 12px;
+}
+.logo-movistar { background: linear-gradient(135deg, #00B140 0%, #00802B 100%); box-shadow: 0 4px 10px rgba(0,177,64,0.3); }
+.logo-personal { background: linear-gradient(135deg, #00D2FF 0%, #0052FF 100%); box-shadow: 0 4px 10px rgba(0,210,255,0.3); }
+
+.login-box h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; color: var(--pers-navy); }
+.login-box p { margin: 0 0 24px; font-size: 13px; color: var(--pers-muted); }
+
+.field-group { text-align: left; margin-bottom: 16px; }
+.field-group label { display: block; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; color: var(--pers-navy); }
+.field-group input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--pers-border); font-size: 13px; }
+.field-group input:focus { outline: none; border-color: var(--pers-blue); box-shadow: 0 0 0 3px rgba(0,82,255,0.15); }
+
+.btn-login {
+  width: 100%; padding: 12px; border: 0; border-radius: 12px;
+  background: linear-gradient(135deg, var(--pers-blue) 0%, #0032B3 100%);
+  color: #fff; font-weight: 800; font-size: 14px; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,82,255,0.3); transition: transform 0.1s, filter 0.1s;
+}
+.btn-login:hover { filter: brightness(1.1); }
+.btn-login:active { transform: scale(0.98); }
+.login-err { color: var(--danger); font-size: 12px; font-weight: 700; margin-top: 14px; display: none; }
+
+/* Header App */
 header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
 .brand { display: flex; align-items: center; gap: 10px; margin-right: 15px; }
-.brand-logo { background: linear-gradient(135deg, var(--pers-cyan) 0%, var(--pers-blue) 100%); color: #fff; font-weight: 900; font-size: 20px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 210, 255, 0.4); }
+.brand-logos-sm { display: flex; gap: 6px; }
+.brand-sm { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #fff; }
 h1 { font-size: 18px; margin: 0; font-weight: 800; letter-spacing: -0.4px; }
 
 /* Botones & Controls */
@@ -43,6 +80,9 @@ header input { width: 60px; text-align: center; }
 header label { font-size: 12px; opacity: 0.9; }
 .sp { flex: 1; }
 
+.user-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+.role-chip { background: var(--pers-cyan); color: var(--pers-navy); padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 900; text-transform: uppercase; }
+
 .sync-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pers-cyan); display: inline-block; box-shadow: 0 0 6px var(--pers-cyan); }
 .sync-dot.busy { background: #FACC15; box-shadow: 0 0 6px #FACC15; animation: pulse 1s infinite; }
@@ -55,7 +95,7 @@ main { padding: 20px; max-width: 1600px; margin: 0 auto; }
 .card { background: var(--pers-card); border-radius: 14px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--pers-border); box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
 h3 { margin: 0 0 14px; font-size: 15px; color: var(--pers-navy); font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
 
-/* KPIs Distrito */
+/* KPIs */
 .kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 18px; }
 .kp .card { margin: 0; border-left: 5px solid var(--pers-blue); }
 .kp.district .card { border-left-color: var(--pers-cyan); background: #FAFCFF; }
@@ -103,7 +143,7 @@ table { border-collapse: separate; border-spacing: 0; width: 100%; }
 .del { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
 .del:hover { background: #FCA5A5; }
 .f { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-input[type=text], select { border: 1px solid var(--pers-border); background: #fff; padding: 6px 12px; border-radius: 8px; }
+input[type=text], input[type=password], select { border: 1px solid var(--pers-border); background: #fff; padding: 6px 12px; border-radius: 8px; }
 .tb { width: 100%; border-collapse: collapse; }
 .tb th { text-align: left; color: var(--pers-muted); font-weight: 700; padding: 8px; border-bottom: 2px solid var(--pers-border); }
 .tb td { padding: 8px; border-bottom: 1px solid #EEF2F7; vertical-align: middle; }
@@ -118,17 +158,51 @@ li:hover { color: var(--pers-blue); }
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="brand-logo">p</div>
-    <h1>Vacaciones Técnicos · Personal</h1>
+<!-- PANTALLA DE LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logos">
+      <div class="logo-badge logo-movistar">M</div>
+      <div class="logo-badge logo-personal">personal</div>
+    </div>
+    <h2>Sistema de Vacaciones</h2>
+    <p>Ingresá tus credenciales para continuar</p>
+
+    <form onsubmit="doLogin(event)">
+      <div class="field-group">
+        <label>Usuario</label>
+        <input id="l-user" type="text" placeholder="Ej: kruki" required autofocus>
+      </div>
+      <div class="field-group">
+        <label>Contraseña</label>
+        <input id="l-pass" type="password" placeholder="Ingresá tu contraseña">
+      </div>
+      <button type="submit" class="btn-login">Iniciar Sesión</button>
+      <div id="l-err" class="login-err">Usuario o contraseña incorrectos.</div>
+    </form>
   </div>
+</div>
+
+<!-- HEADER DE LA APLICACIÓN -->
+<header id="main-header" style="display:none;">
+  <div class="brand">
+    <div class="brand-logos-sm">
+      <div class="brand-sm logo-movistar">M</div>
+      <div class="brand-sm logo-personal">p</div>
+    </div>
+    <h1>Sistema de Vacaciones</h1>
+  </div>
+  
   <button data-v="d" onclick="V='d';render()">📊 Resumen General</button>
   <button data-v="p" onclick="V='p';render()">📅 Planilla por Oficina</button>
-  <button data-v="a" onclick="V='a';render()">⚙️ Gestión (Técnicos/Oficinas/Distritos)</button>
-  
+  <button data-v="a" onclick="V='a';render()">⚙️ Gestión Técnicos</button>
+  <button id="btn-u-nav" data-v="u" onclick="V='u';render()" style="display:none;">👥 Usuarios (ABM)</button>
+
   <span class="sp"></span>
-  
+
+  <div id="u-badge" class="user-badge"></div>
+  <button onclick="doLogout()" title="Cerrar Sesión">🚪 Salir</button>
+
   <div class="sync-badge">
     <span id="sync-dot" class="sync-dot"></span>
     <span id="sync-text">Conectando...</span>
@@ -151,7 +225,7 @@ li:hover { color: var(--pers-blue); }
   <input id="fi" type="file" accept=".json" hidden onchange="imp(this)">
 </header>
 
-<main id="app"></main>
+<main id="app" style="display:none;"></main>
 
 <script>
 const BIN_ID = "6abd1918ffd5d160533f46f2";
@@ -160,6 +234,9 @@ const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 const SEED = {
   u: 20, y: 2026,
+  users: [
+    { u: "kruki", p: "", r: "admin" }
+  ],
   d: ["Bella Vista"],
   o: [
     { n: "Bella Vista", d: "Bella Vista" },
@@ -184,16 +261,18 @@ const isExcludedOffice = o => {
 
 let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
+let currentUser = null; // { u: "kruki", r: "admin" }
 
 function normalizeData() {
   if (!S.d || !Array.isArray(S.d) || S.d.length === 0) {
     S.d = ["Bella Vista"];
   }
+  if (!Array.isArray(S.users) || S.users.length === 0) {
+    S.users = [{ u: "kruki", p: "", r: "admin" }];
+  }
   if (Array.isArray(S.o)) {
     S.o = S.o.map(of => {
-      if (typeof of === 'string') {
-        return { n: of, d: "Bella Vista" };
-      }
+      if (typeof of === 'string') return { n: of, d: "Bella Vista" };
       return of;
     });
   } else {
@@ -226,8 +305,7 @@ async function loadData(manual = false) {
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
     setSyncStatus('ok', 'Sincronizado');
-    renderHeaderSelects();
-    render();
+    if (currentUser) render();
   } catch(err) {
     console.error('Error al cargar de JSONBin:', err);
     setSyncStatus('err', 'Sin conexión');
@@ -252,6 +330,36 @@ async function saveData() {
     console.error('Error al guardar en JSONBin:', err);
     setSyncStatus('err', 'Error al guardar');
   }
+}
+
+/* --- LOGICA DE AUTENTICACION Y LOGGEO --- */
+function doLogin(evt) {
+  evt.preventDefault();
+  const uInput = $('#l-user').value.trim().toLowerCase();
+  const pInput = $('#l-pass').value.trim();
+
+  normalizeData();
+  const found = S.users.find(x => x.u.toLowerCase() === uInput);
+
+  if (found && found.p === pInput) {
+    currentUser = found;
+    $('#login-screen').style.display = 'none';
+    $('#main-header').style.display = 'flex';
+    $('#app').style.display = 'block';
+    $('#l-err').style.display = 'none';
+    render();
+  } else {
+    $('#l-err').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  $('#login-screen').style.display = 'flex';
+  $('#main-header').style.display = 'none';
+  $('#app').style.display = 'none';
+  $('#l-user').value = '';
+  $('#l-pass').value = '';
 }
 
 const wk=y=>{ let d=Date.UTC(y,0,1); while(new Date(d).getUTCDay()!=1) d+=864e5; return [...Array(52)].map((_,i)=>d+i*6048e5); };
@@ -304,7 +412,6 @@ function dash(){
   const activeOffices = getFilteredOffices();
   const activeTechs = getFilteredTechs();
 
-  // Excluir "Supervisores" e itinerantes/especiales ("ms*") del cálculo general
   const calcTechs = activeTechs.filter(t => !isExcludedOffice(t.o));
   const calcOffices = activeOffices.filter(o => !isExcludedOffice(o.n));
   const N = calcTechs.length || 1, u = S.u / 100;
@@ -566,36 +673,130 @@ function abm(){
   </div>`;
 }
 
+/* --- VISTA: ABM DE USUARIOS DE LOGGEO (SOLO ADMINS) --- */
+function usersAbm() {
+  if (!currentUser || currentUser.r !== 'admin') {
+    return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
+  }
+
+  return `
+  <div class="card">
+    <h3>Gestión de Usuarios de Acceso al Sistema</h3>
+    <p style="color:var(--pers-muted); margin-top:-8px; margin-bottom:16px;">
+      Creá y administrá las cuentas de los usuarios que pueden ingresar al sistema y asignales permisos de Administrador o Usuario.
+    </p>
+
+    <div class="f" style="margin-bottom:20px; background:#F8FAFC; padding:12px; border-radius:10px;">
+      <input id="nu-u" type="text" placeholder="Nombre de Usuario (ej: jperez)" style="width:180px">
+      <input id="nu-p" type="text" placeholder="Contraseña (opcional la primera vez)" style="width:220px">
+      <label>Rol:</label>
+      <select id="nu-r">
+        <option value="user">Usuario (User)</option>
+        <option value="admin">Administrador (Admin)</option>
+      </select>
+      <button class="btn" onclick="addUser()">➕ Crear Usuario</button>
+    </div>
+
+    <table class="tb">
+      <thead>
+        <tr><th>Usuario</th><th>Contraseña</th><th>Rol / Atributo</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        ${S.users.map((u, idx) => `
+          <tr>
+            <td><b>${e(u.u)}</b>${u.u === currentUser.u ? '<span class="wk-chip">Tu sesión</span>' : ''}</td>
+            <td>
+              <input type="text" value="${e(u.p)}" placeholder="(Sin contraseña)" onchange="editUser(${idx},'p',this.value)" style="width:200px">
+            </td>
+            <td>
+              <select onchange="editUser(${idx},'r',this.value)">
+                <option value="user" ${u.r==='user'?'selected':''}>Usuario (User)</option>
+                <option value="admin" ${u.r==='admin'?'selected':''}>Administrador (Admin)</option>
+              </select>
+            </td>
+            <td>
+              ${u.u === currentUser.u 
+                ? '<i style="color:var(--pers-muted)">Sesión activa</i>' 
+                : `<button class="del" onclick="delUser(${idx})">Eliminar</button>`
+              }
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function addUser() {
+  const uVal = $('#nu-u').value.trim().toLowerCase();
+  const pVal = $('#nu-p').value.trim();
+  const rVal = $('#nu-r').value;
+
+  if (!uVal) return alert('Debes ingresar un nombre de usuario.');
+  if (S.users.some(x => x.u.toLowerCase() === uVal)) return alert('Ya existe un usuario con ese nombre.');
+
+  S.users.push({ u: uVal, p: pVal, r: rVal });
+  $('#nu-u').value = '';
+  $('#nu-p').value = '';
+  render();
+  saveData();
+}
+
+function editUser(idx, field, value) {
+  if (S.users[idx]) {
+    if (field === 'p') S.users[idx].p = value.trim();
+    if (field === 'r') S.users[idx].r = value;
+    render();
+    saveData();
+  }
+}
+
+function delUser(idx) {
+  const target = S.users[idx];
+  if (!target) return;
+  if (target.u === currentUser.u) return alert('No podés eliminar tu propio usuario en uso.');
+
+  if (confirm(`¿Eliminar al usuario "${target.u}"?`)) {
+    S.users.splice(idx, 1);
+    render();
+    saveData();
+  }
+}
+
 function renderHeaderSelects(){
   $('#ds').innerHTML = `<option value="ALL">🌐 TODOS LOS DISTRITOS</option>` + S.d.map(d => `<option value="${e(d)}" ${d===DIST?'selected':''}>${e(d)}</option>`).join('');
   $('#ys').innerHTML = [2026,2027,2028,2029,2030].map(y => `<option ${y==S.y?'selected':''}>${y}</option>`).join('');
   $('#u').value = S.u;
+
+  // Header User Badge & Admin Navigation
+  if (currentUser) {
+    const isAdm = currentUser.r === 'admin';
+    $('#u-badge').innerHTML = `👤 ${e(currentUser.u)} <span class="role-chip">${e(currentUser.r)}</span>`;
+    $('#btn-u-nav').style.display = isAdm ? 'inline-flex' : 'none';
+  }
 }
 
 function render(){
   renderHeaderSelects();
-  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : abm();
+  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : V==='u' ? usersAbm() : abm();
   document.querySelectorAll('header button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===V));
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
-/* FUNCION TOGGLE CON CONTROL DE LÍMITES (MÁX 2 POR OFICINA / MÁX 9 GENERAL) */
+/* TOGGLE CON CONTROL DE LÍMITES */
 function tog(id, k){
   const t = S.t.find(t => t.id == id);
   if (!t) return;
   const i = t.w.indexOf(k);
 
   if (i < 0) {
-    // Si la oficina no está excluida (no es 'Supervisores' ni arranca con 'ms'), aplicamos las restricciones
     if (!isExcludedOffice(t.o)) {
-      // 1. Límite de máximo 2 técnicos por oficina en la misma semana
       const officeCount = S.t.filter(x => x.o === t.o && x.w.includes(k)).length;
       if (officeCount >= 2) {
         alert(`⚠️ Límite por Oficina Alcanzado:\nLa oficina "${t.o}" ya tiene 2 técnicos en vacaciones en esta semana.`);
         return;
       }
 
-      // 2. Límite de máximo 9 técnicos simultáneos a nivel general
       const globalCount = S.t.filter(x => !isExcludedOffice(x.o) && x.w.includes(k)).length;
       if (globalCount >= 9) {
         alert(`⚠️ Límite General Alcanzado:\nSe ha alcanzado el cupo máximo de 9 técnicos simultáneos en vacaciones para esta semana (excluyendo Supervisores y MS).`);
