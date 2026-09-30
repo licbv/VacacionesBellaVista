@@ -88,6 +88,31 @@ header input { width: 60px; text-align: center; }
 header label { font-size: 12px; opacity: 0.9; }
 .sp { flex: 1; }
 
+/* Botón de Guardar e Indicador de Cambios */
+.btn-save {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-save:hover { background: rgba(255,255,255,0.25); }
+.btn-save.unsaved-active {
+  background: var(--warning) !important;
+  color: #0F172A !important;
+  border-color: #D97706 !important;
+  font-weight: 800 !important;
+  animation: pulse-save 1.5s infinite;
+}
+@keyframes pulse-save {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
 .user-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
 .role-chip { background: var(--pers-cyan); color: #fff; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 900; text-transform: uppercase; }
 
@@ -257,6 +282,9 @@ li:hover { color: var(--pers-blue); }
 
   <div id="u-badge" class="user-badge"></div>
   <button onclick="openChangePwdModal()" title="Cambiar mi Contraseña">🔑 Contraseña</button>
+  
+  <button id="btn-save" onclick="saveData()" class="btn-save" title="Guardar todos los cambios realizados">💾 Guardar</button>
+  
   <button onclick="doLogout()" title="Cerrar Sesión">🚪 Salir</button>
 
   <div class="sync-badge">
@@ -270,10 +298,10 @@ li:hover { color: var(--pers-blue); }
   <select id="ds" onchange="DIST=this.value; SEL=null; render()"></select>
 
   <label>Año</label>
-  <select id="ys" onchange="S.y=+this.value; SEL=null; saveData(); render()"></select>
+  <select id="ys" onchange="S.y=+this.value; SEL=null; markUnsaved(); render()"></select>
   
   <label>Umbral %</label>
-  <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20; saveData(); render()">
+  <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20; markUnsaved(); render()">
   
   <!-- BOTONES EXCLUSIVOS DE ADMINISTRADORES -->
   <button id="btn-admin-csv" onclick="csv()" style="display:none;">📥 CSV</button>
@@ -321,6 +349,23 @@ let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null;
 let hasUnsavedChanges = false;
 
+function markUnsaved() {
+  hasUnsavedChanges = true;
+  updateSaveButtonUI();
+}
+
+function updateSaveButtonUI() {
+  const btn = $('#btn-save');
+  if (!btn) return;
+  if (hasUnsavedChanges) {
+    btn.classList.add('unsaved-active');
+    btn.innerHTML = '⚠️ Guardar Cambios';
+  } else {
+    btn.classList.remove('unsaved-active');
+    btn.innerHTML = '💾 Guardado';
+  }
+}
+
 function logAction(act) {
   if (!Array.isArray(S.logs)) S.logs = [];
   const d = new Date();
@@ -364,6 +409,12 @@ function setSyncStatus(state, msg) {
 }
 
 async function loadData(manual = false) {
+  if (manual && hasUnsavedChanges) {
+    if (!confirm('⚠️ Tenés cambios sin guardar en tu pantalla.\n\nSi recargás desde la nube perderás los cambios no guardados. ¿Deseás continuar?')) {
+      return;
+    }
+  }
+
   setSyncStatus('busy', manual ? 'Actualizando...' : 'Conectando...');
   try {
     const res = await fetch(API_URL + '/latest', {
@@ -379,6 +430,7 @@ async function loadData(manual = false) {
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
     hasUnsavedChanges = false;
+    updateSaveButtonUI();
     setSyncStatus('ok', 'Sincronizado');
   } catch(err) {
     console.error('Error al cargar de JSONBin:', err);
@@ -404,11 +456,13 @@ async function saveData() {
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     hasUnsavedChanges = false;
+    updateSaveButtonUI();
     setSyncStatus('ok', 'Guardado en Nube');
     setTimeout(() => setSyncStatus('ok', 'Sincronizado'), 2000);
   } catch(err) {
     console.error('Error al guardar en JSONBin:', err);
     setSyncStatus('err', 'Error al guardar');
+    alert('❌ Ocurrió un error al intentar guardar en la nube. Revisa tu conexión a internet.');
   }
 }
 
@@ -459,7 +513,6 @@ function doLogin(evt) {
     logAction('Inició sesión en el sistema');
     $('#l-err').style.display = 'none';
     showAppUI();
-    saveData();
   } else {
     $('#l-err').style.display = 'block';
   }
@@ -467,13 +520,12 @@ function doLogin(evt) {
 
 function doLogout() {
   if (hasUnsavedChanges) {
-    if (!confirm('⚠️ Tenés cambios pendientes que no fueron actualizados o guardados en la nube.\n\n¿Estás seguro de cerrar sesión y perder los cambios no guardados?')) {
+    if (!confirm('⚠️ Tenés cambios pendientes que NO fueron guardados en la nube.\n\n¿Estás seguro de cerrar sesión y perder los cambios no guardados?')) {
       return;
     }
   }
   if (currentUser) {
     logAction('Cerró sesión');
-    saveData();
   }
   sessionStorage.removeItem('vacations_user');
   currentUser = null;
@@ -483,10 +535,12 @@ function doLogout() {
   showLoginUI();
 }
 
+/* ADVERTENCIA AL CERRAR / RECARGAR LA PESTAÑA DEL NAVEGADOR */
 window.addEventListener('beforeunload', function (e) {
   if (hasUnsavedChanges) {
     e.preventDefault();
-    e.returnValue = '';
+    e.returnValue = 'Tenés cambios sin guardar en el sistema. ¿Deseás salir de todas formas?';
+    return e.returnValue;
   }
 });
 
@@ -527,10 +581,9 @@ function saveNewPwd(evt) {
   if (uObj) uObj.p = newP;
 
   logAction('Cambió su propia contraseña');
-  hasUnsavedChanges = true;
-  saveData();
+  markUnsaved();
   $('#pwd-modal').style.display = 'none';
-  alert('✅ Contraseña actualizada correctamente.');
+  alert('✅ Contraseña actualizada correctamente. No olvides presionar "Guardar Cambios".');
 }
 
 const wk=y=>{ let d=Date.UTC(y,0,1); while(new Date(d).getUTCDay()!=1) d+=864e5; return [...Array(52)].map((_,i)=>d+i*6048e5); };
@@ -907,11 +960,10 @@ function addUser() {
 
   S.users.push({ u: uVal, p: pVal, r: rVal });
   logAction(`Creó al usuario "${uVal}" con rol [${rVal}]`);
-  hasUnsavedChanges = true;
+  markUnsaved();
   $('#nu-u').value = '';
   $('#nu-p').value = '';
   render();
-  saveData();
 }
 
 function editUser(idx, field, value) {
@@ -925,9 +977,8 @@ function editUser(idx, field, value) {
       target.r = value;
       logAction(`Cambió el rol del usuario "${target.u}" a [${value}]`);
     }
-    hasUnsavedChanges = true;
+    markUnsaved();
     render();
-    saveData();
   }
 }
 
@@ -939,9 +990,8 @@ function delUser(idx) {
   if (confirm(`¿Eliminar al usuario "${target.u}"?`)) {
     S.users.splice(idx, 1);
     logAction(`Eliminó al usuario "${target.u}"`);
-    hasUnsavedChanges = true;
+    markUnsaved();
     render();
-    saveData();
   }
 }
 
@@ -964,7 +1014,7 @@ function logView() {
   <div class="card">
     <h3>
       <span>📋 Historial de Actividad y Auditoría (${logs.length} registros)</span>
-      <button class="del" onclick="clearLogs()">🗑️️ Limpiar Historial</button>
+      <button class="del" onclick="clearLogs()">🗑 Limpiar Historial</button>
     </h3>
     <p style="color:var(--pers-muted); margin-top:-8px; margin-bottom:16px;">
       Registro de auditoría en tiempo real de todas las acciones, asignaciones y modificaciones realizadas por los usuarios.
@@ -995,9 +1045,8 @@ function clearLogs() {
   if (confirm('¿Estás seguro de vaciar todo el log de auditoría del sistema?')) {
     S.logs = [];
     logAction('Limpió todo el historial de auditoría');
-    hasUnsavedChanges = true;
+    markUnsaved();
     render();
-    saveData();
   }
 }
 
@@ -1016,6 +1065,7 @@ function renderHeaderSelects(){
     $('#btn-admin-backup').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-admin-load').style.display = isAdm ? 'inline-flex' : 'none';
   }
+  updateSaveButtonUI();
 }
 
 function render(){
@@ -1057,9 +1107,8 @@ function tog(id, k){
     logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
   }
 
-  hasUnsavedChanges = true;
+  markUnsaved();
   render();
-  saveData();
 }
 
 /* FUNCIONES ABM TÉCNICOS */
@@ -1069,10 +1118,9 @@ function addT(){
   const selectedOff = $('#no').value.split(' (')[0];
   S.t.push({id:++nid, n, o:selectedOff, w:[]});
   logAction(`Agregó nuevo técnico "${n}" en oficina "${selectedOff}"`);
-  hasUnsavedChanges = true;
+  markUnsaved();
   $('#nn').value = '';
   render();
-  saveData();
 }
 
 function delT(id){
@@ -1081,9 +1129,8 @@ function delT(id){
   if(confirm(`¿Eliminar técnico "${t.n}" y sus semanas de vacaciones?`)){
     S.t=S.t.filter(x=>x.id!=id);
     logAction(`Eliminó al técnico "${t.n}" (${t.o})`);
-    hasUnsavedChanges = true;
+    markUnsaved();
     render();
-    saveData();
   }
 }
 
@@ -1100,8 +1147,8 @@ function editT(id,f,v){
     t.o = v.split(' (')[0];
     logAction(`Reasignó técnico "${t.n}" de "${oldOff}" a "${t.o}"`);
   }
-  hasUnsavedChanges = true;
-  render(); saveData();
+  markUnsaved();
+  render();
 }
 
 /* FUNCIONES ABM DISTRITOS */
@@ -1111,9 +1158,9 @@ function addD(){
   if(S.d.includes(n)) return alert('El distrito ya existe.');
   S.d.push(n);
   logAction(`Creó el distrito "${n}"`);
-  hasUnsavedChanges = true;
+  markUnsaved();
   $('#nd').value = '';
-  render(); saveData();
+  render();
 }
 
 function renD(i,v){
@@ -1124,8 +1171,8 @@ function renD(i,v){
   S.o.forEach(o=>{ if(o.d===old) o.d=v; });
   if(DIST===old) DIST=v;
   logAction(`Renombró el distrito "${old}" a "${v}"`);
-  hasUnsavedChanges = true;
-  render(); saveData();
+  markUnsaved();
+  render();
 }
 
 function delD(i){
@@ -1136,8 +1183,8 @@ function delD(i){
     S.d.splice(i,1);
     if(DIST===distName) DIST='ALL';
     logAction(`Eliminó el distrito "${distName}"`);
-    hasUnsavedChanges = true;
-    render(); saveData();
+    markUnsaved();
+    render();
   }
 }
 
@@ -1149,9 +1196,9 @@ function addO(){
   if(S.o.some(o=>o.n===n)) return alert('Ya existe una oficina con ese nombre.');
   S.o.push({n, d});
   logAction(`Creó la oficina "${n}" en el distrito "${d}"`);
-  hasUnsavedChanges = true;
+  markUnsaved();
   $('#no2').value = '';
-  render(); saveData();
+  render();
 }
 
 function renO(i,v){
@@ -1163,8 +1210,8 @@ function renO(i,v){
   S.t.forEach(t=>{ if(t.o===old) t.o=v; });
   if(F===old) F=v;
   logAction(`Renombró la oficina "${old}" a "${v}"`);
-  hasUnsavedChanges = true;
-  render(); saveData();
+  markUnsaved();
+  render();
 }
 
 function changeDistO(i, v){
@@ -1172,8 +1219,8 @@ function changeDistO(i, v){
   const oldD = off.d;
   off.d = v;
   logAction(`Cambió oficina "${off.n}" del distrito "${oldD}" al distrito "${v}"`);
-  hasUnsavedChanges = true;
-  render(); saveData();
+  markUnsaved();
+  render();
 }
 
 function delO(i){
@@ -1183,8 +1230,8 @@ function delO(i){
     S.o.splice(i,1);
     if(F===offName) F='ALL';
     logAction(`Eliminó la oficina "${offName}"`);
-    hasUnsavedChanges = true;
-    render(); saveData();
+    markUnsaved();
+    render();
   }
 }
 
@@ -1211,9 +1258,8 @@ function imp(i){
       const d=JSON.parse(r.result);
       S=d; normalizeData(); nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; DIST='ALL';
       logAction(`Restauró una copia de seguridad JSON`);
-      hasUnsavedChanges = true;
+      markUnsaved();
       render();
-      await saveData();
     } catch(x){ alert('Archivo de backup no válido.'); }
   };
   r.readAsText(i.files[0]); i.value='';
