@@ -38,6 +38,13 @@ header input { width: 60px; text-align: center; }
 header label { font-size: 12px; opacity: 0.9; }
 .sp { flex: 1; }
 
+.sync-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; display: inline-block; }
+.sync-dot.busy { background: #FACC15; animation: pulse 1s infinite; }
+.sync-dot.err { background: #EF4444; }
+
+@keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+
 /* Dashboard & Cards */
 main { padding: 20px; max-width: 1600px; margin: 0 auto; }
 .card { background: var(--mov-card); border-radius: 12px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--mov-border); box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
@@ -119,14 +126,21 @@ li:hover { color: var(--mov-blue); }
   
   <span class="sp"></span>
   
+  <div class="sync-badge">
+    <span id="sync-dot" class="sync-dot"></span>
+    <span id="sync-text">Conectando...</span>
+  </div>
+
+  <button onclick="loadData(true)" title="Recargar datos de la nube">🔄 Actualizar</button>
+
   <label>Año</label>
-  <select id="ys" onchange="S.y=+this.value;SEL=null;save();render()"></select>
+  <select id="ys" onchange="S.y=+this.value;SEL=null;saveData();render()"></select>
   
   <label>Umbral Alerta %</label>
-  <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20;save();render()">
+  <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20;saveData();render()">
   
   <button onclick="csv()">📥 Exportar CSV</button>
-  <button onclick="dl('vacaciones-movistar.json',JSON.stringify(S),'application/json')">💾 Copia JSON</button>
+  <button onclick="dl('vacaciones-movistar.json',JSON.stringify(S),'application/json')">💾 Backup JSON</button>
   <button onclick="$('#fi').click()">📂 Cargar Backup</button>
   <input id="fi" type="file" accept=".json" hidden onchange="imp(this)">
 </header>
@@ -134,18 +148,67 @@ li:hover { color: var(--mov-blue); }
 <main id="app"></main>
 
 <script>
+const BIN_ID = "6abd1918ffd5d160533f46f2";
+const MASTER_KEY = "$2a$10$RBYWKS9nR5ypehogRtWvSu1/R1qEQAlA8VtN9iQUynH5fzC3czXUK";
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
 const SEED={"o": ["Bella Vista", "Hurlingham", "Jose C Paz", "Los Polvorines", "San Miguel", "Trujui", "Pilar"], "t": [{"id": 1, "n": "AVELLANEDA, PABLO SEBASTIAN", "o": "Bella Vista", "w": []}, {"id": 2, "n": "BELMONTE, JAVIER LEANDRO", "o": "Bella Vista", "w": []}, {"id": 3, "n": "CABRAL, CARLOS EZEQUIEL", "o": "Bella Vista", "w": ["2026-07-20"]}, {"id": 4, "n": "RIVAROLA, RUBEN ALBERTO", "o": "Hurlingham", "w": ["2026-04-06", "2026-04-13"]}, {"id": 5, "n": "CUENCA, LUIS DAVID", "o": "Hurlingham", "w": ["2026-07-20", "2026-08-24"]}, {"id": 6, "n": "ESPOSITO, MATIAS ALEJANDRO", "o": "Hurlingham", "w": ["2026-05-18", "2026-07-13"]}, {"id": 7, "n": "FARIÑA, MATIAS", "o": "Hurlingham", "w": ["2026-04-13", "2026-04-20", "2026-06-15", "2026-08-31"]}, {"id": 8, "n": "SARRA, CRISTIAN DAMIAN", "o": "Hurlingham", "w": ["2026-07-27"]}, {"id": 9, "n": "GALEANO, MAURICIO RAUL", "o": "Hurlingham", "w": ["2026-04-13", "2026-05-25", "2026-07-27"]}, {"id": 10, "n": "DIAZ, ROBERTO MARTIN", "o": "Jose C Paz", "w": ["2026-04-06", "2026-04-13"]}, {"id": 11, "n": "DRAGHI, LUCIANO MARTIN", "o": "Jose C Paz", "w": []}, {"id": 12, "n": "KRUPPA, ADRIAN MAXIMILIANO", "o": "Jose C Paz", "w": ["2026-12-21"]}, {"id": 13, "n": "LARROSA, GONZALO EZEQUIEL", "o": "Jose C Paz", "w": []}, {"id": 14, "n": "BENITEZ, MIGUEL", "o": "Jose C Paz", "w": []}, {"id": 15, "n": "CREVATIN, ALEX LEONEL", "o": "Jose C Paz", "w": []}, {"id": 16, "n": "D´AURIA, ENZO ALEJANDRO", "o": "Jose C Paz", "w": []}, {"id": 17, "n": "CAROSIO, SEBASTIAN", "o": "Jose C Paz", "w": []}, {"id": 18, "n": "NACHAR, CARLOS", "o": "Los Polvorines", "w": []}, {"id": 19, "n": "STIBEL MARIO", "o": "Los Polvorines", "w": []}, {"id": 20, "n": "SERRANO GERMAN", "o": "Los Polvorines", "w": []}, {"id": 21, "n": "PAGANELLI, ARIEL HERNAN", "o": "Los Polvorines", "w": []}, {"id": 22, "n": "NOVO, RODRIGO EZEQUIEL", "o": "Los Polvorines", "w": []}, {"id": 23, "n": "MAIDANA, LUIS HORACIO", "o": "Los Polvorines", "w": ["2026-04-06"]}, {"id": 24, "n": "ESVER, RAUL ISAAC", "o": "San Miguel", "w": ["2026-04-06", "2026-09-28"]}, {"id": 25, "n": "VAZQUEZ, ANDRES GABRIEL", "o": "San Miguel", "w": ["2026-08-24"]}, {"id": 26, "n": "GALARZA, JORGE LUIS", "o": "San Miguel", "w": ["2026-05-18", "2026-06-15", "2026-10-19"]}, {"id": 27, "n": "PALACIOS, MAURICIO", "o": "San Miguel", "w": ["2026-04-13", "2026-07-20", "2026-09-21"]}, {"id": 28, "n": "ACOSTA, GUSTAVO ALEJANDRO", "o": "San Miguel", "w": ["2026-08-03", "2026-08-10", "2026-08-17"]}, {"id": 29, "n": "MEDINA, CLAUDIO ANDRES", "o": "San Miguel", "w": ["2026-06-08"]}, {"id": 30, "n": "TORRES, LEONARDO DANIEL", "o": "San Miguel", "w": ["2026-10-05"]}, {"id": 31, "n": "PEREZ, FERNANDO GABRIEL", "o": "San Miguel", "w": ["2026-03-23", "2026-03-30", "2026-05-25", "2026-07-27"]}, {"id": 32, "n": "PAREDES, DIEGO NICASIO", "o": "Trujui", "w": ["2026-04-06", "2026-08-17"]}, {"id": 33, "n": "CAMIÑA, HORACIO", "o": "Trujui", "w": []}, {"id": 34, "n": "PIRELLO, JULIO", "o": "Trujui", "w": []}, {"id": 35, "n": "LESSERTESEUR, PABLO", "o": "Trujui", "w": []}, {"id": 36, "n": "ALVAREZ, MATIAS", "o": "Trujui", "w": []}, {"id": 37, "n": "VEISAGA, CARLOS MARTIN", "o": "Trujui", "w": []}, {"id": 38, "n": "COMPTA, DIEGO CRISTIAN JORGE", "o": "Trujui", "w": []}, {"id": 39, "n": "LASSALLE, PABLO", "o": "Pilar", "w": ["2026-06-01", "2026-06-08", "2026-09-14"]}, {"id": 40, "n": "RAGES, MARCELO OMAR", "o": "Pilar", "w": ["2026-04-06", "2026-04-13", "2026-08-10"]}, {"id": 41, "n": "MAIDANA, FACUNDO EMILIANO", "o": "Pilar", "w": ["2026-05-04", "2026-05-11", "2026-09-21", "2026-09-28"]}, {"id": 42, "n": "ANRIQUEZ, JAIRO", "o": "Pilar", "w": ["2026-10-12"]}, {"id": 43, "n": "SERRANO, FELIPE", "o": "Pilar", "w": ["2026-06-15", "2026-07-13", "2026-07-20"]}, {"id": 44, "n": "VAZQUEZ, MARTIN ALEJANDRO", "o": "Pilar", "w": ["2026-05-25", "2026-06-15", "2026-10-26", "2026-11-02"]}, {"id": 45, "n": "PAGANELLI, ARIEL HERNAN", "o": "Pilar", "w": ["2026-07-27", "2026-08-03"]}]};
 
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
-function load(){ try { return JSON.parse(localStorage.getItem('vac_movistar')); } catch(x){ return null; } }
-function save(){ try { localStorage.setItem('vac_movistar', JSON.stringify(S)); } catch(x){ alert('Error al guardar datos: '+x.message); } }
-
-let S=load();
-if(!S || !S.t){ S={u:20, y:2026, o:SEED.o, t:SEED.t}; save(); }
-
+let S = {u:20, y:2026, o:SEED.o, t:SEED.t};
 let V='d', F='ALL', SEL=null, nid=Math.max(0,...S.t.map(t=>t.id));
+
+function setSyncStatus(state, msg) {
+  const dot = $('#sync-dot'), txt = $('#sync-text');
+  if (!dot || !txt) return;
+  dot.className = 'sync-dot ' + (state === 'busy' ? 'busy' : state === 'err' ? 'err' : '');
+  txt.textContent = msg;
+}
+
+async function loadData(manual = false) {
+  setSyncStatus('busy', manual ? 'Actualizando...' : 'Conectando...');
+  try {
+    const res = await fetch(API_URL + '/latest', {
+      headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.record && Array.isArray(data.record.o) && Array.isArray(data.record.t)) {
+      S = data.record;
+    } else {
+      S = {u:20, y:2026, o:SEED.o, t:SEED.t};
+      await saveData();
+    }
+    nid = Math.max(0, ...S.t.map(t => t.id));
+    setSyncStatus('ok', 'Sincronizado');
+    render();
+  } catch(err) {
+    console.error('Error al cargar de JSONBin:', err);
+    setSyncStatus('err', 'Sin conexión');
+  }
+}
+
+async function saveData() {
+  setSyncStatus('busy', 'Guardando...');
+  try {
+    const res = await fetch(API_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': MASTER_KEY
+      },
+      body: JSON.stringify(S)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    setSyncStatus('ok', 'Guardado en Nube');
+    setTimeout(() => setSyncStatus('ok', 'Sincronizado'), 2000);
+  } catch(err) {
+    console.error('Error al guardar en JSONBin:', err);
+    setSyncStatus('err', 'Error al guardar');
+  }
+}
 
 const wk=y=>{ let d=Date.UTC(y,0,1); while(new Date(d).getUTCDay()!=1) d+=864e5; return [...Array(52)].map((_,i)=>d+i*6048e5); };
 const iso=t=>new Date(t).toISOString().slice(0,10), p2=n=>String(n).padStart(2,'0');
@@ -389,44 +452,46 @@ function render(){
 function tog(id,k){
   const t=S.t.find(t=>t.id==id), i=t.w.indexOf(k);
   if(i<0) t.w.push(k); else t.w.splice(i,1);
-  save(); render();
+  render();
+  saveData();
 }
 
 function addT(){
   const n=$('#nn').value.trim().toUpperCase();
   if(!n || !S.o.length) return;
   S.t.push({id:++nid, n, o:$('#no').value, w:[]});
-  save(); render();
+  render();
+  saveData();
 }
 
 function delT(id){
   if(confirm('¿Eliminar técnico y sus semanas de vacaciones?')){
-    S.t=S.t.filter(t=>t.id!=id); save(); render();
+    S.t=S.t.filter(t=>t.id!=id); render(); saveData();
   }
 }
 
 function editT(id,f,v){
   const t=S.t.find(t=>t.id==id);
   t[f] = f=='n' ? v.trim().toUpperCase() : v;
-  save(); render();
+  render(); saveData();
 }
 
 function addO(){
   const n=$('#no2').value.trim();
   if(!n || S.o.includes(n)) return;
-  S.o.push(n); save(); render();
+  S.o.push(n); render(); saveData();
 }
 
 function renO(i,v){
   v=v.trim(); if(!v || S.o.includes(v)) return render();
   S.t.forEach(t=>{ if(t.o==S.o[i]) t.o=v; });
   if(F==S.o[i]) F=v;
-  S.o[i]=v; save(); render();
+  S.o[i]=v; render(); saveData();
 }
 
 function delO(i){
   if(S.t.some(t=>t.o==S.o[i])) return alert('Debes reasignar o eliminar los técnicos de esta oficina primero.');
-  if(confirm('¿Eliminar oficina?')){ S.o.splice(i,1); save(); render(); }
+  if(confirm('¿Eliminar oficina?')){ S.o.splice(i,1); render(); saveData(); }
 }
 
 function dl(n,x,t){
@@ -445,11 +510,13 @@ function csv(){
 
 function imp(i){
   const r=new FileReader();
-  r.onload=()=>{
+  r.onload=async ()=>{
     try {
       const d=JSON.parse(r.result);
       if(!Array.isArray(d.o) || !Array.isArray(d.t)) throw 0;
-      S=d; nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; save(); init();
+      S=d; nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL';
+      render();
+      await saveData();
     } catch(x){ alert('Archivo de backup no válido.'); }
   };
   r.readAsText(i.files[0]); i.value='';
@@ -457,8 +524,12 @@ function imp(i){
 
 function init(){
   $('#ys').innerHTML=[2026,2027,2028,2029,2030].map(y=>`<option ${y==S.y?'selected':''}>${y}</option>`).join('');
-  $('#u').value=S.u; render();
+  $('#u').value=S.u;
+  loadData();
 }
+
+// Auto-sincronizar cada 30 segundos en segundo plano
+setInterval(() => loadData(false), 30000);
 
 init();
 </script>
