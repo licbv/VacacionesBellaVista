@@ -11,14 +11,13 @@
 :root {
   --pers-navy: #0B132B;
   --pers-blue: #0052FF;
-  --pers-cyan: #00D2FF;
+  --pers-cyan: #00A3E0;
   --pers-cyan-bg: #E6FAFF;
   --pers-bg: #F4F6FB;
   --pers-card: #FFFFFF;
   --pers-text: #0F172A;
   --pers-muted: #64748B;
   --pers-border: #E2E8F0;
-  --movi-green: #00B140;
   --danger: #EF4444;
   --warning: #F59E0B;
   --pers-green: #10B981;
@@ -33,18 +32,18 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Sego
   display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
 .login-box {
-  background: rgba(255, 255, 255, 0.98);
+  background: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 24px; padding: 40px 36px; width: 420px; max-width: 90%;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 30px rgba(0, 210, 255, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 30px rgba(0, 163, 224, 0.15);
   text-align: center;
 }
 
 .login-logos {
-  display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 24px;
+  display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px;
 }
 .brand-divider {
-  width: 1px; height: 36px; background: var(--pers-border); opacity: 0.8;
+  width: 1px; height: 38px; background: var(--pers-border); opacity: 0.8;
 }
 
 .login-box h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; color: var(--pers-navy); letter-spacing: -0.5px; }
@@ -68,7 +67,7 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Sego
 /* Header App */
 header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
 .brand { display: flex; align-items: center; gap: 12px; margin-right: 12px; }
-.brand-logos-hdr { display: flex; align-items: center; gap: 8px; }
+.brand-logos-hdr { display: flex; align-items: center; gap: 10px; }
 h1 { font-size: 17px; margin: 0; font-weight: 800; letter-spacing: -0.4px; color: #fff; }
 
 /* Botones & Controls */
@@ -83,7 +82,7 @@ header label { font-size: 12px; opacity: 0.9; }
 .sp { flex: 1; }
 
 .user-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
-.role-chip { background: var(--pers-cyan); color: var(--pers-navy); padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 900; text-transform: uppercase; }
+.role-chip { background: var(--pers-cyan); color: #fff; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 900; text-transform: uppercase; }
 
 .sync-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pers-cyan); display: inline-block; box-shadow: 0 0 6px var(--pers-cyan); }
@@ -121,12 +120,12 @@ table { border-collapse: separate; border-spacing: 0; width: 100%; }
 .hm tfoot tr.district-total th, .hm tfoot tr.district-total td { background: var(--pers-navy); color: #fff; border-top: 2px solid var(--pers-cyan); }
 
 /* Celda Cian Vacaciones */
-.x { background: var(--pers-cyan) !important; color: var(--pers-navy) !important; font-weight: 900; font-size: 12px; }
+.x { background: var(--pers-cyan) !important; color: #fff !important; font-weight: 900; font-size: 12px; }
 .pl td { background: #fff; }
 .pl tr:nth-child(even) td { background: #FAFCFF; }
 
 /* Badges & Chips */
-.wk-chip { display: inline-block; background: var(--pers-cyan-bg); color: #007799; border: 1px solid #B3F3FF; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin: 2px; }
+.wk-chip { display: inline-block; background: var(--pers-cyan-bg); color: #006699; border: 1px solid #B3F3FF; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin: 2px; }
 .badge-off { background: #EFF6FF; color: var(--pers-blue); padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
 .badge-dist { background: #F3E8FF; color: #7C3AED; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
 
@@ -164,38 +163,17 @@ li:hover { color: var(--pers-blue); }
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logos">
-      <!-- Movistar SVG Logo -->
-      <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="moviGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#80E310"/>
-            <stop offset="50%" stop-color="#00B140"/>
-            <stop offset="100%" stop-color="#007A29"/>
-          </linearGradient>
-          <filter id="glowMovi" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#00B140" flood-opacity="0.4"/>
-          </filter>
-        </defs>
-        <rect width="64" height="64" rx="16" fill="#0B132B"/>
-        <path d="M 14,46 C 13,32 17,18 25,18 C 32,18 31,38 35,38 C 39,38 38,18 45,18 C 53,18 55,32 52,46 C 51,51 45,51 46,44 C 48,34 47,26 44,26 C 41,26 39,38 34,48 C 30,48 28,34 25,26 C 22,26 20,34 21,44 C 22,51 15,51 14,46 Z" fill="url(#moviGrad)" filter="url(#glowMovi)"/>
+      <!-- Movistar SVG Logo (Fiel a imagen original) -->
+      <svg width="52" height="42" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 6,52 C 3,32 11,8 27,8 C 38,8 37,38 46,38 C 54,38 52,10 66,10 C 82,10 90,30 86,52 C 84,60 74,60 76,50 C 79,38 76,22 68,22 C 60,22 55,40 45,58 C 39,58 35,40 28,22 C 21,22 17,38 18,50 C 19,60 8,60 6,52 Z" fill="#0052FF"/>
       </svg>
 
       <div class="brand-divider"></div>
 
-      <!-- Personal SVG Logo -->
-      <svg width="130" height="46" viewBox="0 0 160 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="persGrad" x1="0" y1="0" x2="160" y2="52" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#00E5FF"/>
-            <stop offset="100%" stop-color="#0052FF"/>
-          </linearGradient>
-          <filter id="glowPers" x="-10%" y="-10%" width="120%" height="120%">
-            <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#00D2FF" flood-opacity="0.35"/>
-          </filter>
-        </defs>
-        <rect width="160" height="52" rx="14" fill="url(#persGrad)" filter="url(#glowPers)"/>
-        <text x="76" y="34" fill="#FFFFFF" font-family="'Inter', system-ui, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.8" text-anchor="middle">personal</text>
-        <circle cx="134" cy="22" r="3.5" fill="#00FFD1"/>
+      <!-- Personal SVG Logo (Fiel a imagen original) -->
+      <svg width="135" height="44" viewBox="0 0 160 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="160" height="52" rx="6" fill="#00A3E0"/>
+        <text x="80" y="35" fill="#FFFFFF" font-family="'Inter', -apple-system, Arial, sans-serif" font-weight="700" font-size="27" letter-spacing="-0.8" text-anchor="middle">personal</text>
       </svg>
     </div>
 
@@ -221,20 +199,12 @@ li:hover { color: var(--pers-blue); }
 <header id="main-header" style="display:none;">
   <div class="brand">
     <div class="brand-logos-hdr">
-      <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
-        <rect width="64" height="64" rx="14" fill="#0B132B"/>
-        <path d="M 14,46 C 13,32 17,18 25,18 C 32,18 31,38 35,38 C 39,38 38,18 45,18 C 53,18 55,32 52,46 C 51,51 45,51 46,44 C 48,34 47,26 44,26 C 41,26 39,38 34,48 C 30,48 28,34 25,26 C 22,26 20,34 21,44 C 22,51 15,51 14,46 Z" fill="#00B140"/>
+      <svg width="32" height="24" viewBox="0 0 100 70" fill="none">
+        <path d="M 6,52 C 3,32 11,8 27,8 C 38,8 37,38 46,38 C 54,38 52,10 66,10 C 82,10 90,30 86,52 C 84,60 74,60 76,50 C 79,38 76,22 68,22 C 60,22 55,40 45,58 C 39,58 35,40 28,22 C 21,22 17,38 18,50 C 19,60 8,60 6,52 Z" fill="#0052FF"/>
       </svg>
-      <svg width="78" height="30" viewBox="0 0 160 52" fill="none">
-        <rect width="160" height="52" rx="12" fill="url(#hdrPersGrad)"/>
-        <defs>
-          <linearGradient id="hdrPersGrad" x1="0" y1="0" x2="160" y2="52" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#00D2FF"/>
-            <stop offset="100%" stop-color="#0052FF"/>
-          </linearGradient>
-        </defs>
-        <text x="76" y="34" fill="#FFFFFF" font-family="'Inter', system-ui, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.8" text-anchor="middle">personal</text>
-        <circle cx="134" cy="22" r="3.5" fill="#00FFD1"/>
+      <svg width="86" height="28" viewBox="0 0 160 52" fill="none">
+        <rect width="160" height="52" rx="6" fill="#00A3E0"/>
+        <text x="80" y="35" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="700" font-size="27" letter-spacing="-0.8" text-anchor="middle">personal</text>
       </svg>
     </div>
     <h1>Sistema de Vacaciones</h1>
@@ -243,7 +213,8 @@ li:hover { color: var(--pers-blue); }
   <button data-v="d" onclick="V='d';render()">📊 Resumen General</button>
   <button data-v="p" onclick="V='p';render()">📅 Planilla por Oficina</button>
   <button data-v="a" onclick="V='a';render()">⚙️ Gestión Técnicos</button>
-  <button id="btn-u-nav" data-v="u" onclick="V='u';render()" style="display:none;">👥 Usuarios (ABM)</button>
+  <button id="btn-u-nav" data-v="u" onclick="V='u';render()" style="display:none;">👥 Usuarios</button>
+  <button id="btn-l-nav" data-v="l" onclick="V='l';render()" style="display:none;">📋 Log de Actividad</button>
 
   <span class="sp"></span>
 
@@ -284,6 +255,7 @@ const SEED = {
   users: [
     { u: "kruki", p: "", r: "admin" }
   ],
+  logs: [],
   d: ["Bella Vista"],
   o: [
     { n: "Bella Vista", d: "Bella Vista" },
@@ -310,12 +282,27 @@ let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null; // { u: "kruki", r: "admin" }
 
+function logAction(act) {
+  if (!Array.isArray(S.logs)) S.logs = [];
+  const d = new Date();
+  const timestamp = d.toLocaleDateString('es-AR') + ' ' + d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  S.logs.unshift({
+    u: currentUser ? currentUser.u : 'Sistema',
+    a: act,
+    t: timestamp
+  });
+  if (S.logs.length > 300) S.logs.pop(); // Mantiene los últimos 300 eventos
+}
+
 function normalizeData() {
   if (!S.d || !Array.isArray(S.d) || S.d.length === 0) {
     S.d = ["Bella Vista"];
   }
   if (!Array.isArray(S.users) || S.users.length === 0) {
     S.users = [{ u: "kruki", p: "", r: "admin" }];
+  }
+  if (!Array.isArray(S.logs)) {
+    S.logs = [];
   }
   if (Array.isArray(S.o)) {
     S.o = S.o.map(of => {
@@ -390,6 +377,8 @@ function doLogin(evt) {
 
   if (found && found.p === pInput) {
     currentUser = found;
+    logAction('Inició sesión en el sistema');
+    saveData();
     $('#login-screen').style.display = 'none';
     $('#main-header').style.display = 'flex';
     $('#app').style.display = 'block';
@@ -401,6 +390,8 @@ function doLogin(evt) {
 }
 
 function doLogout() {
+  if (currentUser) logAction('Cerró sesión');
+  saveData();
   currentUser = null;
   $('#login-screen').style.display = 'flex';
   $('#main-header').style.display = 'none';
@@ -723,7 +714,7 @@ function abm(){
 /* --- VISTA: ABM DE USUARIOS DE LOGGEO (SOLO ADMINS) --- */
 function usersAbm() {
   if (!currentUser || currentUser.r !== 'admin') {
-    return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
+    return `<div class="card"><p style="color:var(--danger)">⚠️️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
   }
 
   return `
@@ -735,7 +726,7 @@ function usersAbm() {
 
     <div class="f" style="margin-bottom:20px; background:#F8FAFC; padding:12px; border-radius:10px;">
       <input id="nu-u" type="text" placeholder="Nombre de Usuario (ej: jperez)" style="width:180px">
-      <input id="nu-p" type="text" placeholder="Contraseña (opcional la primera vez)" style="width:220px">
+      <input id="nu-p" type="text" placeholder="Contraseña (opcional)" style="width:220px">
       <label>Rol:</label>
       <select id="nu-r">
         <option value="user">Usuario (User)</option>
@@ -783,6 +774,7 @@ function addUser() {
   if (S.users.some(x => x.u.toLowerCase() === uVal)) return alert('Ya existe un usuario con ese nombre.');
 
   S.users.push({ u: uVal, p: pVal, r: rVal });
+  logAction(`Creó al usuario "${uVal}" con rol [${rVal}]`);
   $('#nu-u').value = '';
   $('#nu-p').value = '';
   render();
@@ -791,8 +783,15 @@ function addUser() {
 
 function editUser(idx, field, value) {
   if (S.users[idx]) {
-    if (field === 'p') S.users[idx].p = value.trim();
-    if (field === 'r') S.users[idx].r = value;
+    const target = S.users[idx];
+    if (field === 'p') {
+      target.p = value.trim();
+      logAction(`Cambió la contraseña del usuario "${target.u}"`);
+    }
+    if (field === 'r') {
+      target.r = value;
+      logAction(`Cambió el rol del usuario "${target.u}" a [${value}]`);
+    }
     render();
     saveData();
   }
@@ -805,6 +804,62 @@ function delUser(idx) {
 
   if (confirm(`¿Eliminar al usuario "${target.u}"?`)) {
     S.users.splice(idx, 1);
+    logAction(`Eliminó al usuario "${target.u}"`);
+    render();
+    saveData();
+  }
+}
+
+/* --- VISTA: LOG DE AUDITORÍA (SOLO ADMINS) --- */
+function logView() {
+  if (!currentUser || currentUser.r !== 'admin') {
+    return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden ver el log de auditoría.</p></div>`;
+  }
+  const logs = S.logs || [];
+  const filterInput = $('#log-filter');
+  const filterTerm = filterInput ? filterInput.value.trim().toLowerCase() : '';
+
+  const filtered = logs.filter(l => 
+    l.u.toLowerCase().includes(filterTerm) || 
+    l.a.toLowerCase().includes(filterTerm) || 
+    l.t.includes(filterTerm)
+  );
+
+  return `
+  <div class="card">
+    <h3>
+      <span>📋 Historial de Actividad y Auditoría (${logs.length} registros)</span>
+      <button class="del" onclick="clearLogs()">🗑️ Limpiar Historial</button>
+    </h3>
+    <p style="color:var(--pers-muted); margin-top:-8px; margin-bottom:16px;">
+      Registro de auditoría en tiempo real de todas las acciones, asignaciones y modificaciones realizadas por los usuarios.
+    </p>
+
+    <div class="f" style="margin-bottom:14px;">
+      <input id="log-filter" type="text" placeholder="🔍 Buscar por usuario, acción o fecha..." value="${e(filterTerm)}" oninput="render()" style="width:340px;">
+    </div>
+
+    <table class="tb">
+      <thead>
+        <tr><th style="width:170px">Fecha y Hora</th><th style="width:140px">Usuario</th><th>Acción / Evento Registrado</th></tr>
+      </thead>
+      <tbody>
+        ${filtered.map(l => `
+          <tr>
+            <td><span style="font-family:monospace; font-size:11px; color:var(--pers-muted)">${e(l.t)}</span></td>
+            <td><b>${e(l.u)}</b></td>
+            <td>${e(l.a)}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="3">No se encontraron registros en el historial.</td></tr>'}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function clearLogs() {
+  if (confirm('¿Estás seguro de vaciar todo el log de auditoría del sistema?')) {
+    S.logs = [];
+    logAction('Limpió todo el historial de auditoría');
     render();
     saveData();
   }
@@ -819,21 +874,27 @@ function renderHeaderSelects(){
     const isAdm = currentUser.r === 'admin';
     $('#u-badge').innerHTML = `👤 ${e(currentUser.u)} <span class="role-chip">${e(currentUser.r)}</span>`;
     $('#btn-u-nav').style.display = isAdm ? 'inline-flex' : 'none';
+    $('#btn-l-nav').style.display = isAdm ? 'inline-flex' : 'none';
   }
 }
 
 function render(){
   renderHeaderSelects();
-  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : V==='u' ? usersAbm() : abm();
+  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : V==='u' ? usersAbm() : V==='l' ? logView() : abm();
   document.querySelectorAll('header button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===V));
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
-/* TOGGLE CON CONTROL DE LÍMITES */
+/* TOGGLE CON CONTROL DE LÍMITES Y LOGGING */
 function tog(id, k){
   const t = S.t.find(t => t.id == id);
   if (!t) return;
   const i = t.w.indexOf(k);
+
+  const W = wk(S.y);
+  const K = W.map(iso);
+  const weekIndex = K.indexOf(k);
+  const weekLabel = weekIndex >= 0 ? lab(W[weekIndex]) : k;
 
   if (i < 0) {
     if (!isExcludedOffice(t.o)) {
@@ -850,8 +911,10 @@ function tog(id, k){
       }
     }
     t.w.push(k);
+    logAction(`Asignó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
   } else {
     t.w.splice(i, 1);
+    logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
   }
 
   render();
@@ -864,21 +927,36 @@ function addT(){
   if(!n || !S.o.length) return alert('Debes cargar un nombre e ingresar una oficina válida.');
   const selectedOff = $('#no').value.split(' (')[0];
   S.t.push({id:++nid, n, o:selectedOff, w:[]});
+  logAction(`Agregó nuevo técnico "${n}" en oficina "${selectedOff}"`);
   $('#nn').value = '';
   render();
   saveData();
 }
 
 function delT(id){
-  if(confirm('¿Eliminar técnico y sus semanas de vacaciones?')){
-    S.t=S.t.filter(t=>t.id!=id); render(); saveData();
+  const t = S.t.find(x => x.id == id);
+  if(!t) return;
+  if(confirm(`¿Eliminar técnico "${t.n}" y sus semanas de vacaciones?`)){
+    S.t=S.t.filter(x=>x.id!=id);
+    logAction(`Eliminó al técnico "${t.n}" (${t.o})`);
+    render();
+    saveData();
   }
 }
 
 function editT(id,f,v){
   const t=S.t.find(t=>t.id==id);
-  if(f==='n') t.n = v.trim().toUpperCase();
-  if(f==='o') t.o = v.split(' (')[0];
+  if(!t) return;
+  if(f==='n') {
+    const oldName = t.n;
+    t.n = v.trim().toUpperCase();
+    logAction(`Cambió nombre de técnico "${oldName}" a "${t.n}"`);
+  }
+  if(f==='o') {
+    const oldOff = t.o;
+    t.o = v.split(' (')[0];
+    logAction(`Reasignó técnico "${t.n}" de "${oldOff}" a "${t.o}"`);
+  }
   render(); saveData();
 }
 
@@ -888,6 +966,7 @@ function addD(){
   if(!n) return;
   if(S.d.includes(n)) return alert('El distrito ya existe.');
   S.d.push(n);
+  logAction(`Creó el distrito "${n}"`);
   $('#nd').value = '';
   render(); saveData();
 }
@@ -899,6 +978,7 @@ function renD(i,v){
   S.d[i]=v;
   S.o.forEach(o=>{ if(o.d===old) o.d=v; });
   if(DIST===old) DIST=v;
+  logAction(`Renombró el distrito "${old}" a "${v}"`);
   render(); saveData();
 }
 
@@ -909,6 +989,7 @@ function delD(i){
   if(confirm(`¿Eliminar el distrito "${distName}"?`)){
     S.d.splice(i,1);
     if(DIST===distName) DIST='ALL';
+    logAction(`Eliminó el distrito "${distName}"`);
     render(); saveData();
   }
 }
@@ -920,6 +1001,7 @@ function addO(){
   if(!n) return;
   if(S.o.some(o=>o.n===n)) return alert('Ya existe una oficina con ese nombre.');
   S.o.push({n, d});
+  logAction(`Creó la oficina "${n}" en el distrito "${d}"`);
   $('#no2').value = '';
   render(); saveData();
 }
@@ -932,11 +1014,15 @@ function renO(i,v){
   S.o[i].n=v;
   S.t.forEach(t=>{ if(t.o===old) t.o=v; });
   if(F===old) F=v;
+  logAction(`Renombró la oficina "${old}" a "${v}"`);
   render(); saveData();
 }
 
 function changeDistO(i, v){
-  S.o[i].d = v;
+  const off = S.o[i];
+  const oldD = off.d;
+  off.d = v;
+  logAction(`Cambió oficina "${off.n}" del distrito "${oldD}" al distrito "${v}"`);
   render(); saveData();
 }
 
@@ -946,6 +1032,7 @@ function delO(i){
   if(confirm(`¿Eliminar la oficina "${offName}"?`)){
     S.o.splice(i,1);
     if(F===offName) F='ALL';
+    logAction(`Eliminó la oficina "${offName}"`);
     render(); saveData();
   }
 }
@@ -959,6 +1046,7 @@ function dl(n,x,t){
 function csv(){
   const W=wk(S.y), K=W.map(iso);
   const activeTechs = getFilteredTechs();
+  logAction(`Exportó la planilla de vacaciones a CSV`);
   dl('vacaciones-personal-'+S.y+'.csv', '\ufeff'+[
     ['Técnico','Oficina','Distrito',...W.map(lab)].join(';'),
     ...activeTechs.map(t=>[t.n, t.o, getTechDistrict(t), ...K.map(k=>t.w.includes(k)?'X':'')].join(';'))
@@ -971,6 +1059,7 @@ function imp(i){
     try {
       const d=JSON.parse(r.result);
       S=d; normalizeData(); nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; DIST='ALL';
+      logAction(`Restauró una copia de seguridad JSON`);
       render();
       await saveData();
     } catch(x){ alert('Archivo de backup no válido.'); }
