@@ -319,6 +319,7 @@ const isExcludedOffice = o => {
 let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null;
+let hasUnsavedChanges = false; // Bandera para detectar cambios pendientes
 
 function logAction(act) {
   if (!Array.isArray(S.logs)) S.logs = [];
@@ -378,6 +379,7 @@ async function loadData(manual = false) {
       await saveData();
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
+    hasUnsavedChanges = false; // Al sincronizar se limpian los cambios pendientes
     setSyncStatus('ok', 'Sincronizado');
     checkSavedSession();
   } catch(err) {
@@ -399,6 +401,7 @@ async function saveData() {
       body: JSON.stringify(S)
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
+    hasUnsavedChanges = false; // Al guardar se marca como sincronizado
     setSyncStatus('ok', 'Guardado en Nube');
     setTimeout(() => setSyncStatus('ok', 'Sincronizado'), 2000);
   } catch(err) {
@@ -460,14 +463,27 @@ function doLogin(evt) {
 }
 
 function doLogout() {
+  if (hasUnsavedChanges) {
+    if (!confirm('⚠️ Tenés cambios pendientes que no fueron actualizados o guardados en la nube.\n\n¿Estás seguro de cerrar sesión y perder los cambios no guardados?')) {
+      return;
+    }
+  }
   if (currentUser) logAction('Cerró sesión');
-  saveData();
   sessionStorage.removeItem('vacations_user');
   currentUser = null;
+  hasUnsavedChanges = false;
   $('#l-user').value = '';
   $('#l-pass').value = '';
   showLoginUI();
 }
+
+// Advertir si intenta cerrar la pestaña o recargar con cambios sin guardar
+window.addEventListener('beforeunload', function (e) {
+  if (hasUnsavedChanges) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
 
 /* MODAL CAMBIO DE CONTRASEÑA */
 function openChangePwdModal() {
@@ -506,6 +522,7 @@ function saveNewPwd(evt) {
   if (uObj) uObj.p = newP;
 
   logAction('Cambió su propia contraseña');
+  hasUnsavedChanges = true;
   saveData();
   $('#pwd-modal').style.display = 'none';
   alert('✅ Contraseña actualizada correctamente.');
@@ -825,7 +842,7 @@ function abm(){
 /* --- VISTA: ABM DE USUARIOS DE LOGGEO (SOLO ADMINS) --- */
 function usersAbm() {
   if (!currentUser || currentUser.r !== 'admin') {
-    return `<div class="card"><p style="color:var(--danger)">⚠️️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
+    return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
   }
 
   return `
@@ -886,6 +903,7 @@ function addUser() {
 
   S.users.push({ u: uVal, p: pVal, r: rVal });
   logAction(`Creó al usuario "${uVal}" con rol [${rVal}]`);
+  hasUnsavedChanges = true;
   $('#nu-u').value = '';
   $('#nu-p').value = '';
   render();
@@ -903,6 +921,7 @@ function editUser(idx, field, value) {
       target.r = value;
       logAction(`Cambió el rol del usuario "${target.u}" a [${value}]`);
     }
+    hasUnsavedChanges = true;
     render();
     saveData();
   }
@@ -916,6 +935,7 @@ function delUser(idx) {
   if (confirm(`¿Eliminar al usuario "${target.u}"?`)) {
     S.users.splice(idx, 1);
     logAction(`Eliminó al usuario "${target.u}"`);
+    hasUnsavedChanges = true;
     render();
     saveData();
   }
@@ -971,6 +991,7 @@ function clearLogs() {
   if (confirm('¿Estás seguro de vaciar todo el log de auditoría del sistema?')) {
     S.logs = [];
     logAction('Limpió todo el historial de auditoría');
+    hasUnsavedChanges = true;
     render();
     saveData();
   }
@@ -987,7 +1008,6 @@ function renderHeaderSelects(){
     $('#btn-u-nav').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-l-nav').style.display = isAdm ? 'inline-flex' : 'none';
     
-    // Ocultar o mostrar botones de CSV, Backup y Cargar según el rol
     $('#btn-admin-csv').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-admin-backup').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-admin-load').style.display = isAdm ? 'inline-flex' : 'none';
@@ -1033,6 +1053,7 @@ function tog(id, k){
     logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
   }
 
+  hasUnsavedChanges = true;
   render();
   saveData();
 }
@@ -1044,6 +1065,7 @@ function addT(){
   const selectedOff = $('#no').value.split(' (')[0];
   S.t.push({id:++nid, n, o:selectedOff, w:[]});
   logAction(`Agregó nuevo técnico "${n}" en oficina "${selectedOff}"`);
+  hasUnsavedChanges = true;
   $('#nn').value = '';
   render();
   saveData();
@@ -1055,6 +1077,7 @@ function delT(id){
   if(confirm(`¿Eliminar técnico "${t.n}" y sus semanas de vacaciones?`)){
     S.t=S.t.filter(x=>x.id!=id);
     logAction(`Eliminó al técnico "${t.n}" (${t.o})`);
+    hasUnsavedChanges = true;
     render();
     saveData();
   }
@@ -1073,6 +1096,7 @@ function editT(id,f,v){
     t.o = v.split(' (')[0];
     logAction(`Reasignó técnico "${t.n}" de "${oldOff}" a "${t.o}"`);
   }
+  hasUnsavedChanges = true;
   render(); saveData();
 }
 
@@ -1083,6 +1107,7 @@ function addD(){
   if(S.d.includes(n)) return alert('El distrito ya existe.');
   S.d.push(n);
   logAction(`Creó el distrito "${n}"`);
+  hasUnsavedChanges = true;
   $('#nd').value = '';
   render(); saveData();
 }
@@ -1095,6 +1120,7 @@ function renD(i,v){
   S.o.forEach(o=>{ if(o.d===old) o.d=v; });
   if(DIST===old) DIST=v;
   logAction(`Renombró el distrito "${old}" a "${v}"`);
+  hasUnsavedChanges = true;
   render(); saveData();
 }
 
@@ -1106,6 +1132,7 @@ function delD(i){
     S.d.splice(i,1);
     if(DIST===distName) DIST='ALL';
     logAction(`Eliminó el distrito "${distName}"`);
+    hasUnsavedChanges = true;
     render(); saveData();
   }
 }
@@ -1118,6 +1145,7 @@ function addO(){
   if(S.o.some(o=>o.n===n)) return alert('Ya existe una oficina con ese nombre.');
   S.o.push({n, d});
   logAction(`Creó la oficina "${n}" en el distrito "${d}"`);
+  hasUnsavedChanges = true;
   $('#no2').value = '';
   render(); saveData();
 }
@@ -1131,6 +1159,7 @@ function renO(i,v){
   S.t.forEach(t=>{ if(t.o===old) t.o=v; });
   if(F===old) F=v;
   logAction(`Renombró la oficina "${old}" a "${v}"`);
+  hasUnsavedChanges = true;
   render(); saveData();
 }
 
@@ -1139,6 +1168,7 @@ function changeDistO(i, v){
   const oldD = off.d;
   off.d = v;
   logAction(`Cambió oficina "${off.n}" del distrito "${oldD}" al distrito "${v}"`);
+  hasUnsavedChanges = true;
   render(); saveData();
 }
 
@@ -1149,6 +1179,7 @@ function delO(i){
     S.o.splice(i,1);
     if(F===offName) F='ALL';
     logAction(`Eliminó la oficina "${offName}"`);
+    hasUnsavedChanges = true;
     render(); saveData();
   }
 }
@@ -1176,6 +1207,7 @@ function imp(i){
       const d=JSON.parse(r.result);
       S=d; normalizeData(); nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; DIST='ALL';
       logAction(`Restauró una copia de seguridad JSON`);
+      hasUnsavedChanges = true;
       render();
       await saveData();
     } catch(x){ alert('Archivo de backup no válido.'); }
