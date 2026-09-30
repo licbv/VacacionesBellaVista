@@ -376,7 +376,6 @@ async function loadData(manual = false) {
       normalizeData();
     } else {
       S = JSON.parse(JSON.stringify(SEED));
-      await saveData();
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
     hasUnsavedChanges = false;
@@ -386,8 +385,11 @@ async function loadData(manual = false) {
     normalizeData();
     setSyncStatus('err', 'Sin conexión');
   }
-  // Verificar sesión una vez cargados los datos
-  checkSavedSession();
+  
+  // Refrescar vistas si ya está logueado
+  if (currentUser) {
+    render();
+  }
 }
 
 async function saveData() {
@@ -417,15 +419,18 @@ function checkSavedSession() {
   if (savedUserJson) {
     try {
       const uSaved = JSON.parse(savedUserJson);
+      normalizeData();
       const found = S.users.find(x => x.u.toLowerCase() === uSaved.u.toLowerCase());
       if (found) {
         currentUser = found;
         showAppUI();
+        loadData(); // Cargar datos actualizados en segundo plano
         return;
       }
     } catch(e) {}
   }
   showLoginUI();
+  loadData(); // Cargar datos en segundo plano mientras está en login
 }
 
 function showAppUI() {
@@ -453,9 +458,9 @@ function doLogin(evt) {
     currentUser = found;
     sessionStorage.setItem('vacations_user', JSON.stringify({ u: found.u }));
     logAction('Inició sesión en el sistema');
-    saveData();
     $('#l-err').style.display = 'none';
     showAppUI();
+    saveData(); // Guardar en nube de forma asíncrona sin bloquear el login
   } else {
     $('#l-err').style.display = 'block';
   }
@@ -467,7 +472,10 @@ function doLogout() {
       return;
     }
   }
-  if (currentUser) logAction('Cerró sesión');
+  if (currentUser) {
+    logAction('Cerró sesión');
+    saveData();
+  }
   sessionStorage.removeItem('vacations_user');
   currentUser = null;
   hasUnsavedChanges = false;
@@ -1213,7 +1221,7 @@ function imp(i){
 }
 
 function init(){
-  loadData();
+  checkSavedSession();
 }
 
 window.onload = init;
