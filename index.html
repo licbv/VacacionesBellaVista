@@ -3,126 +3,132 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestión de Vacaciones - Movistar Distrito</title>
+<title>Gestión de Vacaciones - Personal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --mov-navy: #003245;
-  --mov-blue: #019DF4;
-  --mov-green: #5CB615;
-  --mov-green-bg: #EBF7E5;
-  --mov-bg: #F4F6F8;
-  --mov-card: #FFFFFF;
-  --mov-text: #1D252C;
-  --mov-muted: #50535A;
-  --mov-border: #D0D7DE;
-  --danger: #E53935;
-  --warning: #FF9800;
+  --pers-navy: #0B132B;
+  --pers-blue: #0052FF;
+  --pers-cyan: #00D2FF;
+  --pers-cyan-bg: #E6FAFF;
+  --pers-bg: #F4F6FB;
+  --pers-card: #FFFFFF;
+  --pers-text: #0F172A;
+  --pers-muted: #64748B;
+  --pers-border: #E2E8F0;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --pers-green: #10B981;
+  --pers-green-bg: #ECFDF5;
 }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: 'Telefonica', 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--mov-bg); color: var(--mov-text); font-size: 13px; }
+body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--pers-bg); color: var(--pers-text); font-size: 13px; }
 
-/* Header Movistar */
-header { background: var(--mov-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+/* Header Personal */
+header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
 .brand { display: flex; align-items: center; gap: 10px; margin-right: 15px; }
-.brand-logo { background: var(--mov-green); color: #fff; font-weight: 900; font-size: 18px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-h1 { font-size: 18px; margin: 0; font-weight: 700; letter-spacing: -0.3px; }
+.brand-logo { background: linear-gradient(135deg, var(--pers-cyan) 0%, var(--pers-blue) 100%); color: #fff; font-weight: 900; font-size: 20px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 210, 255, 0.4); }
+h1 { font-size: 18px; margin: 0; font-weight: 800; letter-spacing: -0.4px; }
 
 /* Botones & Controls */
-button, select, input { font-family: inherit; font-size: 12px; border: 1px solid var(--mov-border); border-radius: 20px; padding: 6px 14px; transition: all .15s ease; }
+button, select, input { font-family: inherit; font-size: 12px; border: 1px solid var(--pers-border); border-radius: 20px; padding: 6px 14px; transition: all .15s ease; }
 button { cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-header button { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
-header button:hover { background: rgba(255,255,255,0.25); }
-header button.on { background: var(--mov-blue); color: #fff; border-color: var(--mov-blue); box-shadow: 0 2px 6px rgba(1,157,244,0.4); }
-header select, header input { background: #fff; color: var(--mov-navy); font-weight: 600; }
+header button { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
+header button:hover { background: rgba(255,255,255,0.2); }
+header button.on { background: var(--pers-blue); color: #fff; border-color: var(--pers-blue); box-shadow: 0 2px 8px rgba(0,82,255,0.5); }
+header select, header input { background: #fff; color: var(--pers-navy); font-weight: 600; }
 header input { width: 60px; text-align: center; }
 header label { font-size: 12px; opacity: 0.9; }
 .sp { flex: 1; }
 
-.sync-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; display: inline-block; }
-.sync-dot.busy { background: #FACC15; animation: pulse 1s infinite; }
-.sync-dot.err { background: #EF4444; }
+.sync-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pers-cyan); display: inline-block; box-shadow: 0 0 6px var(--pers-cyan); }
+.sync-dot.busy { background: #FACC15; box-shadow: 0 0 6px #FACC15; animation: pulse 1s infinite; }
+.sync-dot.err { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
 
 @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
 
 /* Dashboard & Cards */
 main { padding: 20px; max-width: 1600px; margin: 0 auto; }
-.card { background: var(--mov-card); border-radius: 12px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--mov-border); box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
-h3 { margin: 0 0 14px; font-size: 15px; color: var(--mov-navy); font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+.card { background: var(--pers-card); border-radius: 14px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--pers-border); box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+h3 { margin: 0 0 14px; font-size: 15px; color: var(--pers-navy); font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
 
 /* KPIs Distrito */
 .kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 18px; }
-.kp .card { margin: 0; border-left: 5px solid var(--mov-blue); }
-.kp.district .card { border-left-color: var(--mov-green); background: #fafefe; }
-.kp b { display: block; font-size: 24px; color: var(--mov-navy); font-weight: 800; line-height: 1.2; }
-.kp span { color: var(--mov-muted); font-size: 12px; font-weight: 500; }
+.kp .card { margin: 0; border-left: 5px solid var(--pers-blue); }
+.kp.district .card { border-left-color: var(--pers-cyan); background: #FAFCFF; }
+.kp b { display: block; font-size: 24px; color: var(--pers-navy); font-weight: 800; line-height: 1.2; }
+.kp span { color: var(--pers-muted); font-size: 12px; font-weight: 500; }
 
 .two { display: grid; grid-template-columns: 1fr 320px; gap: 16px; }
 @media (max-width: 1100px) { .two { grid-template-columns: 1fr; } }
 
 /* Tabla Heatmap */
-.wrap { overflow: auto; max-height: 70vh; border-radius: 8px; border: 1px solid var(--mov-border); }
+.wrap { overflow: auto; max-height: 70vh; border-radius: 10px; border: 1px solid var(--pers-border); }
 table { border-collapse: separate; border-spacing: 0; width: 100%; }
-.hm td, .hm th { border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; text-align: center; font-size: 11px; min-width: 34px; height: 32px; padding: 0 3px; }
+.hm td, .hm th { border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; text-align: center; font-size: 11px; min-width: 34px; height: 32px; padding: 0 3px; }
 .hm td { cursor: pointer; transition: filter .1s; }
-.hm td.sel { outline: 2px solid var(--mov-navy); outline-offset: -2px; }
+.hm td.sel { outline: 2px solid var(--pers-blue); outline-offset: -2px; }
 .hm td:hover { filter: brightness(0.92); }
-.hm th { background: #EBF3F8; color: var(--mov-navy); font-weight: 700; position: sticky; top: 0; z-index: 1; }
+.hm th { background: #F1F5F9; color: var(--pers-navy); font-weight: 700; position: sticky; top: 0; z-index: 1; }
 .hm thead tr+tr th { top: 32px; }
-.hm th.m { background: var(--mov-navy); color: #fff; }
-.hm th.r { position: sticky; left: 0; z-index: 2; text-align: left; min-width: 210px; padding: 0 10px; background: #F0F5F9; font-weight: 600; color: var(--mov-navy); }
-.hm th.r small { float: right; color: var(--mov-muted); font-weight: 400; }
-.hm thead th.r { top: 0; z-index: 3; background: var(--mov-navy); color: #fff; }
-.hm tfoot th, .hm tfoot td { font-weight: 800; background: #E2ECF5; }
-.hm tfoot tr.district-total th, .hm tfoot tr.district-total td { background: var(--mov-navy); color: #fff; border-top: 2px solid var(--mov-blue); }
+.hm th.m { background: var(--pers-navy); color: #fff; }
+.hm th.r { position: sticky; left: 0; z-index: 2; text-align: left; min-width: 210px; padding: 0 10px; background: #F8FAFC; font-weight: 600; color: var(--pers-navy); }
+.hm th.r small { float: right; color: var(--pers-muted); font-weight: 400; }
+.hm thead th.r { top: 0; z-index: 3; background: var(--pers-navy); color: #fff; }
+.hm tfoot th, .hm tfoot td { font-weight: 800; background: #E2E8F0; }
+.hm tfoot tr.district-total th, .hm tfoot tr.district-total td { background: var(--pers-navy); color: #fff; border-top: 2px solid var(--pers-cyan); }
 
-/* Celda Verde Vacaciones Movistar */
-.x { background: var(--mov-green) !important; color: #fff !important; font-weight: 800; font-size: 12px; }
+/* Celda Cian Vacaciones */
+.x { background: var(--pers-cyan) !important; color: var(--pers-navy) !important; font-weight: 900; font-size: 12px; }
 .pl td { background: #fff; }
-.pl tr:nth-child(even) td { background: #fafafa; }
+.pl tr:nth-child(even) td { background: #FAFCFF; }
 
 /* Badges & Chips */
-.wk-chip { display: inline-block; background: var(--mov-green-bg); color: #2E6A05; border: 1px solid #b7e4a1; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin: 2px; }
-.badge-off { background: #E0F2FE; color: #0369A1; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+.wk-chip { display: inline-block; background: var(--pers-cyan-bg); color: #007799; border: 1px solid #B3F3FF; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin: 2px; }
+.badge-off { background: #EFF6FF; color: var(--pers-blue); padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+.badge-dist { background: #F3E8FF; color: #7C3AED; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
 
 /* Leyenda */
-.lg { display: flex; gap: 16px; font-size: 11px; margin: 12px 0 0; align-items: center; flex-wrap: wrap; color: var(--mov-muted); }
+.lg { display: flex; gap: 16px; font-size: 11px; margin: 12px 0 0; align-items: center; flex-wrap: wrap; color: var(--pers-muted); }
 .lg i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -3px; margin-right: 4px; }
 
 /* Tabs */
 .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-.tabs button { background: #fff; border: 1px solid var(--mov-border); color: var(--mov-navy); border-radius: 20px; padding: 6px 16px; }
-.tabs button.on { background: var(--mov-navy); color: #fff; border-color: var(--mov-navy); box-shadow: 0 2px 5px rgba(0,50,69,0.3); }
+.tabs button { background: #fff; border: 1px solid var(--pers-border); color: var(--pers-navy); border-radius: 20px; padding: 6px 16px; }
+.tabs button.on { background: var(--pers-navy); color: #fff; border-color: var(--pers-navy); box-shadow: 0 2px 6px rgba(11,19,43,0.3); }
 
 /* Form & ABM */
-.btn { background: var(--mov-blue); color: #fff; border: 0; }
-.btn:hover { background: #0088d4; }
-.del { background: #FEE2E2; color: var(--danger); border: 1px solid #fca5a5; }
-.del:hover { background: #fca5a5; }
+.btn { background: var(--pers-blue); color: #fff; border: 0; }
+.btn:hover { background: #0043D6; }
+.del { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
+.del:hover { background: #FCA5A5; }
 .f { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-input[type=text], select { border: 1px solid var(--mov-border); background: #fff; padding: 6px 12px; border-radius: 8px; }
+input[type=text], select { border: 1px solid var(--pers-border); background: #fff; padding: 6px 12px; border-radius: 8px; }
 .tb { width: 100%; border-collapse: collapse; }
-.tb th { text-align: left; color: var(--mov-muted); font-weight: 700; padding: 8px; border-bottom: 2px solid var(--mov-border); }
-.tb td { padding: 8px; border-bottom: 1px solid #eef2f7; vertical-align: middle; }
+.tb th { text-align: left; color: var(--pers-muted); font-weight: 700; padding: 8px; border-bottom: 2px solid var(--pers-border); }
+.tb td { padding: 8px; border-bottom: 1px solid #EEF2F7; vertical-align: middle; }
 .tb input { width: 100%; }
-.of { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; }
+.item-box { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; background: #F8FAFC; padding: 8px 12px; border-radius: 8px; }
 
-.tech-detail { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; margin-top: 10px; }
+.tech-detail { background: #F0FDFA; border: 1px solid #99F6E4; padding: 12px; border-radius: 8px; margin-top: 10px; }
 ol { margin: 0; padding-left: 18px; }
-li { padding: 6px 0; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
-li:hover { color: var(--mov-blue); }
+li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
+li:hover { color: var(--pers-blue); }
 </style>
 </head>
 <body>
 
 <header>
   <div class="brand">
-    <div class="brand-logo">m</div>
-    <h1>Vacaciones Técnicos · Movistar</h1>
+    <div class="brand-logo">p</div>
+    <h1>Vacaciones Técnicos · Personal</h1>
   </div>
-  <button data-v="d" onclick="V='d';render()">📊 Resumen Distrito</button>
+  <button data-v="d" onclick="V='d';render()">📊 Resumen General</button>
   <button data-v="p" onclick="V='p';render()">📅 Planilla por Oficina</button>
-  <button data-v="a" onclick="V='a';render()">⚙️ Gestión Técnicos y Oficinas</button>
+  <button data-v="a" onclick="V='a';render()">⚙️ Gestión (Técnicos/Oficinas/Distritos)</button>
   
   <span class="sp"></span>
   
@@ -133,15 +139,18 @@ li:hover { color: var(--mov-blue); }
 
   <button onclick="loadData(true)" title="Recargar datos de la nube">🔄 Actualizar</button>
 
+  <label>Distrito</label>
+  <select id="ds" onchange="DIST=this.value; SEL=null; render()"></select>
+
   <label>Año</label>
-  <select id="ys" onchange="S.y=+this.value;SEL=null;saveData();render()"></select>
+  <select id="ys" onchange="S.y=+this.value; SEL=null; saveData(); render()"></select>
   
-  <label>Umbral Alerta %</label>
-  <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20;saveData();render()">
+  <label>Umbral %</label>
+  <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20; saveData(); render()">
   
-  <button onclick="csv()">📥 Exportar CSV</button>
-  <button onclick="dl('vacaciones-movistar.json',JSON.stringify(S),'application/json')">💾 Backup JSON</button>
-  <button onclick="$('#fi').click()">📂 Cargar Backup</button>
+  <button onclick="csv()">📥 CSV</button>
+  <button onclick="dl('vacaciones-personal.json',JSON.stringify(S),'application/json')">💾 Backup</button>
+  <button onclick="$('#fi').click()">📂 Cargar</button>
   <input id="fi" type="file" accept=".json" hidden onchange="imp(this)">
 </header>
 
@@ -152,13 +161,43 @@ const BIN_ID = "6abd1918ffd5d160533f46f2";
 const MASTER_KEY = "$2a$10$RBYWKS9nR5ypehogRtWvSu1/R1qEQAlA8VtN9iQUynH5fzC3czXUK";
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-const SEED={"o": ["Bella Vista", "Hurlingham", "Jose C Paz", "Los Polvorines", "San Miguel", "Trujui", "Pilar"], "t": [{"id": 1, "n": "AVELLANEDA, PABLO SEBASTIAN", "o": "Bella Vista", "w": []}, {"id": 2, "n": "BELMONTE, JAVIER LEANDRO", "o": "Bella Vista", "w": []}, {"id": 3, "n": "CABRAL, CARLOS EZEQUIEL", "o": "Bella Vista", "w": ["2026-07-20"]}, {"id": 4, "n": "RIVAROLA, RUBEN ALBERTO", "o": "Hurlingham", "w": ["2026-04-06", "2026-04-13"]}, {"id": 5, "n": "CUENCA, LUIS DAVID", "o": "Hurlingham", "w": ["2026-07-20", "2026-08-24"]}, {"id": 6, "n": "ESPOSITO, MATIAS ALEJANDRO", "o": "Hurlingham", "w": ["2026-05-18", "2026-07-13"]}, {"id": 7, "n": "FARIÑA, MATIAS", "o": "Hurlingham", "w": ["2026-04-13", "2026-04-20", "2026-06-15", "2026-08-31"]}, {"id": 8, "n": "SARRA, CRISTIAN DAMIAN", "o": "Hurlingham", "w": ["2026-07-27"]}, {"id": 9, "n": "GALEANO, MAURICIO RAUL", "o": "Hurlingham", "w": ["2026-04-13", "2026-05-25", "2026-07-27"]}, {"id": 10, "n": "DIAZ, ROBERTO MARTIN", "o": "Jose C Paz", "w": ["2026-04-06", "2026-04-13"]}, {"id": 11, "n": "DRAGHI, LUCIANO MARTIN", "o": "Jose C Paz", "w": []}, {"id": 12, "n": "KRUPPA, ADRIAN MAXIMILIANO", "o": "Jose C Paz", "w": ["2026-12-21"]}, {"id": 13, "n": "LARROSA, GONZALO EZEQUIEL", "o": "Jose C Paz", "w": []}, {"id": 14, "n": "BENITEZ, MIGUEL", "o": "Jose C Paz", "w": []}, {"id": 15, "n": "CREVATIN, ALEX LEONEL", "o": "Jose C Paz", "w": []}, {"id": 16, "n": "D´AURIA, ENZO ALEJANDRO", "o": "Jose C Paz", "w": []}, {"id": 17, "n": "CAROSIO, SEBASTIAN", "o": "Jose C Paz", "w": []}, {"id": 18, "n": "NACHAR, CARLOS", "o": "Los Polvorines", "w": []}, {"id": 19, "n": "STIBEL MARIO", "o": "Los Polvorines", "w": []}, {"id": 20, "n": "SERRANO GERMAN", "o": "Los Polvorines", "w": []}, {"id": 21, "n": "PAGANELLI, ARIEL HERNAN", "o": "Los Polvorines", "w": []}, {"id": 22, "n": "NOVO, RODRIGO EZEQUIEL", "o": "Los Polvorines", "w": []}, {"id": 23, "n": "MAIDANA, LUIS HORACIO", "o": "Los Polvorines", "w": ["2026-04-06"]}, {"id": 24, "n": "ESVER, RAUL ISAAC", "o": "San Miguel", "w": ["2026-04-06", "2026-09-28"]}, {"id": 25, "n": "VAZQUEZ, ANDRES GABRIEL", "o": "San Miguel", "w": ["2026-08-24"]}, {"id": 26, "n": "GALARZA, JORGE LUIS", "o": "San Miguel", "w": ["2026-05-18", "2026-06-15", "2026-10-19"]}, {"id": 27, "n": "PALACIOS, MAURICIO", "o": "San Miguel", "w": ["2026-04-13", "2026-07-20", "2026-09-21"]}, {"id": 28, "n": "ACOSTA, GUSTAVO ALEJANDRO", "o": "San Miguel", "w": ["2026-08-03", "2026-08-10", "2026-08-17"]}, {"id": 29, "n": "MEDINA, CLAUDIO ANDRES", "o": "San Miguel", "w": ["2026-06-08"]}, {"id": 30, "n": "TORRES, LEONARDO DANIEL", "o": "San Miguel", "w": ["2026-10-05"]}, {"id": 31, "n": "PEREZ, FERNANDO GABRIEL", "o": "San Miguel", "w": ["2026-03-23", "2026-03-30", "2026-05-25", "2026-07-27"]}, {"id": 32, "n": "PAREDES, DIEGO NICASIO", "o": "Trujui", "w": ["2026-04-06", "2026-08-17"]}, {"id": 33, "n": "CAMIÑA, HORACIO", "o": "Trujui", "w": []}, {"id": 34, "n": "PIRELLO, JULIO", "o": "Trujui", "w": []}, {"id": 35, "n": "LESSERTESEUR, PABLO", "o": "Trujui", "w": []}, {"id": 36, "n": "ALVAREZ, MATIAS", "o": "Trujui", "w": []}, {"id": 37, "n": "VEISAGA, CARLOS MARTIN", "o": "Trujui", "w": []}, {"id": 38, "n": "COMPTA, DIEGO CRISTIAN JORGE", "o": "Trujui", "w": []}, {"id": 39, "n": "LASSALLE, PABLO", "o": "Pilar", "w": ["2026-06-01", "2026-06-08", "2026-09-14"]}, {"id": 40, "n": "RAGES, MARCELO OMAR", "o": "Pilar", "w": ["2026-04-06", "2026-04-13", "2026-08-10"]}, {"id": 41, "n": "MAIDANA, FACUNDO EMILIANO", "o": "Pilar", "w": ["2026-05-04", "2026-05-11", "2026-09-21", "2026-09-28"]}, {"id": 42, "n": "ANRIQUEZ, JAIRO", "o": "Pilar", "w": ["2026-10-12"]}, {"id": 43, "n": "SERRANO, FELIPE", "o": "Pilar", "w": ["2026-06-15", "2026-07-13", "2026-07-20"]}, {"id": 44, "n": "VAZQUEZ, MARTIN ALEJANDRO", "o": "Pilar", "w": ["2026-05-25", "2026-06-15", "2026-10-26", "2026-11-02"]}, {"id": 45, "n": "PAGANELLI, ARIEL HERNAN", "o": "Pilar", "w": ["2026-07-27", "2026-08-03"]}]};
+const SEED = {
+  u: 20, y: 2026,
+  d: ["Bella Vista"],
+  o: [
+    { n: "Bella Vista", d: "Bella Vista" },
+    { n: "Hurlingham", d: "Bella Vista" },
+    { n: "Jose C Paz", d: "Bella Vista" },
+    { n: "Los Polvorines", d: "Bella Vista" },
+    { n: "San Miguel", d: "Bella Vista" },
+    { n: "Trujui", d: "Bella Vista" },
+    { n: "Pilar", d: "Bella Vista" }
+  ],
+  t: [{"id":1,"n":"AVELLANEDA, PABLO SEBASTIAN","o":"Bella Vista","w":[]},{"id":2,"n":"BELMONTE, JAVIER LEANDRO","o":"Bella Vista","w":[]},{"id":3,"n":"CABRAL, CARLOS EZEQUIEL","o":"Bella Vista","w":["2026-07-20"]},{"id":4,"n":"RIVAROLA, RUBEN ALBERTO","o":"Hurlingham","w":["2026-04-06","2026-04-13"]},{"id":5,"n":"CUENCA, LUIS DAVID","o":"Hurlingham","w":["2026-07-20","2026-08-24"]},{"id":6,"n":"ESPOSITO, MATIAS ALEJANDRO","o":"Hurlingham","w":["2026-05-18","2026-07-13"]},{"id":7,"n":"FARIÑA, MATIAS","o":"Hurlingham","w":["2026-04-13","2026-04-20","2026-06-15","2026-08-31"]},{"id":8,"n":"SARRA, CRISTIAN DAMIAN","o":"Hurlingham","w":["2026-07-27"]},{"id":9,"n":"GALEANO, MAURICIO RAUL","o":"Hurlingham","w":["2026-04-13","2026-05-25","2026-07-27"]},{"id":10,"n":"DIAZ, ROBERTO MARTIN","o":"Jose C Paz","w":["2026-04-06","2026-04-13"]},{"id":11,"n":"DRAGHI, LUCIANO MARTIN","o":"Jose C Paz","w":[]},{"id":12,"n":"KRUPPA, ADRIAN MAXIMILIANO","o":"Jose C Paz","w":["2026-12-21"]},{"id":13,"n":"LARROSA, GONZALO EZEQUIEL","o":"Jose C Paz","w":[]},{"id":14,"n":"BENITEZ, MIGUEL","o":"Jose C Paz","w":[]},{"id":15,"n":"CREVATIN, ALEX LEONEL","o":"Jose C Paz","w":[]},{"id":16,"n":"D´AURIA, ENZO ALEJANDRO","o":"Jose C Paz","w":[]},{"id":17,"n":"CAROSIO, SEBASTIAN","o":"Jose C Paz","w":[]},{"id":18,"n":"NACHAR, CARLOS","o":"Los Polvorines","w":[]},{"id":19,"n":"STIBEL MARIO","o":"Los Polvorines","w":[]},{"id":20,"n":"SERRANO GERMAN","o":"Los Polvorines","w":[]},{"id":21,"n":"PAGANELLI, ARIEL HERNAN","o":"Los Polvorines","w":[]},{"id":22,"n":"NOVO, RODRIGO EZEQUIEL","o":"Los Polvorines","w":[]},{"id":23,"n":"MAIDANA, LUIS HORACIO","o":"Los Polvorines","w":["2026-04-06"]},{"id":24,"n":"ESVER, RAUL ISAAC","o":"San Miguel","w":["2026-04-06","2026-09-28"]},{"id":25,"n":"VAZQUEZ, ANDRES GABRIEL","o":"San Miguel","w":["2026-08-24"]},{"id":26,"n":"GALARZA, JORGE LUIS","o":"San Miguel","w":["2026-05-18","2026-06-15","2026-10-19"]},{"id":27,"n":"PALACIOS, MAURICIO","o":"San Miguel","w":["2026-04-13","2026-07-20","2026-09-21"]},{"id":28,"n":"ACOSTA, GUSTAVO ALEJANDRO","o":"San Miguel","w":["2026-08-03","2026-08-10","2026-08-17"]},{"id":29,"n":"MEDINA, CLAUDIO ANDRES","o":"San Miguel","w":["2026-06-08"]},{"id":30,"n":"TORRES, LEONARDO DANIEL","o":"San Miguel","w":["2026-10-05"]},{"id":31,"n":"PEREZ, FERNANDO GABRIEL","o":"San Miguel","w":["2026-03-23","2026-03-30","2026-05-25","2026-07-27"]},{"id":32,"n":"PAREDES, DIEGO NICASIO","o":"Trujui","w":["2026-04-06","2026-08-17"]},{"id":33,"n":"CAMIÑA, HORACIO","o":"Trujui","w":[]},{"id":34,"n":"PIRELLO, JULIO","o":"Trujui","w":[]},{"id":35,"n":"LESSERTESEUR, PABLO","o":"Trujui","w":[]},{"id":36,"n":"ALVAREZ, MATIAS","o":"Trujui","w":[]},{"id":37,"n":"VEISAGA, CARLOS MARTIN","o":"Trujui","w":[]},{"id":38,"n":"COMPTA, DIEGO CRISTIAN JORGE","o":"Trujui","w":[]},{"id":39,"n":"LASSALLE, PABLO","o":"Pilar","w":["2026-06-01","2026-06-08","2026-09-14"]},{"id":40,"n":"RAGES, MARCELO OMAR","o":"Pilar","w":["2026-04-06","2026-04-13","2026-08-10"]},{"id":41,"n":"MAIDANA, FACUNDO EMILIANO","o":"Pilar","w":["2026-05-04","2026-05-11","2026-09-21","2026-09-28"]},{"id":42,"n":"ANRIQUEZ, JAIRO","o":"Pilar","w":["2026-10-12"]},{"id":43,"n":"SERRANO, FELIPE","o":"Pilar","w":["2026-06-15","2026-07-13","2026-07-20"]},{"id":44,"n":"VAZQUEZ, MARTIN ALEJANDRO","o":"Pilar","w":["2026-05-25","2026-06-15","2026-10-26","2026-11-02"]},{"id":45,"n":"PAGANELLI, ARIEL HERNAN","o":"Pilar","w":["2026-07-27","2026-08-03"]}]
+};
 
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
-let S = {u:20, y:2026, o:SEED.o, t:SEED.t};
-let V='d', F='ALL', SEL=null, nid=Math.max(0,...S.t.map(t=>t.id));
+let S = JSON.parse(JSON.stringify(SEED));
+let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
+
+function normalizeData() {
+  if (!S.d || !Array.isArray(S.d) || S.d.length === 0) {
+    S.d = ["Bella Vista"];
+  }
+  if (Array.isArray(S.o)) {
+    S.o = S.o.map(of => {
+      if (typeof of === 'string') {
+        return { n: of, d: "Bella Vista" };
+      }
+      return of;
+    });
+  } else {
+    S.o = [];
+  }
+  if (!Array.isArray(S.t)) S.t = [];
+}
 
 function setSyncStatus(state, msg) {
   const dot = $('#sync-dot'), txt = $('#sync-text');
@@ -175,14 +214,16 @@ async function loadData(manual = false) {
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    if (data.record && Array.isArray(data.record.o) && Array.isArray(data.record.t)) {
+    if (data.record) {
       S = data.record;
+      normalizeData();
     } else {
-      S = {u:20, y:2026, o:SEED.o, t:SEED.t};
+      S = JSON.parse(JSON.stringify(SEED));
       await saveData();
     }
     nid = Math.max(0, ...S.t.map(t => t.id));
     setSyncStatus('ok', 'Sincronizado');
+    renderHeaderSelects();
     render();
   } catch(err) {
     console.error('Error al cargar de JSONBin:', err);
@@ -227,9 +268,9 @@ const mh=W=>{
 
 const heat=(p)=>{
   const u=S.u/100;
-  if(p<=0) return ['#F4F6F8','#64748b'];
-  if(p<.9*u) return ['#EBF7E5','#2E6A05'];
-  if(p<=u) return ['#FFF3C4','#9A6700'];
+  if(p<=0) return ['#F4F6FB','#64748B'];
+  if(p<.9*u) return ['#E6FAFF','#007799'];
+  if(p<=u) return ['#FEF3C7','#92400E'];
   return ['#FEE2E2','#B91C1C'];
 };
 
@@ -239,48 +280,67 @@ const cell=(c,n,tt,i,isDistrict=false)=>{
   return `<td style="background:${bg};color:${fg};${extraClass}" title="${e(tt)}" class="${SEL==i?'sel':''}" ${i>=0?`onclick="SEL=${i};render()"`:''}>${c||''}</td>`;
 };
 
-const opts=(sel)=>S.o.map(o=>`<option ${o==sel?'selected':''}>${e(o)}</option>`).join('');
+// Helper Filtros
+function getFilteredOffices() {
+  return DIST === 'ALL' ? S.o : S.o.filter(o => o.d === DIST);
+}
 
-/* --- VISTA: DASHBOARD / RESUMEN DISTRITO --- */
+function getFilteredTechs() {
+  const offices = getFilteredOffices().map(o => o.n);
+  return S.t.filter(t => offices.includes(t.o));
+}
+
+function getTechDistrict(tech) {
+  const off = S.o.find(o => o.n === tech.o);
+  return off ? off.d : (S.d[0] || 'Bella Vista');
+}
+
+/* --- VISTA: DASHBOARD / RESUMEN GENERAL --- */
 function dash(){
-  const W=wk(S.y), K=W.map(iso), N=S.t.length||1, u=S.u/100;
-  const R=S.o.map(o=>{
-    const ts=S.t.filter(t=>t.o==o);
-    return {o, n:ts.length, c:K.map(k=>ts.filter(t=>t.w.includes(k)).length)};
+  const W=wk(S.y), K=W.map(iso);
+  const activeOffices = getFilteredOffices();
+  const activeTechs = getFilteredTechs();
+  const N = activeTechs.length || 1, u = S.u / 100;
+
+  const R = activeOffices.map(o => {
+    const ts = activeTechs.filter(t => t.o === o.n);
+    return { o: o.n, d: o.d, n: ts.length, c: K.map(k => ts.filter(t => t.w.includes(k)).length) };
   });
-  
-  const tot=K.map((_,i)=>R.reduce((a,r)=>a+r.c[i],0));
-  const mx=Math.max(...tot), pk=tot.indexOf(mx), sum=tot.reduce((a,b)=>a+b,0);
-  const over=tot.filter(x=>x/N>u).length;
-  
-  const top=tot.map((c,i)=>[c,i]).filter(x=>x[0]).sort((a,b)=>b[0]-a[0]).slice(0,6)
-    .map(([c,i])=>`<li onclick="SEL=${i};render()"><b>Semana del ${lab(W[i])}</b><br><span style="color:var(--mov-blue);font-weight:700">${c} técnicos</span> (${Math.round(c/N*100)}% del distrito)</li>`).join('')
+
+  const tot = K.map((_,i) => R.reduce((a,r) => a + r.c[i], 0));
+  const mx = Math.max(...tot), pk = tot.indexOf(mx), sum = tot.reduce((a,b) => a + b, 0);
+  const over = tot.filter(x => x / N > u).length;
+
+  const top = tot.map((c,i) => [c,i]).filter(x => x[0]).sort((a,b) => b[0] - a[0]).slice(0,6)
+    .map(([c,i]) => `<li onclick="SEL=${i};render()"><b>Semana del ${lab(W[i])}</b><br><span style="color:var(--pers-blue);font-weight:700">${c} técnicos</span> (${Math.round(c/N*100)}% del total)</li>`).join('')
     || '<li>Sin vacaciones programadas en este año.</li>';
 
-  const det=SEL==null?'':`<div class="card tech-detail"><h3>Detalle Semana ${lab(W[SEL])} (Distrito Completo)</h3>${
-    S.o.map(o=>{
-      const n=S.t.filter(t=>t.o==o && t.w.includes(K[SEL]));
-      return n.length ? `<p style="margin:4px 0"><b>${e(o)}</b> (${n.length}):${n.map(t=>`<span class="wk-chip">${e(t.n)}</span>`).join(' ')}</p>` : '';
+  const det = SEL == null ? '' : `<div class="card tech-detail"><h3>Detalle Semana ${lab(W[SEL])} (${DIST === 'ALL' ? 'Todos los Distritos' : 'Distrito ' + e(DIST)})</h3>${
+    activeOffices.map(o => {
+      const n = activeTechs.filter(t => t.o === o.n && t.w.includes(K[SEL]));
+      return n.length ? `<p style="margin:4px 0"><b>${e(o.n)}</b> [${e(o.d)}] (${n.length}):${n.map(t => `<span class="wk-chip">${e(t.n)}</span>`).join(' ')}</p>` : '';
     }).join('') || '<p>Sin personal de vacaciones esta semana.</p>'
   }</div>`;
 
   return `
-  <div class="card" style="background: linear-gradient(135deg, #003245 0%, #019DF4 100%); color:#fff;">
-    <h2 style="margin:0 0 6px; font-size:20px; font-weight:800;">Resumen General del Distrito (${S.y})</h2>
-    <p style="margin:0; opacity:0.9;">Monitoreo consolidado de dotación y cupos de vacaciones por oficina técnica.</p>
+  <div class="card" style="background: linear-gradient(135deg, #0B132B 0%, #0052FF 100%); color:#fff;">
+    <h2 style="margin:0 0 6px; font-size:20px; font-weight:800;">
+      Resumen ${DIST === 'ALL' ? 'General Consolidado' : 'Distrito ' + e(DIST)} (${S.y})
+    </h2>
+    <p style="margin:0; opacity:0.9;">Monitoreo de ausentismo y dotación por oficina técnica.</p>
   </div>
 
   <div class="kp district">
-    <div class="card"><b>${S.t.length}</b><span>Técnicos Totales Distrito</span></div>
-    <div class="card"><b>${S.o.length}</b><span>Oficinas Técnicas</span></div>
+    <div class="card"><b>${activeTechs.length}</b><span>Técnicos Totales</span></div>
+    <div class="card"><b>${activeOffices.length}</b><span>Oficinas Técnicas</span></div>
     <div class="card"><b>${sum}</b><span>Semanas Asignadas (${S.y})</span></div>
-    <div class="card"><b>${mx?Math.round(mx/N*100)+'%':'-'}</b><span>Pico Max: ${mx} téc. (${pk>=0?fmt(W[pk]):''})</span></div>
-    <div class="card" style="border-left-color:${over? 'var(--danger)': 'var(--mov-green)'}"><b>${over}</b><span>Semanas s/ umbral (${S.u}%)</span></div>
+    <div class="card"><b>${mx ? Math.round(mx/N*100) + '%' : '-'}</b><span>Pico Max: ${mx} téc. (${pk >= 0 ? fmt(W[pk]) : ''})</span></div>
+    <div class="card" style="border-left-color:${over ? 'var(--danger)' : 'var(--pers-cyan)'}"><b>${over}</b><span>Semanas s/ umbral (${S.u}%)</span></div>
   </div>
 
   <div class="two">
     <div class="card">
-      <h3>Matriz de Ausentismo por Oficina y Semana (${S.y})</h3>
+      <h3>Matriz de Ausentismo por Oficina (${S.y})</h3>
       <div class="wrap">
         <table class="hm">
           <thead>
@@ -290,26 +350,29 @@ function dash(){
           <tbody>
             ${R.map(r=>`
               <tr>
-                <th class="r">${e(r.o)} <small>${r.n} téc.</small></th>
-                ${r.c.map((c,i)=>cell(c, r.n, `${r.o}: ${c}/${r.n} téc. (${r.n?Math.round(c/r.n*100):0}%) · ${lab(W[i])}`, -1)).join('')}
+                <th class="r">
+                  ${e(r.o)}${DIST==='ALL'?`<span class="badge-dist">${e(r.d)}</span>`:''}
+                  <small>${r.n} téc.</small>
+                </th>
+                ${r.c.map((c,i)=>cell(c, r.n, `${r.o} [${r.d}]: ${c}/${r.n} téc. (${r.n?Math.round(c/r.n*100):0}%) · ${lab(W[i])}`, -1)).join('')}
                 <th>${r.c.reduce((a,b)=>a+b,0)}</th>
               </tr>
             `).join('')}
           </tbody>
           <tfoot>
             <tr class="district-total">
-              <th class="r" style="background:var(--mov-navy); color:#fff">TOTAL DISTRITO <small style="color:#b0c4de">${S.t.length}</small></th>
-              ${tot.map((c,i)=>cell(c, N, `Total Distrito: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
-              <th style="background:var(--mov-navy); color:#fff">${sum}</th>
+              <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL SELECCIÓN <small style="color:#A5B4FC">${activeTechs.length}</small></th>
+              ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
+              <th style="background:var(--pers-navy); color:#fff">${sum}</th>
             </tr>
           </tfoot>
         </table>
       </div>
       <div class="lg">
-        <span><i style="background:#EBF7E5; border:1px solid #2E6A05"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
-        <span><i style="background:#FFF3C4; border:1px solid #9A6700"></i>Cerca del Umbral</span>
+        <span><i style="background:#E6FAFF; border:1px solid #007799"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
+        <span><i style="background:#FEF3C7; border:1px solid #92400E"></i>Cerca del Umbral</span>
         <span><i style="background:#FEE2E2; border:1px solid #B91C1C"></i>Alerta (&gt;${S.u}%)</span>
-        <span>Haz clic en la fila "TOTAL DISTRITO" para ver el detalle del personal de esa semana.</span>
+        <span>Haz clic en la fila de TOTALES para ver el detalle de técnicos.</span>
       </div>
     </div>
 
@@ -323,25 +386,30 @@ function dash(){
   </div>`;
 }
 
-/* --- VISTA: PLANILLA POR OFICINA / DISTRITO COMPLETO --- */
+/* --- VISTA: PLANILLA POR OFICINA --- */
 function plan(){
-  const W=wk(S.y), K=W.map(iso);
-  const isAll = (F === 'ALL');
-  
-  const ts = isAll ? S.t : S.t.filter(t=>t.o==F);
+  const W = wk(S.y), K = W.map(iso);
+  const activeOffices = getFilteredOffices();
+  const activeTechs = getFilteredTechs();
+
+  if (F !== 'ALL' && !activeOffices.some(o => o.n === F)) {
+    F = 'ALL';
+  }
+
+  const ts = (F === 'ALL') ? activeTechs : activeTechs.filter(t => t.o === F);
   const n = ts.length || 1;
-  const c = K.map(k=>ts.filter(t=>t.w.includes(k)).length);
+  const c = K.map(k => ts.filter(t => t.w.includes(k)).length);
 
   return `
   <div class="tabs">
-    <button class="${F=='ALL'?'on':''}" onclick="F='ALL';render()">🌐 TODAS LAS OFICINAS (DISTRITO COMPLETO)</button>
-    ${S.o.map((o,i)=>`<button class="${o==F?'on':''}" onclick="F=S.o[${i}];render()">${e(o)}</button>`).join('')}
+    <button class="${F==='ALL'?'on':''}" onclick="F='ALL';render()">🌐 TODAS LAS OFICINAS (${DIST==='ALL'?'TODOS LOS DISTRITOS':e(DIST)})</button>
+    ${activeOffices.map(o=>`<button class="${o.n===F?'on':''}" onclick="F='${e(o.n)}';render()">${e(o.n)}</button>`).join('')}
   </div>
 
   <div class="card">
     <h3>
-      <span>${isAll ? 'Vista General - Distrito Completo' : 'Oficina: '+e(F)} (${S.y})</span>
-      <span style="font-size:12px; font-weight:400; color:var(--mov-muted)">Haz clic en cualquier celda para activar/desactivar la semana de vacaciones</span>
+      <span>${F==='ALL' ? 'Vista General - ' + (DIST==='ALL'?'Todos los Distritos':'Distrito '+e(DIST)) : 'Oficina: '+e(F)} (${S.y})</span>
+      <span style="font-size:12px; font-weight:400; color:var(--pers-muted)">Haz clic en cualquier celda para activar/desactivar la semana</span>
     </h3>
 
     <div class="wrap">
@@ -357,11 +425,13 @@ function plan(){
         <tbody>
           ${ts.map(t=>{
             const userWeeks = W.filter((_, idx) => t.w.includes(K[idx])).map(t => fmt(t));
+            const distName = getTechDistrict(t);
             return `
             <tr class="pl">
               <th class="r">
-                <div style="font-weight:700">${e(t.n)}</div>${isAll ? `<span class="badge-off">${e(t.o)}</span>` : ''}
-                <div style="font-weight:400; font-size:10px; color:var(--mov-muted); margin-top:2px;">
+                <div style="font-weight:700">${e(t.n)}</div>
+                <span class="badge-off">${e(t.o)}</span>${DIST==='ALL' ? `<span class="badge-dist">${e(distName)}</span>` : ''}
+                <div style="font-weight:400; font-size:10px; color:var(--pers-muted); margin-top:2px;">
                   ${userWeeks.length ? userWeeks.map(w => `<span class="wk-chip">${w}</span>`).join('') : 'Sin semanas programadas'}
                 </div>
               </th>
@@ -369,7 +439,7 @@ function plan(){
                 const h=t.w.includes(k);
                 return `<td class="${h?'x':''}" title="${e(t.n)} · Semana ${lab(W[i])}" onclick="tog(${t.id},'${k}')">${h?'✓':''}</td>`;
               }).join('')}
-              <th style="background:#F0F5F9">${K.filter(k=>t.w.includes(k)).length}</th>
+              <th style="background:#F1F5F9">${K.filter(k=>t.w.includes(k)).length}</th>
             </tr>`;
           }).join('') || '<tr><td colspan="55">No hay técnicos asignados en esta vista.</td></tr>'}
         </tbody>
@@ -390,26 +460,32 @@ function plan(){
   </div>`;
 }
 
-/* --- VISTA: ABM TÉCNICOS Y OFICINAS --- */
+/* --- VISTA: ABM TÉCNICOS, OFICINAS Y DISTRITOS --- */
 function abm(){
-  const ts=[...S.t].sort((a,b)=>S.o.indexOf(a.o)-S.o.indexOf(b.o)||a.n.localeCompare(b.n));
-  const K=wk(S.y).map(iso);
+  const ts = [...S.t].sort((a,b) => a.o.localeCompare(b.o) || a.n.localeCompare(b.n));
+  const K = wk(S.y).map(iso);
+
+  const distOpts = (sel) => S.d.map(d => `<option ${d===sel?'selected':''}>${e(d)}</option>`).join('');
+  const offOpts = (sel) => S.o.map(o => `<option ${o.n===sel?'selected':''}>${e(o.n)} (${e(o.d)})</option>`).join('');
 
   return `
+  <!-- ALTA DE TÉCNICO -->
   <div class="card">
     <h3>Alta de Nuevo Técnico</h3>
     <div class="f">
       <input id="nn" type="text" placeholder="APELLIDO, NOMBRE" style="width:280px">
-      <select id="no">${opts(S.o[0])}</select>
+      <label>Oficina:</label>
+      <select id="no">${offOpts(S.o[0]?.n)}</select>
       <button class="btn" onclick="addT()">➕ Agregar Técnico</button>
     </div>
   </div>
 
+  <!-- NOMINA DE TÉCNICOS -->
   <div class="card">
     <h3>Nómina de Técnicos (${S.t.length})</h3>
     <table class="tb">
       <thead>
-        <tr><th>Nombre Completo</th><th>Oficina Asignada</th><th>Semanas ${S.y}</th><th>Semanas Programadas</th><th>Acción</th></tr>
+        <tr><th>Nombre Completo</th><th>Oficina / Distrito</th><th>Semanas ${S.y}</th><th>Semanas Programadas</th><th>Acción</th></tr>
       </thead>
       <tbody>
         ${ts.map(t=>{
@@ -417,7 +493,9 @@ function abm(){
           return `
           <tr>
             <td><input type="text" value="${e(t.n)}" onchange="editT(${t.id},'n',this.value)"></td>
-            <td><select onchange="editT(${t.id},'o',this.value)">${opts(t.o)}</select></td>
+            <td>
+              <select onchange="editT(${t.id},'o',this.value)">${offOpts(t.o)}</select>
+            </td>
             <td><b>${K.filter(k=>t.w.includes(k)).length}</b> sem.</td>
             <td>${assigned.length ? assigned.map(a => `<span class="wk-chip">${a}</span>`).join(' ') : '<i>Ninguna</i>'}</td>
             <td><button class="del" onclick="delT(${t.id})">Eliminar</button></td>
@@ -427,25 +505,53 @@ function abm(){
     </table>
   </div>
 
+  <!-- GESTIÓN DE DISTRITOS -->
+  <div class="card">
+    <h3>Gestión de Distritos</h3>
+    ${S.d.map((d,i)=>`
+      <div class="item-box">
+        <input type="text" value="${e(d)}" onchange="renD(${i},this.value)">
+        <span style="color:var(--pers-muted)">${S.o.filter(o=>o.d===d).length} oficinas asignadas</span>
+        <button class="del" onclick="delD(${i})">Eliminar Distrito</button>
+      </div>
+    `).join('')}
+    <div class="f" style="margin-top:14px">
+      <input id="nd" type="text" placeholder="Nombre nuevo distrito (ej: Distrito Norte)">
+      <button class="btn" onclick="addD()">➕ Agregar Distrito</button>
+    </div>
+  </div>
+
+  <!-- GESTIÓN DE OFICINAS -->
   <div class="card">
     <h3>Gestión de Oficinas Técnicas</h3>
     ${S.o.map((o,i)=>`
-      <div class="of">
-        <input type="text" value="${e(o)}" onchange="renO(${i},this.value)">
-        <span style="color:var(--mov-muted)">${S.t.filter(t=>t.o==o).length} técnicos</span>
-        <button class="del" onclick="delO(${i})">Eliminar Oficina</button>
+      <div class="item-box">
+        <input type="text" value="${e(o.n)}" onchange="renO(${i},this.value)" placeholder="Nombre Oficina">
+        <label style="margin-left:10px">Distrito:</label>
+        <select onchange="changeDistO(${i},this.value)">${distOpts(o.d)}</select>
+        <span style="color:var(--pers-muted); margin-left:10px;">${S.t.filter(t=>t.o===o.n).length} técnicos</span>
+        <button class="del" onclick="delO(${i})" style="margin-left:auto">Eliminar Oficina</button>
       </div>
     `).join('')}
     <div class="f" style="margin-top:14px">
       <input id="no2" type="text" placeholder="Nombre nueva oficina">
+      <label>Asignar a Distrito:</label>
+      <select id="nd2">${distOpts(S.d[0])}</select>
       <button class="btn" onclick="addO()">➕ Agregar Oficina</button>
     </div>
   </div>`;
 }
 
+function renderHeaderSelects(){
+  $('#ds').innerHTML = `<option value="ALL">🌐 TODOS LOS DISTRITOS</option>` + S.d.map(d => `<option value="${e(d)}" ${d===DIST?'selected':''}>${e(d)}</option>`).join('');
+  $('#ys').innerHTML = [2026,2027,2028,2029,2030].map(y => `<option ${y==S.y?'selected':''}>${y}</option>`).join('');
+  $('#u').value = S.u;
+}
+
 function render(){
-  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V=='d' ? dash() : V=='p' ? plan() : abm();
-  document.querySelectorAll('header button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v==V));
+  renderHeaderSelects();
+  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : abm();
+  document.querySelectorAll('header button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===V));
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
@@ -456,10 +562,13 @@ function tog(id,k){
   saveData();
 }
 
+/* FUNCIONES ABM TÉCNICOS */
 function addT(){
   const n=$('#nn').value.trim().toUpperCase();
-  if(!n || !S.o.length) return;
-  S.t.push({id:++nid, n, o:$('#no').value, w:[]});
+  if(!n || !S.o.length) return alert('Debes cargar un nombre e ingresar una oficina válida.');
+  const selectedOff = $('#no').value.split(' (')[0];
+  S.t.push({id:++nid, n, o:selectedOff, w:[]});
+  $('#nn').value = '';
   render();
   saveData();
 }
@@ -472,26 +581,77 @@ function delT(id){
 
 function editT(id,f,v){
   const t=S.t.find(t=>t.id==id);
-  t[f] = f=='n' ? v.trim().toUpperCase() : v;
+  if(f==='n') t.n = v.trim().toUpperCase();
+  if(f==='o') t.o = v.split(' (')[0];
   render(); saveData();
 }
 
+/* FUNCIONES ABM DISTRITOS */
+function addD(){
+  const n=$('#nd').value.trim();
+  if(!n) return;
+  if(S.d.includes(n)) return alert('El distrito ya existe.');
+  S.d.push(n);
+  $('#nd').value = '';
+  render(); saveData();
+}
+
+function renD(i,v){
+  v=v.trim();
+  if(!v || S.d.includes(v)) return render();
+  const old=S.d[i];
+  S.d[i]=v;
+  S.o.forEach(o=>{ if(o.d===old) o.d=v; });
+  if(DIST===old) DIST=v;
+  render(); saveData();
+}
+
+function delD(i){
+  const distName = S.d[i];
+  if(S.o.some(o=>o.d===distName)) return alert('No puedes eliminar un distrito que tiene oficinas asociadas.');
+  if(S.d.length<=1) return alert('Debe existir al menos un distrito.');
+  if(confirm(`¿Eliminar el distrito "${distName}"?`)){
+    S.d.splice(i,1);
+    if(DIST===distName) DIST='ALL';
+    render(); saveData();
+  }
+}
+
+/* FUNCIONES ABM OFICINAS */
 function addO(){
   const n=$('#no2').value.trim();
-  if(!n || S.o.includes(n)) return;
-  S.o.push(n); render(); saveData();
+  const d=$('#nd2').value;
+  if(!n) return;
+  if(S.o.some(o=>o.n===n)) return alert('Ya existe una oficina con ese nombre.');
+  S.o.push({n, d});
+  $('#no2').value = '';
+  render(); saveData();
 }
 
 function renO(i,v){
-  v=v.trim(); if(!v || S.o.includes(v)) return render();
-  S.t.forEach(t=>{ if(t.o==S.o[i]) t.o=v; });
-  if(F==S.o[i]) F=v;
-  S.o[i]=v; render(); saveData();
+  v=v.trim();
+  if(!v) return render();
+  const old=S.o[i].n;
+  if(S.o.some((o,idx)=>idx!==i && o.n===v)) return alert('Ya existe otra oficina con ese nombre.');
+  S.o[i].n=v;
+  S.t.forEach(t=>{ if(t.o===old) t.o=v; });
+  if(F===old) F=v;
+  render(); saveData();
+}
+
+function changeDistO(i, v){
+  S.o[i].d = v;
+  render(); saveData();
 }
 
 function delO(i){
-  if(S.t.some(t=>t.o==S.o[i])) return alert('Debes reasignar o eliminar los técnicos de esta oficina primero.');
-  if(confirm('¿Eliminar oficina?')){ S.o.splice(i,1); render(); saveData(); }
+  const offName = S.o[i].n;
+  if(S.t.some(t=>t.o===offName)) return alert('Debes reasignar o eliminar los técnicos de esta oficina primero.');
+  if(confirm(`¿Eliminar la oficina "${offName}"?`)){
+    S.o.splice(i,1);
+    if(F===offName) F='ALL';
+    render(); saveData();
+  }
 }
 
 function dl(n,x,t){
@@ -502,9 +662,10 @@ function dl(n,x,t){
 
 function csv(){
   const W=wk(S.y), K=W.map(iso);
-  dl('vacaciones-movistar-'+S.y+'.csv', '\ufeff'+[
-    ['Técnico','Oficina',...W.map(lab)].join(';'),
-    ...S.t.map(t=>[t.n, t.o, ...K.map(k=>t.w.includes(k)?'X':'')].join(';'))
+  const activeTechs = getFilteredTechs();
+  dl('vacaciones-personal-'+S.y+'.csv', '\ufeff'+[
+    ['Técnico','Oficina','Distrito',...W.map(lab)].join(';'),
+    ...activeTechs.map(t=>[t.n, t.o, getTechDistrict(t), ...K.map(k=>t.w.includes(k)?'X':'')].join(';'))
   ].join('\n'), 'text/csv');
 }
 
@@ -513,8 +674,7 @@ function imp(i){
   r.onload=async ()=>{
     try {
       const d=JSON.parse(r.result);
-      if(!Array.isArray(d.o) || !Array.isArray(d.t)) throw 0;
-      S=d; nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL';
+      S=d; normalizeData(); nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; DIST='ALL';
       render();
       await saveData();
     } catch(x){ alert('Archivo de backup no válido.'); }
@@ -523,12 +683,10 @@ function imp(i){
 }
 
 function init(){
-  $('#ys').innerHTML=[2026,2027,2028,2029,2030].map(y=>`<option ${y==S.y?'selected':''}>${y}</option>`).join('');
-  $('#u').value=S.u;
+  normalizeData();
   loadData();
 }
 
-// Auto-sincronizar cada 30 segundos en segundo plano
 setInterval(() => loadData(false), 30000);
 
 init();
