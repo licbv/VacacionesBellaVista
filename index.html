@@ -290,11 +290,63 @@ header button:hover{background:#F3F4F6}
 .strip i{flex:1;height:18px;border-radius:1.5px;cursor:pointer;background:#EEF0F3}
 /* filas de tamaño fijo en la planilla */
 .pl th.r{white-space:nowrap}
-.pl th.r>div:last-child{display:none}
+.pl th.r>div:last-child{display:inline;margin-left:8px;font-size:11px!important;color:var(--pers-muted)!important}
+.pl th.r>div:last-child b{color:var(--pers-text)}
 .pl th.r>div:first-child{margin-bottom:2px}
 .pl td,.pl th{height:46px}
 .hm th.go{cursor:pointer}
 .hm th.go:hover{background:#E4EFFB;color:#0B6BCB}
+.neg{color:#D13438}
+.sb-credit b{cursor:pointer}.sb-credit b:hover{color:#fff;text-decoration:underline}
+#ct-modal{position:fixed;inset:0;background:rgba(15,27,45,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:3000}
+#ct-modal.open{display:flex}
+.ct-box{background:#fff;border-radius:12px;padding:28px 32px;width:340px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.ct-av{width:56px;height:56px;border-radius:50%;background:#0F1B2D;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px;margin:0 auto 12px}
+.ct-box h3{justify-content:center;margin:0}
+.ct-box p{margin:2px 0 14px;color:var(--pers-muted)}
+.ct-mail{display:block;color:var(--pers-blue);font-weight:600;margin-bottom:18px;text-decoration:none}
+.ct-act{display:flex;gap:8px;justify-content:center}
+.ct-btn{background:var(--pers-blue);color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600}
+.ct-act button{background:#fff;border:1px solid #D0D5DD}
+.bal-note{margin:-6px 0 12px;color:var(--pers-muted)}
+/* contacto: popover */
+#ct-modal{inset:auto;left:14px;bottom:74px;width:268px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;align-items:initial;justify-content:initial}
+#ct-modal.open{display:block}
+.ct-box{width:auto;padding:18px 20px;text-align:left;border:1px solid var(--pers-border)}
+.ct-av{margin:0 0 10px}
+.ct-box h3{justify-content:flex-start}
+.ct-act{justify-content:flex-start}
+/* resumen */
+.kpis.c4{grid-template-columns:repeat(4,1fr)}
+/* gestión */
+.cnt{background:#E7EAF0;border-radius:10px;padding:0 7px;font-size:11px;margin-left:4px;color:#41506A}
+.tabs button.on .cnt{background:#DCEBFA}
+.abm-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.abm-bar input[type=search]{width:260px;padding:7px 12px;border:1px solid #D0D5DD;background:#fff}
+.abm-bar select{padding:7px 10px;border:1px solid #D0D5DD;background:#fff}
+.abm-wrap{max-height:66vh;overflow:auto;border:1px solid var(--pers-border);border-radius:8px;background:#fff}
+.abm-t{width:100%;border-collapse:collapse}
+.abm-t thead th{position:sticky;top:0;z-index:1;background:#F6F7F9;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--pers-muted);padding:9px 10px;border-bottom:1px solid var(--pers-border)}
+.abm-t td{padding:3px 10px;border-bottom:1px solid #F0F2F5}
+.abm-t .c{text-align:center}
+.abm-t td input,.abm-t td select{border:1px solid transparent;background:transparent;padding:6px 8px;width:100%}
+.abm-t td input:hover,.abm-t td select:hover,.abm-t td input:focus{border-color:#D0D5DD;background:#fff}
+.abm-t td input.num{width:80px;text-align:center}
+.abm-t tr.grp td{background:#F3F6FA;font-weight:600;font-size:12px;color:#41506A;padding:7px 10px}
+.abm-t .del{padding:4px 10px}
+.addbox{display:none;gap:8px;align-items:center;background:#fff;border:1px solid var(--pers-border);border-radius:8px;padding:10px;margin-bottom:10px}
+.addbox.open{display:flex}
+.addbox input{width:280px}
+/* programación automática */
+.pbar .ap{background:#0B6BCB!important;color:#fff!important;border-color:#0B6BCB!important}
+#as-modal{position:fixed;inset:0;background:rgba(15,27,45,.55);display:none;align-items:center;justify-content:center;z-index:3000}
+#as-modal.open{display:flex}
+.as-box{background:#fff;border-radius:12px;padding:26px 28px;width:460px;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.as-box h3{margin:0 0 6px}
+.as-box p{color:var(--pers-muted);margin:0 0 12px}
+.as-box label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#41506A;margin:10px 0 4px}
+.as-box select{width:100%;padding:8px 10px}
+.as-r{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 details.mx{margin-top:16px}
 .sb-foot{margin-top:auto}
 .sb-credit{padding:12px 12px 0;margin-top:12px;border-top:1px solid rgba(255,255,255,.08);font-size:10.5px;color:#6B7A93;letter-spacing:.3px;line-height:1.5}
@@ -1208,9 +1260,9 @@ function tog(id, k){
         return;
       }
 
-      const globalCount = S.t.filter(x => !isExcludedOffice(x.o) && x.w.includes(k)).length;
+      const globalCount = S.t.filter(x => !isExcludedOffice(x.o) && getTechDistrict(x) === getTechDistrict(t) && x.w.includes(k)).length;
       if (globalCount >= 9) {
-        alert(`⚠️ Límite General Alcanzado:\nSe ha alcanzado el cupo máximo de 9 técnicos simultáneos en vacaciones para esta semana (excluyendo Supervisores y MS).`);
+        alert(`⚠️ Límite General Alcanzado:\nSe ha alcanzado el cupo máximo de 9 técnicos simultáneos en vacaciones en el distrito para esta semana (excluyendo Supervisores y MS).`);
         return;
       }
     }
@@ -1399,8 +1451,16 @@ const IC={
  l:'<path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/>'};
 const item=(v,t)=>`<button class="nav-i" data-nv="${v}" onclick="V='${v}';SEL=null;render()"><svg viewBox="0 0 24 24">${IC[v]}</svg>${t}</button>`;
 const sb=document.createElement('aside');sb.id='sb';
-sb.innerHTML=`<div class="sb-brand">${LOGO(130,36)}<small>Sistema de vacaciones</small></div>${item('d','Resumen')}${item('p','Planilla de carga')}${item('a','Técnicos')}<div class="adm"><div class="sb-grp">Administración</div>${item('u','Usuarios')}${item('l','Registro')}</div><div class="sb-foot"><b id="sb-user"></b><span id="sb-role"></span></div><div class="sb-credit">Desarrollado por<b>Iván Javier Kruk Losada</b></div>`;
+sb.innerHTML=`<div class="sb-brand">${LOGO(130,36)}<small>Sistema de vacaciones</small></div>${item('d','Resumen')}${item('p','Planilla de carga')}${item('a','Técnicos')}<div class="adm"><div class="sb-grp">Administración</div>${item('u','Usuarios')}${item('l','Registro')}</div><div class="sb-foot"><b id="sb-user"></b><span id="sb-role"></span></div><div class="sb-credit">Desarrollado por<b onmouseenter="openContact()" onmouseleave="leaveContact()" onclick="openContact()" title="Contacto">Iván Javier Kruk Losada</b></div>`;
 document.body.appendChild(sb);
+const MAIL='ivan.kruk@tmoviles.com.ar';
+const ct=document.createElement('div');ct.id='ct-modal';
+ct.innerHTML=`<div class="ct-box"><div class="ct-av">IK</div><h3>Iván Javier Kruk Losada</h3><p>Desarrollador del Sistema de Vacaciones</p><a class="ct-mail" href="mailto:${MAIL}">${MAIL}</a><div class="ct-act"><a class="ct-btn" href="mailto:${MAIL}?subject=Sistema%20de%20Vacaciones">Enviar correo</a><button onclick="closeContact()">Cerrar</button></div></div>`;
+let ctT;ct.onmouseenter=()=>clearTimeout(ctT);ct.onmouseleave=()=>{ctT=setTimeout(()=>ct.classList.remove('open'),250);};
+document.body.appendChild(ct);
+window.openContact=()=>{clearTimeout(ctT);ct.classList.add('open');};
+window.leaveContact=()=>{ctT=setTimeout(()=>ct.classList.remove('open'),250);};
+window.closeContact=()=>ct.classList.remove('open');
 const ttl=document.createElement('span');ttl.id='pg-title';
 document.getElementById('main-header').prepend(ttl);
 
@@ -1445,8 +1505,10 @@ function dashD(){
 
   /* por oficina */
   const rows=offs.map(o=>{const ts=techs.filter(t=>t.o===o.n),c=K.map(k=>ts.filter(t=>t.w.includes(k)).length);
-    return `<tr><td><b>${e(o.n)}</b></td><td class="n">${ts.length}</td><td class="n">${c.reduce((a,b)=>a+b,0)}</td><td class="n">${Math.max(0,...c)}</td><td><div class="strip">${c.map((v,i)=>`<i onclick="SEL=${i};render()" title="${lab(W[i])}: ${v}" style="${v?`background:${v>=2?'#0B6BCB':'#7CC4F7'}`:''};${i===sel?'outline:1.5px solid #1A2230;outline-offset:1px':''}"></i>`).join('')}</div></td></tr>`}).join('');
+    return `<tr><td><b>${e(o.n)}</b></td><td class="n">${ts.length}</td><td class="n">${c.reduce((a,b)=>a+b,0)}</td><td class="n">${Math.max(0,...c)}</td><td class="n">${vs(ts).tk}</td><td class="n">${vs(ts).pd}</td><td><div class="strip">${c.map((v,i)=>`<i onclick="SEL=${i};render()" title="${lab(W[i])}: ${v}" style="${v?`background:${v>=2?'#0B6BCB':'#7CC4F7'}`:''};${i===sel?'outline:1.5px solid #1A2230;outline-offset:1px':''}"></i>`).join('')}</div></td></tr>`}).join('');
 
+  const V0=vs(techs);
+  const vacKpis=`<div class="kpis c4"><div class="k"><small>Vacaciones tomadas</small><b>${V0.tk*7}</b><span>días · ${V0.tk} sem.</span></div><div class="k"><small>Programadas a futuro</small><b>${V0.sc*7}</b><span>días · ${V0.sc} sem.</span></div><div class="k"><small>Pendientes de programar</small><b>${V0.pd}</b><span>días · ≈ ${Math.floor(V0.pd/7)} sem.</span></div><div class="k"><small>Saldo cargado</small><b>${V0.tot}</b><span>${V0.sin?V0.sin+' técnicos sin saldo cargado':'todos con saldo cargado'}</span></div></div>`;
   /* matriz original, colapsada */
   const doc=new DOMParser().parseFromString(_dash(),'text/html');
   const m=[...doc.querySelectorAll('.card')].find(c=>c.querySelector('h3')&&c.querySelector('h3').textContent.includes('Matriz'));
@@ -1457,8 +1519,8 @@ function dashD(){
    <div class="k"><small>Semanas asignadas</small><b>${sum}</b><span>en ${S.y}</span></div>
    <div class="k"><small>Pico</small><b>${mx?Math.round(mx/N*100)+'%':'–'}</b><span>${mx} téc. · ${pk>=0?fmt(W[pk]):''}</span></div>
    <div class="k ${over?'warn':''}"><small>Sobre umbral</small><b>${over}</b><span>semanas &gt; ${S.u}%</span></div></div>
-  <div class="dgrid"><div class="card chart"><h3>Ocupación semanal <span class="mut" style="font-weight:400;font-size:12px">tocá una barra para ver el detalle</span></h3>${chart}</div><div class="card">${det}</div></div>
-  <div class="dgrid"><div class="card"><h3>Por oficina</h3><div style="overflow:auto"><table class="otab"><thead><tr><th>Oficina</th><th class="n">Téc.</th><th class="n">Sem.</th><th class="n">Pico</th><th>Distribución anual</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class="card"><h3>Semanas críticas</h3>${top}</div></div>
+  ${vacKpis}<div class="dgrid"><div class="card chart"><h3>Ocupación semanal <span class="mut" style="font-weight:400;font-size:12px">tocá una barra para ver el detalle</span></h3>${chart}</div><div class="card">${det}</div></div>
+  <div class="dgrid"><div class="card"><h3>Por oficina</h3><div style="overflow:auto"><table class="otab"><thead><tr><th>Oficina</th><th class="n">Téc.</th><th class="n">Sem.</th><th class="n">Pico</th><th class="n">Tomadas (sem.)</th><th class="n">Pend. (días)</th><th>Distribución anual</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class="card"><h3>Semanas críticas</h3>${top}</div></div>
   ${m?m.outerHTML:''}`;
 }
 dash=function(){return dashD();};
@@ -1477,7 +1539,7 @@ function planBar(){
   const tabs=document.querySelector('#app .tabs');if(!tabs||V!=='p')return;
   const b=document.createElement('div');b.className='pbar';
   const dt=S.d.length>1?`<div class="tabs" style="margin-right:6px">${S.d.map(d=>`<button class="${d===DIST?'on':''}" onclick="DIST='${e(d)}';F='ALL';render()">${e(d)}</button>`).join('')}</div>`:'';
-  b.innerHTML=dt+`<input type="search" placeholder="Buscar técnico" value="${e(PQ)}" oninput="PQ=this.value;applyPQ()"><button onclick="goToday()">Ir a la semana actual</button>`;
+  b.innerHTML=dt+`<input type="search" placeholder="Buscar técnico" value="${e(PQ)}" oninput="PQ=this.value;applyPQ()"><button onclick="goToday()">Ir a la semana actual</button>${currentUser&&currentUser.r==='admin'?'<button class="ap" onclick="openAuto()">Programación automática</button>':''}`;
   tabs.parentNode.insertBefore(b,tabs);
 }
 
@@ -1486,6 +1548,51 @@ getFilteredTechs=function(){
   const offs=getFilteredOffices().map(o=>o.n);
   return S.t.filter(t=>offs.includes(t.o)).sort((a,b)=>offs.indexOf(a.o)-offs.indexOf(b.o)||a.n.localeCompare(b.n,'es'));
 };
+
+/* saldos de vacaciones por técnico y año: t.b[año]={p:año anterior, l:licencia} en días; cada semana = 7 días, se descuenta primero año anterior */
+function bal(t,y){
+  const b=t.b&&t.b[y];if(!b)return null;
+  const used=wk(y).map(iso).filter(k=>t.w.includes(k)).length*7,p=+b.p||0,l=+b.l||0,up=Math.min(p,used);
+  return{p,l,used,rp:p-up,rl:l-(used-up)};
+}
+window.setBal=function(id,f,v){
+  const t=S.t.find(x=>x.id==id);if(!t)return;
+  const n=Math.max(0,Math.round(+v)||0);
+  t.b=t.b||{};t.b[S.y]=t.b[S.y]||{p:0,l:0};t.b[S.y][f]=n;
+  logAction(`Cargó ${f==='p'?'vacaciones año anterior':'licencia por vacaciones'} de "${t.n}" (${S.y}): ${n} días`);
+  markUnsaved();render();
+};
+const _tog=tog;
+tog=function(id,k){
+  const t=S.t.find(x=>x.id==id);
+  if(t&&!t.w.includes(k)){
+    const y=+k.slice(0,4),b=bal(t,y);
+    if(b&&b.used+7>b.p+b.l){alert(`⚠️ Saldo insuficiente:\n"${t.n}" tiene ${b.rp+b.rl} días disponibles en ${y} y una semana necesita 7.\n\nCargá o corregí su saldo en Gestión de técnicos.`);return;}
+  }
+  _tog(id,k);
+};
+function fillCounts(){
+  document.querySelectorAll('.hm tbody tr.pl').forEach(r=>{
+    const th=r.querySelector('th.r'),d=th&&th.querySelector('div:last-child'),n=r.lastElementChild.textContent.trim();
+    if(!d||d===th.firstElementChild)return;
+    const td=r.querySelector('td[onclick]'),m=td&&/tog\((\d+),/.exec(td.getAttribute('onclick')),t=m&&S.t.find(x=>x.id==m[1]),b=t&&bal(t,S.y);
+    d.innerHTML='<b>'+n+'</b> '+(n==1?'semana':'semanas')+(b?` · Ant. <b>${b.rp}</b> · Lic. <b class="${b.rl<0?'neg':''}">${b.rl}</b> días`:'');
+  });
+}
+function balCols(){
+  const tb=document.querySelector('#app .tb');if(!tb)return;
+  const hr=tb.querySelector('thead tr'),last=hr.lastElementChild;
+  ['Vacaciones año anterior (días)','Licencia por vacaciones (días)','Saldo restante'].forEach(x=>{const th=document.createElement('th');th.textContent=x;hr.insertBefore(th,last);});
+  tb.querySelectorAll('tbody tr').forEach(r=>{
+    const bt=r.querySelector('button.del'),m=bt&&/delT\((\d+)\)/.exec(bt.getAttribute('onclick')),t=m&&S.t.find(x=>x.id==m[1]);if(!t)return;
+    const b=bal(t,S.y),cell=h=>{const td=document.createElement('td');td.innerHTML=h;r.insertBefore(td,r.lastElementChild);};
+    cell(`<input type="number" min="0" style="width:90px" placeholder="–" value="${b?b.p:''}" onchange="setBal(${t.id},'p',this.value)">`);
+    cell(`<input type="number" min="0" style="width:90px" placeholder="–" value="${b?b.l:''}" onchange="setBal(${t.id},'l',this.value)">`);
+    cell(b?`Ant. <b>${b.rp}</b> · Lic. <b class="${b.rl<0?'neg':''}">${b.rl}</b>`:'<span class="mut">Sin cargar</span>');
+  });
+  const n=document.createElement('p');n.className='bal-note';n.textContent='Saldos en días para el año '+S.y+' (cada semana descuenta 7 días, primero de año anterior). Cambiá el año arriba para cargar otro período.';
+  tb.parentNode.insertBefore(n,tb);
+}
 
 /* matriz: clic en oficina -> planilla de carga de esa oficina */
 function linkOffices(){
@@ -1497,6 +1604,103 @@ function linkOffices(){
   });
 }
 
+/* resumen de vacaciones: tomadas / programadas / pendientes */
+function vs(ts){
+  const y=S.y,W=wk(y),now=Date.now();let tk=0,sc=0,pd=0,tot=0,sin=0;
+  ts.forEach(t=>{
+    W.filter(w=>t.w.includes(iso(w))).forEach(w=>{if(w+6*864e5<now)tk++;else sc++;});
+    const b=bal(t,y);if(b){tot+=b.p+b.l;pd+=Math.max(0,b.rp+b.rl);}else sin++;
+  });
+  return{tk,sc,pd,tot,sin};
+}
+
+/* gestión: técnicos / oficinas / distritos con pestañas */
+let ABT='t',TF='',TQ='';
+window.filtRows=q=>{
+  TQ=q;const s=q.trim().toLowerCase();let g=null,v=0;
+  document.querySelectorAll('.abm-t tbody tr').forEach(r=>{
+    if(r.classList.contains('grp')){if(g)g.style.display=v?'':'none';g=r;v=0;return;}
+    r.style.display=!s||(r.dataset.n||'').includes(s)?'':'none';if(r.style.display!=='none')v++;
+  });
+  if(g)g.style.display=v?'':'none';
+};
+window.toggleAdd=()=>{const b=document.querySelector('.addbox');if(!b)return;b.classList.toggle('open');const i=b.querySelector('input');if(i)i.focus();};
+function abm2(){
+  const offIdx=n=>{const i=S.o.findIndex(o=>o.n===n);return i<0?99:i;};
+  const cnt={t:S.t.length,o:S.o.length,d:S.d.length};
+  const tabs=`<div class="tabs">${[['t','Técnicos'],['o','Oficinas'],['d','Distritos']].map(([k,l])=>`<button class="${ABT===k?'on':''}" onclick="ABT='${k}';render()">${l} <span class="cnt">${cnt[k]}</span></button>`).join('')}</div>`;
+  const distOpts=sel=>S.d.map(d=>`<option ${d===sel?'selected':''}>${e(d)}</option>`).join('');
+  const offOpts=sel=>S.o.map(o=>`<option ${o.n===sel?'selected':''}>${e(o.n)} (${e(o.d)})</option>`).join('');
+  let body='';
+  if(ABT==='t'){
+    const K=wk(S.y).map(iso);
+    const list=[...S.t].filter(t=>!TF||t.o===TF).sort((a,b)=>offIdx(a.o)-offIdx(b.o)||a.n.localeCompare(b.n,'es'));
+    let last=null,rows='';
+    list.forEach(t=>{
+      if(t.o!==last){last=t.o;rows+=`<tr class="grp"><td colspan="7">${e(t.o)} <span class="cnt">${list.filter(x=>x.o===t.o).length}</span></td></tr>`;}
+      const b=bal(t,S.y),wn=K.filter(k=>t.w.includes(k)).length;
+      rows+=`<tr data-n="${e(t.n.toLowerCase())}"><td><input type="text" value="${e(t.n)}" onchange="editT(${t.id},'n',this.value)"></td><td><select onchange="editT(${t.id},'o',this.value)">${offOpts(t.o)}</select></td><td class="c"><input class="num" type="number" min="0" placeholder="–" value="${b?b.p:''}" onchange="setBal(${t.id},'p',this.value)"></td><td class="c"><input class="num" type="number" min="0" placeholder="–" value="${b?b.l:''}" onchange="setBal(${t.id},'l',this.value)"></td><td class="c">${b?`<b>${b.rp}</b> / <b class="${b.rl<0?'neg':''}">${b.rl}</b>`:'<span class="mut">–</span>'}</td><td class="c">${wn}</td><td class="c"><button class="del" onclick="delT(${t.id})">Eliminar</button></td></tr>`;
+    });
+    body=`<div class="abm-bar"><input type="search" placeholder="Buscar técnico" value="${e(TQ)}" oninput="filtRows(this.value)"><select onchange="TF=this.value;render()"><option value="">Todas las oficinas</option>${S.o.map(o=>`<option ${o.n===TF?'selected':''}>${e(o.n)}</option>`).join('')}</select><span class="sp"></span><span class="mut">Saldos de ${S.y} en días</span><button class="btn" onclick="toggleAdd()">+ Nuevo técnico</button></div>
+    <div class="addbox"><input id="nn" type="text" placeholder="APELLIDO, NOMBRE"><select id="no">${offOpts(S.o[0]&&S.o[0].n)}</select><button class="btn" onclick="addT()">Agregar técnico</button></div>
+    <div class="abm-wrap"><table class="abm-t"><thead><tr><th>Nombre</th><th>Oficina</th><th class="c">Vacaciones año anterior</th><th class="c">Licencia por vacaciones</th><th class="c">Saldo (ant. / lic.)</th><th class="c">Sem.</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="7" class="mut" style="padding:16px">No hay técnicos.</td></tr>'}</tbody></table></div>`;
+  }else if(ABT==='o'){
+    body=`<div class="abm-bar"><span class="mut">${S.o.length} oficinas</span><span class="sp"></span><button class="btn" onclick="toggleAdd()">+ Nueva oficina</button></div>
+    <div class="addbox"><input id="no2" type="text" placeholder="Nombre de la oficina"><select id="nd2">${distOpts(S.d[0])}</select><button class="btn" onclick="addO()">Agregar oficina</button></div>
+    <div class="abm-wrap"><table class="abm-t"><thead><tr><th>Oficina</th><th>Distrito</th><th class="c">Técnicos</th><th></th></tr></thead><tbody>${S.o.map((o,i)=>`<tr><td><input type="text" value="${e(o.n)}" onchange="renO(${i},this.value)"></td><td><select onchange="changeDistO(${i},this.value)">${distOpts(o.d)}</select></td><td class="c">${S.t.filter(t=>t.o===o.n).length}</td><td class="c"><button class="del" onclick="delO(${i})">Eliminar</button></td></tr>`).join('')}</tbody></table></div>`;
+  }else{
+    body=`<div class="abm-bar"><span class="mut">${S.d.length} distritos</span><span class="sp"></span><button class="btn" onclick="toggleAdd()">+ Nuevo distrito</button></div>
+    <div class="addbox"><input id="nd" type="text" placeholder="Nombre del distrito"><button class="btn" onclick="addD()">Agregar distrito</button></div>
+    <div class="abm-wrap"><table class="abm-t"><thead><tr><th>Distrito</th><th class="c">Oficinas</th><th class="c">Técnicos</th><th></th></tr></thead><tbody>${S.d.map((d,i)=>`<tr><td><input type="text" value="${e(d)}" onchange="renD(${i},this.value)"></td><td class="c">${S.o.filter(o=>o.d===d).length}</td><td class="c">${S.t.filter(t=>getTechDistrict(t)===d).length}</td><td class="c"><button class="del" onclick="delD(${i})">Eliminar</button></td></tr>`).join('')}</tbody></table></div>`;
+  }
+  return tabs+body;
+}
+abm=abm2;
+
+/* programación automática (solo administradores) */
+const as=document.createElement('div');as.id='as-modal';
+as.innerHTML=`<div class="as-box"><h3>Programación automática</h3><p>Asigna al azar las vacaciones pendientes de cada técnico, respetando lo ya cargado y los límites de 2 por oficina y 9 por distrito.</p><label>Oficinas</label><select id="as-sc"></select><div class="as-r"><div><label>Desde la semana</label><select id="as-f"></select></div><div><label>Hasta la semana</label><select id="as-t"></select></div></div><div class="ct-act" style="justify-content:flex-end;margin-top:18px"><button onclick="document.getElementById('as-modal').classList.remove('open')">Cancelar</button><button class="btn" onclick="runAuto()">Generar</button></div></div>`;
+document.body.appendChild(as);
+window.openAuto=function(){
+  if(!currentUser||currentUser.r!=='admin')return;
+  const W=wk(S.y),now=Date.now(),offs=getFilteredOffices();
+  let f=W.findIndex(w=>w+6*864e5>=now);if(f<0)f=0;
+  document.getElementById('as-sc').innerHTML='<option value="">Todas las oficinas'+(DIST==='ALL'?'':' · '+e(DIST))+'</option>'+offs.map(o=>`<option ${o.n===F?'selected':''}>${e(o.n)}</option>`).join('');
+  const opts=sel=>W.map((w,i)=>`<option value="${i}" ${i===sel?'selected':''}>${lab(w)}</option>`).join('');
+  document.getElementById('as-f').innerHTML=opts(f);
+  document.getElementById('as-t').innerHTML=opts(W.length-1);
+  as.classList.add('open');
+};
+window.runAuto=function(){
+  if(!currentUser||currentUser.r!=='admin')return alert('Solo los administradores pueden usar la programación automática.');
+  const W=wk(S.y),K=W.map(iso),f=+document.getElementById('as-f').value,t2=+document.getElementById('as-t').value,sc=document.getElementById('as-sc').value;
+  if(f>t2)return alert('El rango de semanas no es válido.');
+  const scope=getFilteredTechs().filter(t=>!sc||t.o===sc);
+  const cOff={},cDist={};
+  S.t.forEach(t=>{if(isExcludedOffice(t.o))return;const d=getTechDistrict(t);K.forEach((k,i)=>{if(t.w.includes(k)){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}});});
+  const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  const need=new Map();let skipped=0;
+  scope.forEach(t=>{const b=bal(t,S.y);if(!b){skipped++;return;}const n=Math.floor(Math.max(0,b.rp+b.rl)/7);if(n>0)need.set(t,n);});
+  const got=new Map(),techs=[...need.keys()],maxN=Math.max(0,...need.values());
+  for(let r=0;r<maxN;r++){
+    shuffle(techs.slice()).forEach(t=>{
+      const mine=got.get(t)||[];if(mine.length>=need.get(t))return;
+      const ex=isExcludedOffice(t.o),d=getTechDistrict(t);
+      const cand=shuffle(K.map((_,i)=>i).filter(i=>i>=f&&i<=t2&&!t.w.includes(K[i])&&!mine.includes(i)&&(ex||((cOff[t.o+'|'+i]||0)<2&&(cDist[d+'|'+i]||0)<9))));
+      if(!cand.length)return;
+      const i=cand[0];mine.push(i);got.set(t,mine);
+      if(!ex){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}
+    });
+  }
+  let total=0,missing=0;got.forEach(a=>total+=a.length);need.forEach((n,t)=>missing+=n-(got.get(t)||[]).length);
+  if(!total)return alert('No hay semanas para asignar: los técnicos del alcance elegido no tienen saldo pendiente cargado, o no hay lugar en ese rango por los límites.');
+  const msg='Programación automática '+S.y+'\n\n• Técnicos con pendientes: '+need.size+'\n• Semanas a asignar: '+total+'\n'+(missing?'• Sin lugar por los límites: '+missing+' (probá con un rango más amplio)\n':'')+(skipped?'• Omitidos por no tener saldo cargado: '+skipped+'\n':'')+'\nSe respetan los límites de 2 por oficina y 9 por distrito.\n¿Aplicar la programación?';
+  if(!confirm(msg))return;
+  got.forEach((arr,t)=>{arr.forEach(i=>t.w.push(K[i]));t.w.sort();});
+  logAction('Programación automática: '+total+' semanas asignadas a '+need.size+' técnicos (rango '+lab(W[f])+' a '+lab(W[t2])+')');
+  markUnsaved();as.classList.remove('open');render();
+};
+
 /* ---------- Hooks ---------- */
 const _render=render;let lv=null,savedAll=false;
 render=function(){
@@ -1504,9 +1708,10 @@ render=function(){
   else if(V!=='p'&&savedAll){DIST='ALL';savedAll=false;}
   _render();
   const first=V!==lv;lv=V;
-  if(V==='p'){planBar();applyPQ();}
+  if(V==='p'){planBar();applyPQ();fillCounts();}
   markCur();
   if(V==='d')linkOffices();
+  if(V==='a'&&ABT==='t'&&TQ)filtRows(TQ);
   const adm=currentUser&&currentUser.r==='admin';
   sb.querySelector('.adm').style.display=adm?'':'none';
   sb.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('on',b.dataset.nv===V));
