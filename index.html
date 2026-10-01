@@ -347,6 +347,25 @@ header button:hover{background:#F3F4F6}
 .as-box label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#41506A;margin:10px 0 4px}
 .as-box select{width:100%;padding:8px 10px}
 .as-r{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* color */
+:root{--pers-bg:#EEF3FA;--pers-border:#DDE5F0;--green:#5CB615;--violet:#7C5CFC}
+#sb{background:linear-gradient(180deg,#0A1F44 0%,#0B2D66 100%)}
+#sb .nav-i.on{background:rgba(1,157,244,.24)}
+#sb .nav-i.on::before{background:var(--green)}
+body.in-app header::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#019DF4,#5CB615)}
+.card{box-shadow:0 1px 3px rgba(11,43,102,.07)}
+h3{color:#0B2D66}
+.kpis{overflow:hidden;box-shadow:0 1px 3px rgba(11,43,102,.07)}
+.kpis .k{border-top:3px solid var(--c,#019DF4)}
+.kpis .k b{color:var(--c,#0F1B2D)}
+.kpis .k:nth-child(1){--c:#019DF4}.kpis .k:nth-child(2){--c:#5CB615}.kpis .k:nth-child(3){--c:#7C5CFC}.kpis .k:nth-child(4){--c:#F59E0B}.kpis .k:nth-child(5){--c:#EF4444}
+.kpis.c4 .k:nth-child(1){--c:#5CB615}.kpis.c4 .k:nth-child(2){--c:#019DF4}.kpis.c4 .k:nth-child(3){--c:#F59E0B}.kpis.c4 .k:nth-child(4){--c:#7C5CFC}
+.x{background:linear-gradient(180deg,#2BB8FF,#019DF4)!important}
+.tabs{background:#DCE6F5}
+.tabs button.on{color:#0B6BCB}
+.btn,.btn-login{background:linear-gradient(135deg,#0B6BCB,#019DF4)}
+.btn:hover,.btn-login:hover{background:linear-gradient(135deg,#0A5CAE,#0189D6)}
+.badge-off{font-weight:700}
 details.mx{margin-top:16px}
 .sb-foot{margin-top:auto}
 .sb-credit{padding:12px 12px 0;margin-top:12px;border-top:1px solid rgba(255,255,255,.08);font-size:10.5px;color:#6B7A93;letter-spacing:.3px;line-height:1.5}
@@ -769,10 +788,10 @@ const mh=W=>{
 
 const heat=(p)=>{
   const u=S.u/100;
-  if(p<=0) return ['#F4F6FB','#64748B'];
-  if(p<.9*u) return ['#E6FAFF','#007799'];
-  if(p<=u) return ['#FEF3C7','#92400E'];
-  return ['#FEE2E2','#B91C1C'];
+  if(p<=0) return ['#F4F7FB','#64748B'];
+  if(p<.9*u) return ['#CFEFFF','#00577A'];
+  if(p<=u) return ['#FFE9A8','#8A4B00'];
+  return ['#FFC9CB','#B3171C'];
 };
 
 const cell=(c,n,tt,i,isDistrict=false)=>{
@@ -881,9 +900,9 @@ function dash(){
       </table>
     </div>
     <div class="lg">
-      <span><i style="background:#E6FAFF; border:1px solid #007799"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
-      <span><i style="background:#FEF3C7; border:1px solid #92400E"></i>Cerca del Umbral</span>
-      <span><i style="background:#FEE2E2; border:1px solid #B91C1C"></i>Alerta (&gt;${S.u}%)</span>
+      <span><i style="background:#CFEFFF; border:1px solid #00577A"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
+      <span><i style="background:#FFE9A8; border:1px solid #8A4B00"></i>Cerca del Umbral</span>
+      <span><i style="background:#FFC9CB; border:1px solid #B3171C"></i>Alerta (&gt;${S.u}%)</span>
       <span>Haz clic en cualquier celda de la fila TOTAL TÉCNICOS para ver el detalle de la semana.</span>
     </div>
   </div>
@@ -1605,6 +1624,15 @@ function linkOffices(){
 }
 
 /* resumen de vacaciones: tomadas / programadas / pendientes */
+const PAL=['#0B6BCB','#5CB615','#7C5CFC','#F59E0B','#E5484D','#0EA5A4','#D946A8','#64748B'];
+const oc=n=>{const i=S.o.findIndex(o=>o.n===n);return PAL[(i<0?0:i)%PAL.length];};
+function paint(){
+  document.querySelectorAll('.badge-off').forEach(b=>{const c=oc(b.textContent.trim()),th=b.closest('th.r');b.style.background=c+'1F';b.style.color=c;if(th)th.style.boxShadow='inset 4px 0 0 '+c;});
+  document.querySelectorAll('.hm tbody tr:not(.pl) th.r').forEach(th=>{const nm=th.firstChild&&(th.firstChild.nodeValue||'').trim();if(nm&&S.o.some(o=>o.n===nm))th.style.boxShadow='inset 4px 0 0 '+oc(nm);});
+  document.querySelectorAll('.otab tbody tr').forEach(r=>{const td=r.firstElementChild,nm=td.textContent.trim();if(S.o.some(o=>o.n===nm))td.style.boxShadow='inset 4px 0 0 '+oc(nm);});
+  document.querySelectorAll('.abm-t tr.grp td').forEach(td=>{const nm=td.firstChild&&(td.firstChild.nodeValue||'').trim();if(nm&&S.o.some(o=>o.n===nm))td.style.boxShadow='inset 4px 0 0 '+oc(nm);});
+}
+
 function vs(ts){
   const y=S.y,W=wk(y),now=Date.now();let tk=0,sc=0,pd=0,tot=0,sin=0;
   ts.forEach(t=>{
@@ -1615,7 +1643,7 @@ function vs(ts){
 }
 
 /* gestión: técnicos / oficinas / distritos con pestañas */
-let ABT='t',TF='',TQ='';
+window.ABT='t';window.TF='';window.TQ='';
 window.filtRows=q=>{
   TQ=q;const s=q.trim().toLowerCase();let g=null,v=0;
   document.querySelectorAll('.abm-t tbody tr').forEach(r=>{
@@ -1659,7 +1687,7 @@ abm=abm2;
 
 /* programación automática (solo administradores) */
 const as=document.createElement('div');as.id='as-modal';
-as.innerHTML=`<div class="as-box"><h3>Programación automática</h3><p>Asigna al azar las vacaciones pendientes de cada técnico, respetando lo ya cargado y los límites de 2 por oficina y 9 por distrito.</p><label>Oficinas</label><select id="as-sc"></select><div class="as-r"><div><label>Desde la semana</label><select id="as-f"></select></div><div><label>Hasta la semana</label><select id="as-t"></select></div></div><div class="ct-act" style="justify-content:flex-end;margin-top:18px"><button onclick="document.getElementById('as-modal').classList.remove('open')">Cancelar</button><button class="btn" onclick="runAuto()">Generar</button></div></div>`;
+as.innerHTML=`<div class="as-box"><h3>Programación automática</h3><p>Asigna al azar las vacaciones pendientes de cada técnico, respetando lo ya cargado y los límites de 2 por oficina y 9 por distrito.</p><label>Oficinas</label><select id="as-sc"></select><label>Tipo de vacaciones a programar</label><select id="as-ty"><option value="all">Año anterior y luego licencia (todo lo pendiente)</option><option value="p">Solo vacaciones año anterior</option><option value="l">Solo licencia por vacaciones</option></select><div class="as-r"><div><label>Desde la semana</label><select id="as-f"></select></div><div><label>Hasta la semana</label><select id="as-t"></select></div></div><div class="ct-act" style="justify-content:flex-end;margin-top:18px"><button onclick="document.getElementById('as-modal').classList.remove('open')">Cancelar</button><button class="btn" onclick="runAuto()">Generar</button></div></div>`;
 document.body.appendChild(as);
 window.openAuto=function(){
   if(!currentUser||currentUser.r!=='admin')return;
@@ -1679,8 +1707,15 @@ window.runAuto=function(){
   const cOff={},cDist={};
   S.t.forEach(t=>{if(isExcludedOffice(t.o))return;const d=getTechDistrict(t);K.forEach((k,i)=>{if(t.w.includes(k)){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}});});
   const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
-  const need=new Map();let skipped=0;
-  scope.forEach(t=>{const b=bal(t,S.y);if(!b){skipped++;return;}const n=Math.floor(Math.max(0,b.rp+b.rl)/7);if(n>0)need.set(t,n);});
+  const ty=document.getElementById('as-ty').value,need=new Map();let skipped=0,withPrev=0;
+  scope.forEach(t=>{
+    const b=bal(t,S.y);if(!b){skipped++;return;}
+    let days;
+    if(ty==='p')days=b.rp;
+    else if(ty==='l'){if(b.rp>0){withPrev++;return;}days=b.rl;}
+    else days=b.rp+b.rl;
+    const n=Math.floor(Math.max(0,days)/7);if(n>0)need.set(t,n);
+  });
   const got=new Map(),techs=[...need.keys()],maxN=Math.max(0,...need.values());
   for(let r=0;r<maxN;r++){
     shuffle(techs.slice()).forEach(t=>{
@@ -1694,7 +1729,7 @@ window.runAuto=function(){
   }
   let total=0,missing=0;got.forEach(a=>total+=a.length);need.forEach((n,t)=>missing+=n-(got.get(t)||[]).length);
   if(!total)return alert('No hay semanas para asignar: los técnicos del alcance elegido no tienen saldo pendiente cargado, o no hay lugar en ese rango por los límites.');
-  const msg='Programación automática '+S.y+'\n\n• Técnicos con pendientes: '+need.size+'\n• Semanas a asignar: '+total+'\n'+(missing?'• Sin lugar por los límites: '+missing+' (probá con un rango más amplio)\n':'')+(skipped?'• Omitidos por no tener saldo cargado: '+skipped+'\n':'')+'\nSe respetan los límites de 2 por oficina y 9 por distrito.\n¿Aplicar la programación?';
+  const msg='Programación automática '+S.y+'\n\n• Tipo: '+({all:'año anterior y luego licencia',p:'solo año anterior',l:'solo licencia'})[ty]+'\n• Técnicos con pendientes: '+need.size+'\n• Semanas a asignar: '+total+'\n'+(missing?'• Sin lugar por los límites: '+missing+' (probá con un rango más amplio)\n':'')+(skipped?'• Omitidos por no tener saldo cargado: '+skipped+'\n':'')+(withPrev?'• Omitidos por tener año anterior pendiente (se usa primero): '+withPrev+'\n':'')+'\nSe respetan los límites de 2 por oficina y 9 por distrito.\n¿Aplicar la programación?';
   if(!confirm(msg))return;
   got.forEach((arr,t)=>{arr.forEach(i=>t.w.push(K[i]));t.w.sort();});
   logAction('Programación automática: '+total+' semanas asignadas a '+need.size+' técnicos (rango '+lab(W[f])+' a '+lab(W[t2])+')');
@@ -1717,6 +1752,7 @@ render=function(){
   sb.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('on',b.dataset.nv===V));
   ttl.textContent=(TT[V]||'')+' · '+S.y;
   if(currentUser){document.getElementById('sb-user').textContent=currentUser.u;document.getElementById('sb-role').textContent=adm?'Administrador':'Usuario';}
+  paint();
   clean(document.body);
   if(first&&V==='p')setTimeout(goToday,60);
 };
