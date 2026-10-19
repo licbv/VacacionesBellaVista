@@ -7,10 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-<!-- SDK de EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
 <style>
 :root {
   --pers-navy: #0B132B;
@@ -506,16 +502,8 @@ const BIN_ID = "6abd1918ffd5d160533f46f2";
 const MASTER_KEY = "$2a$10$RBYWKS9nR5ypehogRtWvSu1/R1qEQAlA8VtN9iQUynH5fzC3czXUK";
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-// CONFIGURACIÓN EMAILJS
-const EMAILJS_PUBLIC_KEY = "lNrom6fz8aCfUhH_i";
-const EMAILJS_TEMPLATE_ID = "template_ybyll0o";
-const EMAILJS_SERVICE_ID = "service_nyvfvps";
-
-emailjs.init(EMAILJS_PUBLIC_KEY);
-
 const SEED = {
   u: 20, y: 2026,
-  alertEmails: "",
   users: [
     { u: "kruki", p: "", r: "admin" }
   ],
@@ -534,7 +522,7 @@ const SEED = {
 };
 
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-const e=s=>String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
 const isExcludedOffice = o => {
   const s = String(o || '').trim().toLowerCase();
@@ -545,7 +533,6 @@ let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null;
 let hasUnsavedChanges = false;
-let sentAlertsCache = new Set();
 
 function markUnsaved() {
   hasUnsavedChanges = true;
@@ -588,7 +575,6 @@ function normalizeData() {
     }
   }
   if (!Array.isArray(S.logs)) S.logs = [];
-  if (!S.alertEmails) S.alertEmails = "";
   if (Array.isArray(S.o)) {
     S.o = S.o.map(of => {
       if (typeof of === 'string') return { n: of, d: "Bella Vista" };
@@ -663,34 +649,6 @@ async function saveData() {
     setSyncStatus('err', 'Error al guardar');
     alert('❌ Ocurrió un error al intentar guardar en la nube. Revisa tu conexión a internet.');
   }
-}
-
-/* ENVÍO AUTOMÁTICO DE ALERTAS POR CORREO CON EMAILJS (CÁLCULO GLOBAL DISTRITAL) */
-function sendThresholdAlert(districtName, weekLabel, currentPercent, thresholdPercent, techNames) {
-  if (!S.alertEmails || S.alertEmails.trim() === '') return;
-
-  const alertKey = `${districtName}_${weekLabel}_${Math.round(currentPercent * 100)}`;
-  if (sentAlertsCache.has(alertKey)) return;
-
-  const triggerUser = currentUser ? currentUser.u : 'Sistema';
-
-  const templateParams = {
-    to_emails: S.alertEmails,
-    office: `Distrito: ${districtName} (Global)`,
-    week: weekLabel,
-    percent: Math.round(currentPercent * 100) + '%',
-    threshold: thresholdPercent + '%',
-    technicians: techNames.join(', '),
-    user_action: triggerUser
-  };
-
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-    .then(function() {
-       logAction(`Alerta enviada por mail a (${S.alertEmails}) por ausentismo GLOBAL del ${Math.round(currentPercent * 100)}\% en${districtName} (Acción por: ${triggerUser})`);
-       sentAlertsCache.add(alertKey);
-    }, function(error) {
-       console.error('❌ Error EmailJS:', error);
-    });
 }
 
 /* MANEJO DE SESIÓN PERSISTENTE */
@@ -917,14 +875,15 @@ function dash(){
                 ${e(r.o)}${DIST==='ALL'?`<span class="badge-dist">${e(r.d)}</span>`:''}
                 <small>${r.n} téc.</small>
               </th>
-              ${r.c.map((c,i)=>cell(c, r.n, `${r.o} [${r.d}]: ${c}/${r.n} téc. (${r.n?Math.round(c/r.n*100):0}\%) · ${lab(W[i])}`, -1)).join('')}
+              ${r.c.map((c,i)=>cell(c, r.n, `${r.o} [${r.d}]: ${c}/${r.n} téc. (${r.n?Math.round(c/r.n*100):0}%) · ${lab(W[i])}`, -1)).join('')}
               <th>${r.c.reduce((a,b)=>a+b,0)}</th>
             </tr>
           `).join('')}
         </tbody>
         <tfoot>
           <tr class="district-total">
-            <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL TÉCNICOS <small style="color:#A5B4FC">${calcTechs.length}</small></th>${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
+            <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL TÉCNICOS <small style="color:#A5B4FC">${calcTechs.length}</small></th>
+            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
             <th style="background:var(--pers-navy); color:#fff">${sum}</th>
           </tr>
           <tr>
@@ -977,7 +936,8 @@ function plan(){
 
   return `
   <div class="tabs">
-    <button class="${F==='ALL'?'on':''}" onclick="F='ALL';render()">🌐 TODAS LAS OFICINAS (${DIST==='ALL'?'TODOS LOS DISTRITOS':e(DIST)})</button>${activeOffices.map(o=>`<button class="${o.n===F?'on':''}" onclick="F='${e(o.n)}';render()">${e(o.n)}</button>`).join('')}
+    <button class="${F==='ALL'?'on':''}" onclick="F='ALL';render()">🌐 TODAS LAS OFICINAS (${DIST==='ALL'?'TODOS LOS DISTRITOS':e(DIST)})</button>
+    ${activeOffices.map(o=>`<button class="${o.n===F?'on':''}" onclick="F='${e(o.n)}';render()">${e(o.n)}</button>`).join('')}
   </div>
 
   <div class="card">
@@ -1019,7 +979,8 @@ function plan(){
         </tbody>
         <tfoot>
           <tr>
-            <th class="r">Técnicos de Vacaciones<small>${calcTs.length} total</small></th>${c.map((v,i)=>cell(v, calcTs.length, `${v}/${calcTs.length} téc. · ${lab(W[i])}`, -1)).join('')}
+            <th class="r">Técnicos de Vacaciones<small>${calcTs.length} total</small></th>
+            ${c.map((v,i)=>cell(v, calcTs.length, `${v}/${calcTs.length} téc. · ${lab(W[i])}`, -1)).join('')}
             <th>${c.reduce((a,b)=>a+b,0)}</th>
           </tr>
           <tr>
@@ -1120,7 +1081,7 @@ function abm(){
   </div>`;
 }
 
-/* --- VISTA: ABM DE USUARIOS Y CONFIGURACIÓN DE CORREO (SOLO ADMINS) --- */
+/* --- VISTA: ABM DE USUARIOS DE LOGGEO (SOLO ADMINS) --- */
 function usersAbm() {
   if (!currentUser || currentUser.r !== 'admin') {
     return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
@@ -1171,38 +1132,7 @@ function usersAbm() {
         `).join('')}
       </tbody>
     </table>
-  </div>
-
-  <div class="card" style="margin-top:16px;">
-    <h3>📧 Configuración de Alertas por Correo Electrónico (Solo Admin)</h3>
-    <p style="color:var(--pers-muted); font-size:12px; margin-bottom:12px;">
-      Cuando el ausentismo global distrital alcance o supere el % de umbral, se enviará un correo automático a las casillas indicadas.
-    </p>
-    <div class="f" style="flex-direction:column; align-items:flex-start; gap:10px;">
-      <div style="width:100%;">
-        <label style="display:block; font-weight:700; font-size:11px; margin-bottom:4px;">Correos Destinatarios (separados por coma):</label>
-        <input id="cfg-emails" type="text" style="width:100%;" placeholder="ejemplo@telecom.com, jefe@telecom.com" value="${e(S.alertEmails || '')}">
-      </div>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <label style="font-weight:700; font-size:11px;">Umbral de Disparo (%):</label>
-        <input id="cfg-threshold" type="number" min="1" max="100" style="width:70px;" value="${S.u || 20}">
-        <button class="btn" onclick="saveEmailSettings()">💾 Guardar Configuración de Correo</button>
-      </div>
-    </div>
   </div>`;
-}
-
-function saveEmailSettings() {
-  const emails = $('#cfg-emails').value.trim();
-  const threshold = +$('#cfg-threshold').value || 20;
-
-  S.alertEmails = emails;
-  S.u = threshold;
-
-  logAction(`Actualizó la configuración de e-mails (${S.u}\%, Destinos:${S.alertEmails})`);
-  markUnsaved();
-  saveData();
-  alert('✅ Configuración de alertas por correo guardada correctamente.');
 }
 
 function addUser() {
@@ -1330,7 +1260,7 @@ function render(){
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
-/* TOGGLE CON CONTROL DE LÍMITES, LOGGING Y DISPARO DE CORREO GLOBAL */
+/* TOGGLE CON CONTROL DE LÍMITES Y LOGGING */
 function tog(id, k){
   const t = S.t.find(t => t.id == id);
   if (!t) return;
@@ -1356,22 +1286,10 @@ function tog(id, k){
       }
     }
     t.w.push(k);
-    logAction(`Asignó vacaciones a "${t.n}" (${t.o}) - Semana:${weekLabel}`);
-
-    // VERIFICACIÓN DE UMBRAL GLOBAL (DISTRITAL EXCLUYENDO MS Y SUPERVISORES)
-    const techDistrict = getTechDistrict(t);
-    const globalDistrictTechs = S.t.filter(x => !isExcludedOffice(x.o) && getTechDistrict(x) === techDistrict);
-    const absentDistrictTechs = globalDistrictTechs.filter(x => x.w.includes(k));
-    const globalPercent = globalDistrictTechs.length ? (absentDistrictTechs.length / globalDistrictTechs.length) : 0;
-
-    if (globalPercent >= (S.u / 100)) {
-      const absentNames = absentDistrictTechs.map(x => `${x.n} (${x.o})`);
-      sendThresholdAlert(techDistrict, weekLabel, globalPercent, S.u, absentNames);
-    }
-
+    logAction(`Asignó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
   } else {
     t.w.splice(i, 1);
-    logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana:${weekLabel}`);
+    logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
   }
 
   markUnsaved();
@@ -1617,10 +1535,12 @@ function dashD(){
   return `<div class="kpis">
    <div class="k"><small>Técnicos</small><b>${calc.length}</b><span>${offs.filter(o=>!isExcludedOffice(o.n)).length} oficinas</span></div>
    <div class="k"><small>Semana actual</small><b>${cw>=0?tot[cw]:'–'}</b><span>${cw>=0?'de vacaciones ahora':'fuera de '+S.y}</span></div>
-   <div class="k"><small>Semanas asignadas</small><b>${sum}</b><span>en${S.y}</span></div>
+   <div class="k"><small>Semanas asignadas</small><b>${sum}</b><span>en ${S.y}</span></div>
    <div class="k"><small>Pico</small><b>${mx?Math.round(mx/N*100)+'%':'–'}</b><span>${mx} téc. · ${pk>=0?fmt(W[pk]):''}</span></div>
-   <div class="k ${over?'warn':''}"><small>Sobre umbral</small><b>${over}</b><span>semanas &gt; ${S.u}\%</span></div></div>${vacKpis}<div class="dgrid"><div class="card chart"><h3>Ocupación semanal <span class="mut" style="font-weight:400;font-size:12px">tocá una barra para ver el detalle</span></h3>${chart}</div><div class="card">${det}</div></div>
-  <div class="dgrid"><div class="card"><h3>Por oficina</h3><div style="overflow:auto"><table class="otab"><thead><tr><th>Oficina</th><th class="n">Téc.</th><th class="n">Sem.</th><th class="n">Pico</th><th class="n">Tomadas (sem.)</th><th class="n">Pend. (días)</th><th>Distribución anual</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class="card"><h3>Semanas críticas</h3>${top}</div></div>${m?m.outerHTML:''}`;
+   <div class="k ${over?'warn':''}"><small>Sobre umbral</small><b>${over}</b><span>semanas &gt; ${S.u}%</span></div></div>
+  ${vacKpis}<div class="dgrid"><div class="card chart"><h3>Ocupación semanal <span class="mut" style="font-weight:400;font-size:12px">tocá una barra para ver el detalle</span></h3>${chart}</div><div class="card">${det}</div></div>
+  <div class="dgrid"><div class="card"><h3>Por oficina</h3><div style="overflow:auto"><table class="otab"><thead><tr><th>Oficina</th><th class="n">Téc.</th><th class="n">Sem.</th><th class="n">Pico</th><th class="n">Tomadas (sem.)</th><th class="n">Pend. (días)</th><th>Distribución anual</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class="card"><h3>Semanas críticas</h3>${top}</div></div>
+  ${m?m.outerHTML:''}`;
 }
 dash=function(){return dashD();};
 
@@ -1658,7 +1578,7 @@ window.setBal=function(id,f,v){
   const t=S.t.find(x=>x.id==id);if(!t)return;
   const n=Math.max(0,Math.round(+v)||0);
   t.b=t.b||{};t.b[S.y]=t.b[S.y]||{p:0,l:0};t.b[S.y][f]=n;
-  logAction(`Cargó ${f==='p'?'vacaciones año anterior':'licencia por vacaciones'} de "${t.n}" (${S.y}):${n} días`);
+  logAction(`Cargó ${f==='p'?'vacaciones año anterior':'licencia por vacaciones'} de "${t.n}" (${S.y}): ${n} días`);
   markUnsaved();render();
 };
 const _tog=tog;
@@ -1767,4 +1687,79 @@ abm=abm2;
 
 /* programación automática (solo administradores) */
 const as=document.createElement('div');as.id='as-modal';
-as.innerHTML=`<div class="as-box"><h3>Programación automática</h3><p>Asigna al azar las vacaciones pendientes de cada técnico, respetando lo ya cargado y los límites de
+as.innerHTML=`<div class="as-box"><h3>Programación automática</h3><p>Asigna al azar las vacaciones pendientes de cada técnico, respetando lo ya cargado y los límites de 2 por oficina y 9 por distrito.</p><label>Oficinas</label><select id="as-sc"></select><label>Tipo de vacaciones a programar</label><select id="as-ty"><option value="all">Año anterior y luego licencia (todo lo pendiente)</option><option value="p">Solo vacaciones año anterior</option><option value="l">Solo licencia por vacaciones</option></select><div class="as-r"><div><label>Desde la semana</label><select id="as-f"></select></div><div><label>Hasta la semana</label><select id="as-t"></select></div></div><div class="ct-act" style="justify-content:flex-end;margin-top:18px"><button onclick="document.getElementById('as-modal').classList.remove('open')">Cancelar</button><button class="btn" onclick="runAuto()">Generar</button></div></div>`;
+document.body.appendChild(as);
+window.openAuto=function(){
+  if(!currentUser||currentUser.r!=='admin')return;
+  const W=wk(S.y),now=Date.now(),offs=getFilteredOffices();
+  let f=W.findIndex(w=>w+6*864e5>=now);if(f<0)f=0;
+  document.getElementById('as-sc').innerHTML='<option value="">Todas las oficinas'+(DIST==='ALL'?'':' · '+e(DIST))+'</option>'+offs.map(o=>`<option ${o.n===F?'selected':''}>${e(o.n)}</option>`).join('');
+  const opts=sel=>W.map((w,i)=>`<option value="${i}" ${i===sel?'selected':''}>${lab(w)}</option>`).join('');
+  document.getElementById('as-f').innerHTML=opts(f);
+  document.getElementById('as-t').innerHTML=opts(W.length-1);
+  as.classList.add('open');
+};
+window.runAuto=function(){
+  if(!currentUser||currentUser.r!=='admin')return alert('Solo los administradores pueden usar la programación automática.');
+  const W=wk(S.y),K=W.map(iso),f=+document.getElementById('as-f').value,t2=+document.getElementById('as-t').value,sc=document.getElementById('as-sc').value;
+  if(f>t2)return alert('El rango de semanas no es válido.');
+  const scope=getFilteredTechs().filter(t=>!sc||t.o===sc);
+  const cOff={},cDist={};
+  S.t.forEach(t=>{if(isExcludedOffice(t.o))return;const d=getTechDistrict(t);K.forEach((k,i)=>{if(t.w.includes(k)){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}});});
+  const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  const ty=document.getElementById('as-ty').value,need=new Map();let skipped=0,withPrev=0;
+  scope.forEach(t=>{
+    const b=bal(t,S.y);if(!b){skipped++;return;}
+    let days;
+    if(ty==='p')days=b.rp;
+    else if(ty==='l'){if(b.rp>0){withPrev++;return;}days=b.rl;}
+    else days=b.rp+b.rl;
+    const n=Math.floor(Math.max(0,days)/7);if(n>0)need.set(t,n);
+  });
+  const got=new Map(),techs=[...need.keys()],maxN=Math.max(0,...need.values());
+  for(let r=0;r<maxN;r++){
+    shuffle(techs.slice()).forEach(t=>{
+      const mine=got.get(t)||[];if(mine.length>=need.get(t))return;
+      const ex=isExcludedOffice(t.o),d=getTechDistrict(t);
+      const cand=shuffle(K.map((_,i)=>i).filter(i=>i>=f&&i<=t2&&!t.w.includes(K[i])&&!mine.includes(i)&&(ex||((cOff[t.o+'|'+i]||0)<2&&(cDist[d+'|'+i]||0)<9))));
+      if(!cand.length)return;
+      const i=cand[0];mine.push(i);got.set(t,mine);
+      if(!ex){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}
+    });
+  }
+  let total=0,missing=0;got.forEach(a=>total+=a.length);need.forEach((n,t)=>missing+=n-(got.get(t)||[]).length);
+  if(!total)return alert('No hay semanas para asignar: los técnicos del alcance elegido no tienen saldo pendiente cargado, o no hay lugar en ese rango por los límites.');
+  const msg='Programación automática '+S.y+'\n\n• Tipo: '+({all:'año anterior y luego licencia',p:'solo año anterior',l:'solo licencia'})[ty]+'\n• Técnicos con pendientes: '+need.size+'\n• Semanas a asignar: '+total+'\n'+(missing?'• Sin lugar por los límites: '+missing+' (probá con un rango más amplio)\n':'')+(skipped?'• Omitidos por no tener saldo cargado: '+skipped+'\n':'')+(withPrev?'• Omitidos por tener año anterior pendiente (se usa primero): '+withPrev+'\n':'')+'\nSe respetan los límites de 2 por oficina y 9 por distrito.\n¿Aplicar la programación?';
+  if(!confirm(msg))return;
+  got.forEach((arr,t)=>{arr.forEach(i=>t.w.push(K[i]));t.w.sort();});
+  logAction('Programación automática: '+total+' semanas asignadas a '+need.size+' técnicos (rango '+lab(W[f])+' a '+lab(W[t2])+')');
+  markUnsaved();as.classList.remove('open');render();
+};
+
+/* ---------- Hooks ---------- */
+const _render=render;let lv=null,savedAll=false;
+render=function(){
+  if(V==='p'&&DIST==='ALL'&&S.d&&S.d.length){savedAll=true;DIST=S.d[0];F='ALL';}
+  else if(V!=='p'&&savedAll){DIST='ALL';savedAll=false;}
+  _render();
+  const first=V!==lv;lv=V;
+  if(V==='p'){planBar();applyPQ();fillCounts();}
+  markCur();
+  if(V==='d')linkOffices();
+  if(V==='a'&&ABT==='t'&&TQ)filtRows(TQ);
+  const adm=currentUser&&currentUser.r==='admin';
+  sb.querySelector('.adm').style.display=adm?'':'none';
+  sb.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('on',b.dataset.nv===V));
+  ttl.textContent=(TT[V]||'')+' · '+S.y;
+  if(currentUser){document.getElementById('sb-user').textContent=currentUser.u;document.getElementById('sb-role').textContent=adm?'Administrador':'Usuario';}
+  paint();
+  clean(document.body);
+  if(first&&V==='p')setTimeout(goToday,60);
+};
+const _sa=showAppUI;showAppUI=function(){document.body.classList.add('in-app');_sa();};
+const _sl=showLoginUI;showLoginUI=function(){document.body.classList.remove('in-app');_sl();};
+})();
+
+</script>
+</body>
+</html>
