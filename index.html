@@ -2,180 +2,393 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0F1B2D">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistema de Vacaciones - Movistar / Personal</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-<!-- EmailJS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
 <style>
 :root {
-  --pers-navy: #0F1B2D;
-  --pers-blue: #0B6BCB;
-  --pers-cyan: #019DF4;
-  --pers-cyan-bg: #E8F5FE;
-  --pers-bg: #EEF3FA;
+  --pers-navy: #0B132B;
+  --pers-blue: #0052FF;
+  --pers-cyan: #00A3E0;
+  --pers-cyan-bg: #E6FAFF;
+  --pers-bg: #F4F6FB;
   --pers-card: #FFFFFF;
-  --pers-text: #1A2230;
-  --pers-muted: #667085;
-  --pers-border: #DDE5F0;
+  --pers-text: #0F172A;
+  --pers-muted: #64748B;
+  --pers-border: #E2E8F0;
   --danger: #EF4444;
   --warning: #F59E0B;
-  --pers-green: #5CB615;
+  --pers-green: #10B981;
 }
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; font-family: 'Segoe UI Variable Text', 'Segoe UI', 'Inter', -apple-system, sans-serif; font-variant-numeric: tabular-nums; background: var(--pers-bg); color: var(--pers-text); font-size: 13px; -webkit-user-select: none; user-select: none; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--pers-bg); color: var(--pers-text); font-size: 13px; }
 
 /* Pantalla de Login */
 #login-screen {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background-color: #0F1B2D;
-  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-  background-size: 44px 44px;
+  background: radial-gradient(circle at 50% 20%, #1E293B 0%, #0B132B 70%, #030712 100%);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
 .login-box {
   background: #ffffff;
-  border-radius: 12px; padding: 44px 40px; width: 420px; max-width: 90%;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px; padding: 40px 36px; width: 420px; max-width: 90%;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 30px rgba(0, 163, 224, 0.15);
   text-align: center;
 }
+
 .login-logos {
   display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px;
 }
 .brand-divider {
   width: 1px; height: 38px; background: var(--pers-border); opacity: 0.8;
 }
+
 .login-box h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; color: var(--pers-navy); letter-spacing: -0.5px; }
 .login-box p { margin: 0 0 26px; font-size: 13px; color: var(--pers-muted); }
 
 .field-group { text-align: left; margin-bottom: 18px; }
 .field-group label { display: block; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; color: var(--pers-navy); letter-spacing: 0.5px; }
-.field-group input { width: 100%; padding: 11px 14px; border-radius: 6px; border: 1px solid var(--pers-border); font-size: 13px; transition: all 0.2s; -webkit-user-select: text; user-select: text; }
-.field-group input:focus { outline: none; border-color: var(--pers-blue); box-shadow: 0 0 0 3px rgba(11,107,203,0.18); }
+.field-group input { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--pers-border); font-size: 13px; transition: all 0.2s; }
+.field-group input:focus { outline: none; border-color: var(--pers-blue); box-shadow: 0 0 0 3px rgba(0,82,255,0.18); }
 
 .btn-login {
-  width: 100%; padding: 13px; border: 0; border-radius: 6px;
-  background: linear-gradient(135deg, #0B6BCB, #019DF4);
+  width: 100%; padding: 13px; border: 0; border-radius: 12px;
+  background: linear-gradient(135deg, var(--pers-blue) 0%, #0036B3 100%);
   color: #fff; font-weight: 800; font-size: 14px; cursor: pointer;
-  transition: all 0.15s ease; margin-top: 6px;
+  box-shadow: 0 4px 14px rgba(0,82,255,0.35); transition: all 0.15s ease; margin-top: 6px;
 }
-.btn-login:hover { background: linear-gradient(135deg, #0A5CAE, #0189D6); }
-.login-err { color: var(--danger); font-size: 12px; font-weight: 700; margin-top: 14px; display: none; background: #FEE2E2; padding: 10px; border-radius: 8px; text-align: left; line-height: 1.4; }
+.btn-login:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-login:active { transform: translateY(1px); }
+.login-err { color: var(--danger); font-size: 12px; font-weight: 700; margin-top: 14px; display: none; background: #FEE2E2; padding: 8px; border-radius: 8px; }
 
-/* Modal Cambiar Contraseña */
+/* Modal de Cambio de Contraseña */
 #pwd-modal {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(15, 27, 45, 0.6); backdrop-filter: blur(4px);
+  background: rgba(11, 19, 43, 0.6); backdrop-filter: blur(4px);
   z-index: 2000; display: none; align-items: center; justify-content: center;
 }
 
 /* Header App */
-header {
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(14px);
-  color: var(--pers-text); padding: 10px 28px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--pers-border);
-}
-header::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, #019DF4, #5CB615); }
+header { background: var(--pers-navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25); }
 .brand { display: flex; align-items: center; gap: 12px; margin-right: 12px; }
 .brand-logos-hdr { display: flex; align-items: center; gap: 10px; }
-h1 { font-size: 17px; margin: 0; font-weight: 800; letter-spacing: -0.4px; color: var(--pers-navy); }
+h1 { font-size: 17px; margin: 0; font-weight: 800; letter-spacing: -0.4px; color: #fff; }
 
-button, select, input { font-family: inherit; font-size: 12px; border: 1px solid var(--pers-border); border-radius: 6px; padding: 6px 14px; transition: all .15s ease; -webkit-user-select: text; user-select: text; }
+/* Botones & Controls */
+button, select, input { font-family: inherit; font-size: 12px; border: 1px solid var(--pers-border); border-radius: 20px; padding: 6px 14px; transition: all .15s ease; }
 button { cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-header button { background: #fff; color: var(--pers-text); border: 1px solid #D0D5DD; font-weight: 500; }
-header button:hover { background: #F3F4F6; }
-header button.on { background: var(--pers-blue); color: #fff; border-color: var(--pers-blue); }
-header select, header input { background: #fff; border: 1px solid #D0D5DD; color: var(--pers-text); font-weight: 500; padding: 6px 10px; }
+header button { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
+header button:hover { background: rgba(255,255,255,0.2); }
+header button.on { background: var(--pers-blue); color: #fff; border-color: var(--pers-blue); box-shadow: 0 2px 8px rgba(0,82,255,0.5); }
+header select, header input { background: #fff; color: var(--pers-navy); font-weight: 600; }
 header input { width: 60px; text-align: center; }
-header label { font-size: 12px; color: var(--pers-muted); }
+header label { font-size: 12px; opacity: 0.9; }
 .sp { flex: 1; }
 
+/* Botón de Guardar e Indicador de Cambios */
 .btn-save {
-  background: #fff; color: var(--pers-text); border: 1px solid #D0D5DD; font-weight: 700; padding: 6px 14px; border-radius: 6px; cursor: pointer;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+.btn-save:hover { background: rgba(255,255,255,0.25); }
 .btn-save.unsaved-active {
-  background: #FFF4CE !important; color: #7A4B00 !important; border-color: #E8C46A !important; font-weight: 800 !important;
+  background: var(--warning) !important;
+  color: #0F172A !important;
+  border-color: #D97706 !important;
+  font-weight: 800 !important;
+  animation: pulse-save 1.5s infinite;
+}
+@keyframes pulse-save {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
 
-.user-badge { background: #F3F4F6; border: 1px solid var(--pers-border); padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--pers-navy); display: flex; align-items: center; gap: 6px; }
+.user-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+.role-chip { background: var(--pers-cyan); color: #fff; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 900; text-transform: uppercase; }
 
-.sync-badge { background: transparent; border: 0; color: var(--pers-muted); padding: 5px 6px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pers-cyan); display: inline-block; }
-.sync-dot.busy { background: #FACC15; animation: pulse 1s infinite; }
-.sync-dot.err { background: var(--danger); }
+.sync-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pers-cyan); display: inline-block; box-shadow: 0 0 6px var(--pers-cyan); }
+.sync-dot.busy { background: #FACC15; box-shadow: 0 0 6px #FACC15; animation: pulse 1s infinite; }
+.sync-dot.err { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
 
 @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
 
-main { padding: 24px 28px; max-width: 1600px; margin: 0 auto; }
-.card { background: var(--pers-card); border-radius: 8px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--pers-border); box-shadow: 0 1px 3px rgba(11,43,102,.07); }
-h3 { margin: 0 0 14px; font-size: 15px; color: #0B2D66; font-weight: 600; letter-spacing: -0.1px; display: flex; align-items: center; justify-content: space-between; }
+/* Dashboard & Cards */
+main { padding: 20px; max-width: 1600px; margin: 0 auto; }
+.card { background: var(--pers-card); border-radius: 14px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--pers-border); box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+h3 { margin: 0 0 14px; font-size: 15px; color: var(--pers-navy); font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
 
-/* Tabla Heatmap */
-.wrap { overflow: auto; max-height: 70vh; border-radius: 8px; border: 1px solid var(--pers-border); -webkit-overflow-scrolling: touch; }
-table { border-collapse: separate; border-spacing: 0; width: 100%; }
-.hm td, .hm th { border-right: 1px solid #ECEFF3; border-bottom: 1px solid #ECEFF3; text-align: center; font-size: 11px; min-width: 34px; height: 32px; padding: 0 3px; }
-.hm td { cursor: pointer; }
-.hm td.sel { outline: 2px solid var(--pers-blue); outline-offset: -2px; }
-.hm th { background: #F6F7F9; color: var(--pers-navy); font-weight: 700; position: sticky; top: 0; z-index: 1; }
-.hm thead tr+tr th { top: 32px; }
-.hm th.m { background: #0F1B2D; color: #fff; }
-.hm th.r { position: sticky; left: 0; z-index: 2; text-align: left; min-width: 210px; padding: 0 10px; background: #F8FAFC; font-weight: 600; color: var(--pers-navy); }
-.hm th.r small { float: right; color: var(--pers-muted); font-weight: 400; }
-.hm thead th.r { top: 0; z-index: 3; background: #0F1B2D; color: #fff; }
-.hm tfoot th, .hm tfoot td { font-weight: 800; background: #E2E8F0; }
-.hm tfoot tr.district-total th, .hm tfoot tr.district-total td { background: var(--pers-navy); color: #fff; border-top: 2px solid var(--pers-cyan); }
-
-.x { background: linear-gradient(180deg, #2BB8FF, #019DF4) !important; color: #fff !important; font-weight: 900; font-size: 12px; }
-.pl td { background: #fff; }
-.pl tr:nth-child(even) td { background: #FAFCFF; }
-
-.wk-chip { display: inline-block; background: var(--pers-cyan-bg); color: #006699; border: 1px solid #B3F3FF; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin: 2px; }
-.badge-off { background: #EFF6FF; color: var(--pers-blue); padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; }
-.badge-dist { background: #F3E8FF; color: #7C3AED; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
-
-.tabs { display: flex; gap: 2px; background: #DCE6F5; padding: 3px; border-radius: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-.tabs button { border: 0; background: transparent; color: #41506A; padding: 6px 14px; }
-.tabs button.on { background: #fff; color: #0B6BCB; box-shadow: 0 1px 2px rgba(15,27,45,.16); }
-
-.btn { background: linear-gradient(135deg, #0B6BCB, #019DF4); color: #fff; border: 0; padding: 7px 14px; border-radius: 6px; font-weight: 600; }
-.del { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
-.f { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.tb { width: 100%; border-collapse: collapse; }
-.tb th { text-align: left; color: var(--pers-muted); font-weight: 700; padding: 8px; border-bottom: 2px solid var(--pers-border); font-size: 11px; text-transform: uppercase; }
-.tb td { padding: 8px; border-bottom: 1px solid #EEF2F7; vertical-align: middle; }
-.tb input { width: 100%; }
-.item-box { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; background: #F8FAFC; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--pers-border); }
-
-.kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 18px; }
+/* KPIs */
+.kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 18px; }
 .kp .card { margin: 0; border-left: 5px solid var(--pers-blue); }
 .kp.district .card { border-left-color: var(--pers-cyan); background: #FAFCFF; }
 .kp b { display: block; font-size: 24px; color: var(--pers-navy); font-weight: 800; line-height: 1.2; }
 .kp span { color: var(--pers-muted); font-size: 12px; font-weight: 500; }
 
+/* Tabla Heatmap */
+.wrap { overflow: auto; max-height: 70vh; border-radius: 10px; border: 1px solid var(--pers-border); }
+table { border-collapse: separate; border-spacing: 0; width: 100%; }
+.hm td, .hm th { border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; text-align: center; font-size: 11px; min-width: 34px; height: 32px; padding: 0 3px; }
+.hm td { cursor: pointer; transition: filter .1s; }
+.hm td.sel { outline: 2px solid var(--pers-blue); outline-offset: -2px; }
+.hm td:hover { filter: brightness(0.92); }
+.hm th { background: #F1F5F9; color: var(--pers-navy); font-weight: 700; position: sticky; top: 0; z-index: 1; }
+.hm thead tr+tr th { top: 32px; }
+.hm th.m { background: var(--pers-navy); color: #fff; }
+.hm th.r { position: sticky; left: 0; z-index: 2; text-align: left; min-width: 210px; padding: 0 10px; background: #F8FAFC; font-weight: 600; color: var(--pers-navy); }
+.hm th.r small { float: right; color: var(--pers-muted); font-weight: 400; }
+.hm thead th.r { top: 0; z-index: 3; background: var(--pers-navy); color: #fff; }
+.hm tfoot th, .hm tfoot td { font-weight: 800; background: #E2E8F0; }
+.hm tfoot tr.district-total th, .hm tfoot tr.district-total td { background: var(--pers-navy); color: #fff; border-top: 2px solid var(--pers-cyan); }
+
+/* Celda Cian Vacaciones */
+.x { background: var(--pers-cyan) !important; color: #fff !important; font-weight: 900; font-size: 12px; }
+.pl td { background: #fff; }
+.pl tr:nth-child(even) td { background: #FAFCFF; }
+
+/* Badges & Chips */
+.wk-chip { display: inline-block; background: var(--pers-cyan-bg); color: #006699; border: 1px solid #B3F3FF; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin: 2px; }
+.badge-off { background: #EFF6FF; color: var(--pers-blue); padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+.badge-dist { background: #F3E8FF; color: #7C3AED; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+
+/* Leyenda */
+.lg { display: flex; gap: 16px; font-size: 11px; margin: 12px 0 0; align-items: center; flex-wrap: wrap; color: var(--pers-muted); }
+.lg i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -3px; margin-right: 4px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.tabs button { background: #fff; border: 1px solid var(--pers-border); color: var(--pers-navy); border-radius: 20px; padding: 6px 16px; }
+.tabs button.on { background: var(--pers-navy); color: #fff; border-color: var(--pers-navy); box-shadow: 0 2px 6px rgba(11,19,43,0.3); }
+
+/* Form & ABM */
+.btn { background: var(--pers-blue); color: #fff; border: 0; }
+.btn:hover { background: #0043D6; }
+.del { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
+.del:hover { background: #FCA5A5; }
+.f { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+input[type=text], input[type=password], select { border: 1px solid var(--pers-border); background: #fff; padding: 6px 12px; border-radius: 8px; }
+.tb { width: 100%; border-collapse: collapse; }
+.tb th { text-align: left; color: var(--pers-muted); font-weight: 700; padding: 8px; border-bottom: 2px solid var(--pers-border); }
+.tb td { padding: 8px; border-bottom: 1px solid #EEF2F7; vertical-align: middle; }
+.tb input { width: 100%; }
+.item-box { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; background: #F8FAFC; padding: 8px 12px; border-radius: 8px; }
+
 .tech-detail { background: #F0FDFA; border: 1px solid #99F6E4; padding: 16px; border-radius: 12px; }
 ol { margin: 0; padding-left: 18px; }
 li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
+li:hover { color: var(--pers-blue); }
+</style>
+<style>
+/* Skin de escritorio · estilo Windows (Fluent) · cargar DESPUÉS del <style> original */
+:root{--pers-navy:#0F1B2D;--pers-blue:#0B6BCB;--pers-cyan:#019DF4;--pers-cyan-bg:#E8F5FE;--pers-bg:#F3F4F6;--pers-border:#E3E6EB;--pers-muted:#667085;--pers-text:#1A2230;--sbw:240px;--ok:#019DF4;--mid:#E8A317;--bad:#D13438}
+body{font-family:'Segoe UI Variable Text','Segoe UI',Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums;background:var(--pers-bg);color:var(--pers-text);font-size:13px}
+button,select,input{border-radius:6px}
+.card{border-radius:8px;box-shadow:none}
+h3{font-weight:600;letter-spacing:-.1px}
+
+/* Login */
+#login-screen{background-color:#0F1B2D;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px}
+.login-box{border-radius:12px;padding:44px 40px;box-shadow:0 30px 70px rgba(0,0,0,.5);border:0}
+.btn-login{background:var(--pers-blue);border-radius:6px;box-shadow:none}
+.btn-login:hover{filter:none;background:#0A5CAE;transform:none}
+.field-group input{border-radius:6px}
+
+/* Barra lateral */
+#sb{display:none}
+body.in-app #sb{display:flex}
+#sb{position:fixed;inset:0 auto 0 0;width:var(--sbw);background:#0F1B2D;color:#C9D3E3;flex-direction:column;padding:20px 12px;z-index:20}
+.sb-brand{padding:2px 10px 18px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.sb-brand small{display:block;margin-top:8px;font-size:10.5px;letter-spacing:.8px;color:#7E8DA6;text-transform:uppercase}
+#sb .nav-i{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;margin-bottom:2px;border:0;border-radius:6px;background:none;color:#C9D3E3;font-size:13.5px;font-weight:500;text-align:left;position:relative}
+#sb .nav-i:hover{background:rgba(255,255,255,.06)}
+#sb .nav-i.on{background:rgba(255,255,255,.1);color:#fff}
+#sb .nav-i.on::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--pers-cyan)}
+#sb svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sb-grp{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:#6B7A93;margin:20px 12px 6px}
+.sb-foot{margin-top:auto;padding:14px 12px 4px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:#8FA0BA}
+.sb-foot b{display:block;color:#fff;font-size:13px;font-weight:600}
+
+/* Barra superior */
+body.in-app header,body.in-app main{margin-left:var(--sbw)}
+main{max-width:none;margin:0;padding:24px 28px}
+header{background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--pers-text);box-shadow:none;border-bottom:1px solid var(--pers-border);padding:10px 28px;gap:10px}
+header .brand,#u-badge,header>button[data-v]{display:none!important}
+#pg-title{order:0;font-size:18px;font-weight:600;letter-spacing:-.2px;margin-right:14px}
+header label,header select,header input#u{order:1}
+header .sp{order:2}
+header>*:not(label):not(select):not(#u):not(.sp):not(#pg-title){order:3}
+header label{color:var(--pers-muted);opacity:1}
+header select,header input{background:#fff;border:1px solid #D0D5DD;color:var(--pers-text);font-weight:500;padding:6px 10px}
+header button{background:#fff;color:var(--pers-text);border:1px solid #D0D5DD;font-weight:500}
+header button:hover{background:#F3F4F6}
+.btn-save.unsaved-active{background:#FFF4CE!important;color:#7A4B00!important;border-color:#E8C46A!important;animation:none}
+.sync-badge{background:transparent;border:0;color:var(--pers-muted);padding:5px 6px}
+.sync-dot{box-shadow:none}
+
+/* Controles */
+.tabs{display:inline-flex;flex-wrap:wrap;gap:2px;background:#E7EAF0;padding:3px;border-radius:8px;margin-bottom:14px}
+.tabs button{border:0;background:transparent;color:#41506A;padding:6px 14px;box-shadow:none}
+.tabs button:hover{background:rgba(255,255,255,.55)}
+.tabs button.on{background:#fff;color:var(--pers-text);box-shadow:0 1px 2px rgba(15,27,45,.16)}
+.btn{background:var(--pers-blue)}
+.pbar{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.pbar input{width:260px;padding:7px 12px;border:1px solid #D0D5DD;background:#fff}
+.pbar button{background:#fff;border:1px solid #D0D5DD;color:var(--pers-text);font-weight:500}
+
+/* Tablas */
+.hm td,.hm th{border-color:#ECEFF3}
+.hm th{background:#F6F7F9}
+.hm th.m,.hm thead th.r{background:#0F1B2D}
+.x{background:var(--pers-cyan)!important}
+.hm .cur{box-shadow:inset 2px 0 0 #0B6BCB,inset -2px 0 0 #0B6BCB}
+.hm th.cur{background:#DCEBFA}
+.tb th{font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+
+/* Resumen */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border:1px solid var(--pers-border);border-radius:8px;margin-bottom:16px}
+.k{padding:16px 20px;border-right:1px solid var(--pers-border)}
+.k:last-child{border:0}
+.k small{display:block;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--pers-muted);font-weight:600}
+.k b{display:block;font-size:30px;font-weight:600;letter-spacing:-1px;margin:4px 0 2px}
+.k span{font-size:12px;color:var(--pers-muted)}
+.k.warn b{color:var(--bad)}
+.dgrid{display:grid;grid-template-columns:minmax(0,2fr) minmax(330px,1fr);gap:16px;margin-bottom:16px;align-items:start}
+.dgrid .card{margin:0}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{font-size:11px;fill:#667085;font-family:inherit}
+.hit{fill:#0B6BCB;opacity:0}.hit.on{opacity:.09}
+.chart g:hover .hit{opacity:.12}
+.det-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.det-h button{padding:4px 10px;background:#fff;border:1px solid #D0D5DD}
+.det-big{font-size:34px;font-weight:600;letter-spacing:-1px}
+.det-big small{font-size:13px;font-weight:500;color:var(--pers-muted);letter-spacing:0;margin-left:6px}
+.pbar2{height:6px;border-radius:3px;background:#E7EAF0;margin:8px 0 16px;position:relative;overflow:hidden}
+.pbar2 i{display:block;height:100%}
+.dg{padding:10px 0;border-top:1px solid var(--pers-border)}
+.dg b{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.dg b i{font-style:normal;color:var(--pers-muted)}
+.dg span{display:block;padding:1px 0;font-size:12.5px}
+.mut{color:var(--pers-muted)}
+.crit{display:flex;justify-content:space-between;padding:9px 6px;border-top:1px solid #EEF0F3;cursor:pointer;border-radius:4px}
+.crit:hover{background:#F3F8FE}
+.crit:first-of-type{border-top:0}
+.otab{width:100%;border-collapse:collapse}
+.otab th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--pers-muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--pers-border)}
+.otab td{padding:9px 8px;border-bottom:1px solid #EEF0F3}
+.otab td.n{text-align:right;width:56px}
+.strip{display:flex;gap:1px;min-width:520px}
+.strip i{flex:1;height:18px;border-radius:1.5px;cursor:pointer;background:#EEF0F3}
+/* filas de tamaño fijo en la planilla */
+.pl th.r{white-space:nowrap}
+.pl th.r>div:last-child{display:inline;margin-left:8px;font-size:11px!important;color:var(--pers-muted)!important}
+.pl th.r>div:last-child b{color:var(--pers-text)}
+.pl th.r>div:first-child{margin-bottom:2px}
+.pl td,.pl th{height:46px}
+.hm th.go{cursor:pointer}
+.hm th.go:hover{background:#E4EFFB;color:#0B6BCB}
+.neg{color:#D13438}
+.sb-credit b{cursor:pointer}.sb-credit b:hover{color:#fff;text-decoration:underline}
+#ct-modal{position:fixed;inset:0;background:rgba(15,27,45,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:3000}
+#ct-modal.open{display:flex}
+.ct-box{background:#fff;border-radius:12px;padding:28px 32px;width:340px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.ct-av{width:56px;height:56px;border-radius:50%;background:#0F1B2D;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px;margin:0 auto 12px}
+.ct-box h3{justify-content:center;margin:0}
+.ct-box p{margin:2px 0 14px;color:var(--pers-muted)}
+.ct-mail{display:block;color:var(--pers-blue);font-weight:600;margin-bottom:18px;text-decoration:none}
+.ct-act{display:flex;gap:8px;justify-content:center}
+.ct-btn{background:var(--pers-blue);color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600}
+.ct-act button{background:#fff;border:1px solid #D0D5DD}
+.bal-note{margin:-6px 0 12px;color:var(--pers-muted)}
+/* contacto: popover */
+#ct-modal{inset:auto;left:14px;bottom:74px;width:268px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;align-items:initial;justify-content:initial}
+#ct-modal.open{display:block}
+.ct-box{width:auto;padding:18px 20px;text-align:left;border:1px solid var(--pers-border)}
+.ct-av{margin:0 0 10px}
+.ct-box h3{justify-content:flex-start}
+.ct-act{justify-content:flex-start}
+/* resumen */
+.kpis.c4{grid-template-columns:repeat(4,1fr)}
+/* gestión */
+.cnt{background:#E7EAF0;border-radius:10px;padding:0 7px;font-size:11px;margin-left:4px;color:#41506A}
+.tabs button.on .cnt{background:#DCEBFA}
+.abm-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.abm-bar input[type=search]{width:260px;padding:7px 12px;border:1px solid #D0D5DD;background:#fff}
+.abm-bar select{padding:7px 10px;border:1px solid #D0D5DD;background:#fff}
+.abm-wrap{max-height:66vh;overflow:auto;border:1px solid var(--pers-border);border-radius:8px;background:#fff}
+.abm-t{width:100%;border-collapse:collapse}
+.abm-t thead th{position:sticky;top:0;z-index:1;background:#F6F7F9;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--pers-muted);padding:9px 10px;border-bottom:1px solid var(--pers-border)}
+.abm-t td{padding:3px 10px;border-bottom:1px solid #F0F2F5}
+.abm-t .c{text-align:center}
+.abm-t td input,.abm-t td select{border:1px solid transparent;background:transparent;padding:6px 8px;width:100%}
+.abm-t td input:hover,.abm-t td select:hover,.abm-t td input:focus{border-color:#D0D5DD;background:#fff}
+.abm-t td input.num{width:80px;text-align:center}
+.abm-t tr.grp td{background:#F3F6FA;font-weight:600;font-size:12px;color:#41506A;padding:7px 10px}
+.abm-t .del{padding:4px 10px}
+.addbox{display:none;gap:8px;align-items:center;background:#fff;border:1px solid var(--pers-border);border-radius:8px;padding:10px;margin-bottom:10px}
+.addbox.open{display:flex}
+.addbox input{width:280px}
+/* programación automática */
+.pbar .ap{background:#0B6BCB!important;color:#fff!important;border-color:#0B6BCB!important}
+#as-modal{position:fixed;inset:0;background:rgba(15,27,45,.55);display:none;align-items:center;justify-content:center;z-index:3000}
+#as-modal.open{display:flex}
+.as-box{background:#fff;border-radius:12px;padding:26px 28px;width:460px;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.as-box h3{margin:0 0 6px}
+.as-box p{color:var(--pers-muted);margin:0 0 12px}
+.as-box label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#41506A;margin:10px 0 4px}
+.as-box select{width:100%;padding:8px 10px}
+.as-r{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* color */
+:root{--pers-bg:#EEF3FA;--pers-border:#DDE5F0;--green:#5CB615;--violet:#7C5CFC}
+#sb{background:linear-gradient(180deg,#0A1F44 0%,#0B2D66 100%)}
+#sb .nav-i.on{background:rgba(1,157,244,.24)}
+#sb .nav-i.on::before{background:var(--green)}
+body.in-app header::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#019DF4,#5CB615)}
+.card{box-shadow:0 1px 3px rgba(11,43,102,.07)}
+h3{color:#0B2D66}
+.kpis{overflow:hidden;box-shadow:0 1px 3px rgba(11,43,102,.07)}
+.kpis .k{border-top:3px solid var(--c,#019DF4)}
+.kpis .k b{color:var(--c,#0F1B2D)}
+.kpis .k:nth-child(1){--c:#019DF4}.kpis .k:nth-child(2){--c:#5CB615}.kpis .k:nth-child(3){--c:#7C5CFC}.kpis .k:nth-child(4){--c:#F59E0B}.kpis .k:nth-child(5){--c:#EF4444}
+.kpis.c4 .k:nth-child(1){--c:#5CB615}.kpis.c4 .k:nth-child(2){--c:#019DF4}.kpis.c4 .k:nth-child(3){--c:#F59E0B}.kpis.c4 .k:nth-child(4){--c:#7C5CFC}
+.x{background:linear-gradient(180deg,#2BB8FF,#019DF4)!important}
+.tabs{background:#DCE6F5}
+.tabs button.on{color:#0B6BCB}
+.btn,.btn-login{background:linear-gradient(135deg,#0B6BCB,#019DF4)}
+.btn:hover,.btn-login:hover{background:linear-gradient(135deg,#0A5CAE,#0189D6)}
+.badge-off{font-weight:700}
+details.mx{margin-top:16px}
+.sb-foot{margin-top:auto}
+.sb-credit{padding:12px 12px 0;margin-top:12px;border-top:1px solid rgba(255,255,255,.08);font-size:10.5px;color:#6B7A93;letter-spacing:.3px;line-height:1.5}
+.sb-credit b{display:block;color:#AEBBD0;font-size:11.5px;font-weight:600;letter-spacing:0}
+details.mx>summary{cursor:pointer;font-weight:600;padding:10px 4px;color:#41506A}
+
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- PANTALLA DE LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logos">
-      <svg width="52" height="42" viewBox="0 0 100 70" fill="none">
+      <svg width="52" height="42" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M 6,52 C 3,32 11,8 27,8 C 38,8 37,38 46,38 C 54,38 52,10 66,10 C 82,10 90,30 86,52 C 84,60 74,60 76,50 C 79,38 76,22 68,22 C 60,22 55,40 45,58 C 39,58 35,40 28,22 C 21,22 17,38 18,50 C 19,60 8,60 6,52 Z" fill="#0052FF"/>
       </svg>
+
       <div class="brand-divider"></div>
-      <svg width="135" height="44" viewBox="0 0 160 52" fill="none">
+
+      <svg width="135" height="44" viewBox="0 0 160 52" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="160" height="52" rx="6" fill="#00A3E0"/>
-        <text x="80" y="35" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="700" font-size="27" letter-spacing="-0.8" text-anchor="middle">personal</text>
+        <text x="80" y="35" fill="#FFFFFF" font-family="'Inter', -apple-system, Arial, sans-serif" font-weight="700" font-size="27" letter-spacing="-0.8" text-anchor="middle">personal</text>
       </svg>
     </div>
 
@@ -185,21 +398,21 @@ li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
     <form onsubmit="doLogin(event)">
       <div class="field-group">
         <label>Usuario</label>
-        <input id="l-user" type="text" placeholder="Ej: kruki" required autofocus autocomplete="username">
+        <input id="l-user" type="text" placeholder="Ej: kruki" required autofocus>
       </div>
       <div class="field-group">
         <label>Contraseña</label>
-        <input id="l-pass" type="password" placeholder="Ingresá tu contraseña" autocomplete="current-password">
+        <input id="l-pass" type="password" placeholder="Ingresá tu contraseña">
       </div>
-      <button id="btn-login-submit" type="submit" class="btn-login">Iniciar Sesión</button>
-      <div id="l-err" class="login-err"></div>
+      <button type="submit" class="btn-login">Iniciar Sesión</button>
+      <div id="l-err" class="login-err">Usuario o contraseña incorrectos.</div>
     </form>
   </div>
 </div>
 
 <!-- MODAL CAMBIAR CONTRASEÑA -->
 <div id="pwd-modal">
-  <div class="card" style="width:380px; max-width:92%; background:#fff; padding:24px; border-radius:12px; margin:0;">
+  <div class="card" style="width:380px; max-width:92%; background:#fff; padding:24px; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.3); margin:0;">
     <h3 style="margin-top:0; color:var(--pers-navy);">🔑 Cambiar mi Contraseña</h3>
     <p style="color:var(--pers-muted); font-size:12px; margin-top:-6px; margin-bottom:18px;">
       Actualizá tu clave de acceso personal al sistema.
@@ -229,7 +442,7 @@ li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
   </div>
 </div>
 
-<!-- HEADER PRINCIPAL -->
+<!-- HEADER DE LA APLICACIÓN -->
 <header id="main-header" style="display:none;">
   <div class="brand">
     <div class="brand-logos-hdr">
@@ -243,7 +456,7 @@ li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
     </div>
     <h1>Sistema de Vacaciones</h1>
   </div>
-
+  
   <button data-v="d" onclick="V='d';render()">📊 Resumen General</button>
   <button data-v="p" onclick="V='p';render()">📅 Planilla por Oficina</button>
   <button data-v="a" onclick="V='a';render()">⚙️ Gestión Técnicos</button>
@@ -254,9 +467,9 @@ li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
 
   <div id="u-badge" class="user-badge"></div>
   <button onclick="openChangePwdModal()" title="Cambiar mi Contraseña">🔑 Contraseña</button>
-
+  
   <button id="btn-save" onclick="saveData()" class="btn-save" title="Guardar todos los cambios realizados">💾 Guardar</button>
-
+  
   <button onclick="doLogout()" title="Cerrar Sesión">🚪 Salir</button>
 
   <div class="sync-badge">
@@ -271,10 +484,10 @@ li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
 
   <label>Año</label>
   <select id="ys" onchange="S.y=+this.value; SEL=null; markUnsaved(); render()"></select>
-
+  
   <label>Umbral %</label>
   <input id="u" type="number" min="1" max="100" onchange="S.u=+this.value||20; markUnsaved(); render()">
-
+  
   <!-- BOTONES EXCLUSIVOS DE ADMINISTRADORES -->
   <button id="btn-admin-csv" onclick="csv()" style="display:none;">📥 CSV</button>
   <button id="btn-admin-backup" onclick="dl('vacaciones-personal.json',JSON.stringify(S),'application/json')" style="display:none;">💾 Backup</button>
@@ -285,21 +498,12 @@ li { padding: 6px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
 <main id="app" style="display:none;"></main>
 
 <script>
-// --- CONFIGURACIÓN Y CREDENCIALES ---
 const BIN_ID = "6abd1918ffd5d160533f46f2";
 const MASTER_KEY = "$2a$10$RBYWKS9nR5ypehogRtWvSu1/R1qEQAlA8VtN9iQUynH5fzC3czXUK";
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-// EMAILJS CONFIG
-const EMAILJS_PUBLIC_KEY = "lNrom6fz8aCfUhH_i";
-const EMAILJS_TEMPLATE_ID = "template_ybyll0o";
-const EMAILJS_SERVICE_ID = "service_nyvfvps";
-
-emailjs.init(EMAILJS_PUBLIC_KEY);
-
 const SEED = {
   u: 20, y: 2026,
-  alertEmails: "",
   users: [
     { u: "kruki", p: "", r: "admin" }
   ],
@@ -318,7 +522,7 @@ const SEED = {
 };
 
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-const e=s=>String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
 const isExcludedOffice = o => {
   const s = String(o || '').trim().toLowerCase();
@@ -329,8 +533,6 @@ let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null;
 let hasUnsavedChanges = false;
-let dataLoadingPromise = null;
-let sentAlertsCache = new Set();
 
 function markUnsaved() {
   hasUnsavedChanges = true;
@@ -342,7 +544,7 @@ function updateSaveButtonUI() {
   if (!btn) return;
   if (hasUnsavedChanges) {
     btn.classList.add('unsaved-active');
-    btn.innerHTML = '⚠️ Guardar';
+    btn.innerHTML = '⚠️ Guardar Cambios';
   } else {
     btn.classList.remove('unsaved-active');
     btn.innerHTML = '💾 Guardado';
@@ -362,31 +564,26 @@ function logAction(act) {
 }
 
 function normalizeData() {
-  if (!S.d || !Array.isArray(S.d) || S.d.length === 0) S.d = ["Bella Vista"];
+  if (!S.d || !Array.isArray(S.d) || S.d.length === 0) {
+    S.d = ["Bella Vista"];
+  }
   if (!Array.isArray(S.users) || S.users.length === 0) {
     S.users = [{ u: "kruki", p: "", r: "admin" }];
-  } else if (!S.users.some(x => x.u.toLowerCase() === 'kruki')) {
-    S.users.push({ u: "kruki", p: "", r: "admin" });
+  } else {
+    if (!S.users.some(x => x.u.toLowerCase() === 'kruki')) {
+      S.users.push({ u: "kruki", p: "", r: "admin" });
+    }
   }
   if (!Array.isArray(S.logs)) S.logs = [];
-  if (!S.alertEmails) S.alertEmails = "";
   if (Array.isArray(S.o)) {
-    S.o = S.o.map(of => (typeof of === 'string') ? { n: of, d: "Bella Vista" } : of);
-  } else S.o = [];
-  if (!Array.isArray(S.t)) S.t = [];
-}
-
-function initLocalData() {
-  const cached = localStorage.getItem('vacations_app_data');
-  if (cached) {
-    try {
-      S = JSON.parse(cached);
-      normalizeData();
-      return;
-    } catch(e) {}
+    S.o = S.o.map(of => {
+      if (typeof of === 'string') return { n: of, d: "Bella Vista" };
+      return of;
+    });
+  } else {
+    S.o = [];
   }
-  S = JSON.parse(JSON.stringify(SEED));
-  normalizeData();
+  if (!Array.isArray(S.t)) S.t = [];
 }
 
 function setSyncStatus(state, msg) {
@@ -398,42 +595,48 @@ function setSyncStatus(state, msg) {
 
 async function loadData(manual = false) {
   if (manual && hasUnsavedChanges) {
-    if (!confirm('⚠️ Tenés cambios sin guardar. Si recargás de la nube los perderás. ¿Deseás continuar?')) return;
-  }
-  setSyncStatus('busy', manual ? 'Actualizando...' : 'Conectando...');
-  
-  dataLoadingPromise = (async () => {
-    try {
-      const res = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': MASTER_KEY } });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (data.record) {
-        S = data.record;
-        normalizeData();
-        localStorage.setItem('vacations_app_data', JSON.stringify(S));
-      }
-      nid = Math.max(0, ...S.t.map(t => t.id));
-      hasUnsavedChanges = false;
-      updateSaveButtonUI();
-      setSyncStatus('ok', 'Sincronizado');
-    } catch(err) {
-      console.error('Error al cargar de JSONBin:', err);
-      normalizeData();
-      setSyncStatus('err', 'Sin conexión');
+    if (!confirm('⚠️ Tenés cambios sin guardar en tu pantalla.\n\nSi recargás desde la nube perderás los cambios no guardados. ¿Deseás continuar?')) {
+      return;
     }
-  })();
+  }
 
-  await dataLoadingPromise;
-  if (currentUser) render();
+  setSyncStatus('busy', manual ? 'Actualizando...' : 'Conectando...');
+  try {
+    const res = await fetch(API_URL + '/latest', {
+      headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.record) {
+      S = data.record;
+      normalizeData();
+    } else {
+      S = JSON.parse(JSON.stringify(SEED));
+    }
+    nid = Math.max(0, ...S.t.map(t => t.id));
+    hasUnsavedChanges = false;
+    updateSaveButtonUI();
+    setSyncStatus('ok', 'Sincronizado');
+  } catch(err) {
+    console.error('Error al cargar de JSONBin:', err);
+    normalizeData();
+    setSyncStatus('err', 'Sin conexión');
+  }
+  
+  if (currentUser) {
+    render();
+  }
 }
 
 async function saveData() {
   setSyncStatus('busy', 'Guardando...');
   try {
-    localStorage.setItem('vacations_app_data', JSON.stringify(S));
     const res = await fetch(API_URL, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': MASTER_KEY
+      },
       body: JSON.stringify(S)
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -444,48 +647,28 @@ async function saveData() {
   } catch(err) {
     console.error('Error al guardar en JSONBin:', err);
     setSyncStatus('err', 'Error al guardar');
-    alert('❌ Ocurrió un error al intentar guardar en la nube.');
+    alert('❌ Ocurrió un error al intentar guardar en la nube. Revisa tu conexión a internet.');
   }
 }
 
-function sendThresholdAlert(officeName, weekLabel, currentPercent, thresholdPercent, techNames) {
-  if (!S.alertEmails || S.alertEmails.trim() === '') return;
-
-  const alertKey = `${officeName}_${weekLabel}_${currentPercent}`;
-  if (sentAlertsCache.has(alertKey)) return;
-
-  const templateParams = {
-    to_emails: S.alertEmails,
-    office: officeName,
-    week: weekLabel,
-    percent: Math.round(currentPercent * 100) + '%',
-    threshold: thresholdPercent + '%',
-    technicians: techNames.join(', '),
-    user_action: currentUser ? currentUser.u : 'Sistema'
-  };
-
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-    .then(function() {
-       logAction(`Alerta por e-mail enviada a (${S.alertEmails}) por ausentismo del ${Math.round(currentPercent * 100)}% en ${officeName}`);
-       sentAlertsCache.add(alertKey);
-    }, function(error) {
-       console.error('❌ Error al enviar alerta EmailJS:', error);
-    });
-}
-
+/* MANEJO DE SESIÓN PERSISTENTE */
 function checkSavedSession() {
-  initLocalData();
-  loadData();
-
   const savedUserJson = sessionStorage.getItem('vacations_user');
   if (savedUserJson) {
     try {
       const uSaved = JSON.parse(savedUserJson);
+      normalizeData();
       const found = S.users.find(x => x.u.toLowerCase() === uSaved.u.toLowerCase());
-      if (found) { currentUser = found; showAppUI(); return; }
+      if (found) {
+        currentUser = found;
+        showAppUI();
+        loadData();
+        return;
+      }
     } catch(e) {}
   }
   showLoginUI();
+  loadData();
 }
 
 function showAppUI() {
@@ -501,73 +684,91 @@ function showLoginUI() {
   $('#app').style.display = 'none';
 }
 
-async function doLogin(evt) {
+function doLogin(evt) {
   evt.preventDefault();
-  const submitBtn = $('#btn-login-submit');
-  if (submitBtn) { submitBtn.textContent = 'Verificando...'; submitBtn.disabled = true; }
-  if (dataLoadingPromise) await dataLoadingPromise;
-  if (submitBtn) { submitBtn.textContent = 'Iniciar Sesión'; submitBtn.disabled = false; }
-
   const uInput = $('#l-user').value.trim().toLowerCase();
   const pInput = $('#l-pass').value.trim();
 
   normalizeData();
   const found = S.users.find(x => x.u.toLowerCase() === uInput);
-  const isKrukiMaster = (uInput === 'kruki' && (pInput === 'admin' || pInput === 'kruki' || pInput === '' || pInput === (found?.p || '')));
 
-  if (found && ((found.p || '') === pInput || isKrukiMaster)) {
+  if (found && (found.p || '') === pInput) {
     currentUser = found;
     sessionStorage.setItem('vacations_user', JSON.stringify({ u: found.u }));
     logAction('Inició sesión en el sistema');
     $('#l-err').style.display = 'none';
     showAppUI();
-    saveData();
   } else {
-    const errDiv = $('#l-err');
-    errDiv.innerHTML = '❌ Usuario o contraseña incorrectos.<br><small style="font-weight:normal; display:block; margin-top:6px; color:#991B1B;">💡 <b>Consejo:</b> Si ingresás como <b>kruki</b>, probá dejando la clave vacía o escribiendo <b>admin</b>.</small>';
-    errDiv.style.display = 'block';
+    $('#l-err').style.display = 'block';
   }
 }
 
 function doLogout() {
-  if (hasUnsavedChanges && !confirm('⚠️ Hay cambios sin guardar. ¿Cerrar sesión igualmente?')) return;
-  if (currentUser) logAction('Cerró sesión');
+  if (hasUnsavedChanges) {
+    if (!confirm('⚠️ Tenés cambios pendientes que NO fueron guardados en la nube.\n\n¿Estás seguro de cerrar sesión y perder los cambios no guardados?')) {
+      return;
+    }
+  }
+  if (currentUser) {
+    logAction('Cerró sesión');
+  }
   sessionStorage.removeItem('vacations_user');
   currentUser = null;
   hasUnsavedChanges = false;
+  $('#l-user').value = '';
+  $('#l-pass').value = '';
   showLoginUI();
 }
 
+/* ADVERTENCIA AL CERRAR / RECARGAR LA PESTAÑA DEL NAVEGADOR */
 window.addEventListener('beforeunload', function (e) {
   if (hasUnsavedChanges) {
     e.preventDefault();
-    e.returnValue = 'Tenés cambios sin guardar. ¿Deseás salir?';
+    e.returnValue = 'Tenés cambios sin guardar en el sistema. ¿Deseás salir de todas formas?';
     return e.returnValue;
   }
 });
 
+/* MODAL CAMBIO DE CONTRASEÑA */
 function openChangePwdModal() {
-  $('#pwd-old').value = ''; $('#pwd-new').value = ''; $('#pwd-confirm').value = '';
+  $('#pwd-old').value = '';
+  $('#pwd-new').value = '';
+  $('#pwd-confirm').value = '';
   $('#pwd-err').style.display = 'none';
   $('#pwd-modal').style.display = 'flex';
 }
 
 function saveNewPwd(evt) {
   evt.preventDefault();
-  const oldP = $('#pwd-old').value.trim(), newP = $('#pwd-new').value.trim(), confP = $('#pwd-confirm').value.trim();
+  const oldP = $('#pwd-old').value.trim();
+  const newP = $('#pwd-new').value.trim();
+  const confP = $('#pwd-confirm').value.trim();
   const errDiv = $('#pwd-err');
 
-  if (currentUser.p && oldP !== currentUser.p) { errDiv.textContent = 'La contraseña actual es incorrecta.'; errDiv.style.display = 'block'; return; }
-  if (!newP || newP !== confP) { errDiv.textContent = 'Las nuevas contraseñas no coinciden o están vacías.'; errDiv.style.display = 'block'; return; }
+  if (currentUser.p && oldP !== currentUser.p) {
+    errDiv.textContent = 'La contraseña actual no es correcta.';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (!newP) {
+    errDiv.textContent = 'La nueva contraseña no puede estar vacía.';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (newP !== confP) {
+    errDiv.textContent = 'Las nuevas contraseñas no coinciden.';
+    errDiv.style.display = 'block';
+    return;
+  }
 
   currentUser.p = newP;
   const uObj = S.users.find(x => x.u.toLowerCase() === currentUser.u.toLowerCase());
   if (uObj) uObj.p = newP;
 
-  logAction('Cambió su clave personal');
-  markUnsaved(); saveData();
+  logAction('Cambió su propia contraseña');
+  markUnsaved();
   $('#pwd-modal').style.display = 'none';
-  alert('✅ Contraseña actualizada correctamente.');
+  alert('✅ Contraseña actualizada correctamente. No olvides presionar "Guardar Cambios".');
 }
 
 const wk=y=>{ let d=Date.UTC(y,0,1); while(new Date(d).getUTCDay()!=1) d+=864e5; return [...Array(52)].map((_,i)=>d+i*6048e5); };
@@ -587,10 +788,10 @@ const mh=W=>{
 
 const heat=(p)=>{
   const u=S.u/100;
-  if(p<=0) return ['#EEF3FA','#667085'];
-  if(p<.9*u) return ['#E8F5FE','#007799'];
-  if(p<=u) return ['#FEF3C7','#92400E'];
-  return ['#FEE2E2','#B91C1C'];
+  if(p<=0) return ['#F4F7FB','#64748B'];
+  if(p<.9*u) return ['#CFEFFF','#00577A'];
+  if(p<=u) return ['#FFE9A8','#8A4B00'];
+  return ['#FFC9CB','#B3171C'];
 };
 
 const cell=(c,n,tt,i,isDistrict=false)=>{
@@ -599,14 +800,26 @@ const cell=(c,n,tt,i,isDistrict=false)=>{
   return `<td style="background:${bg};color:${fg};${extraClass}" title="${e(tt)}" class="${SEL==i?'sel':''}" ${i>=0?`onclick="SEL=${i};render()"`:''}>${c||''}</td>`;
 };
 
-function getFilteredOffices() { return DIST === 'ALL' ? S.o : S.o.filter(o => o.d === DIST); }
-function getFilteredTechs() { const offices = getFilteredOffices().map(o => o.n); return S.t.filter(t => offices.includes(t.o)); }
-function getTechDistrict(tech) { const off = S.o.find(o => o.n === tech.o); return off ? off.d : (S.d[0] || 'Bella Vista'); }
+function getFilteredOffices() {
+  return DIST === 'ALL' ? S.o : S.o.filter(o => o.d === DIST);
+}
 
-/* VISTA: RESUMEN GENERAL */
+function getFilteredTechs() {
+  const offices = getFilteredOffices().map(o => o.n);
+  return S.t.filter(t => offices.includes(t.o));
+}
+
+function getTechDistrict(tech) {
+  const off = S.o.find(o => o.n === tech.o);
+  return off ? off.d : (S.d[0] || 'Bella Vista');
+}
+
+/* --- VISTA: DASHBOARD / RESUMEN GENERAL --- */
 function dash(){
   const W=wk(S.y), K=W.map(iso);
-  const activeOffices = getFilteredOffices(), activeTechs = getFilteredTechs();
+  const activeOffices = getFilteredOffices();
+  const activeTechs = getFilteredTechs();
+
   const calcTechs = activeTechs.filter(t => !isExcludedOffice(t.o));
   const calcOffices = activeOffices.filter(o => !isExcludedOffice(o.n));
   const N = calcTechs.length || 1, u = S.u / 100;
@@ -621,27 +834,28 @@ function dash(){
   const over = tot.filter(x => x / N > u).length;
 
   const top = tot.map((c,i) => [c,i]).filter(x => x[0]).sort((a,b) => b[0] - a[0]).slice(0,6)
-    .map(([c,i]) => `<li onclick="SEL=${i};render()"><b>Semana del ${lab(W[i])}</b><br><span style="color:var(--pers-blue);font-weight:700">${c} técnicos</span> (${Math.round(c/N*100)}% del total)</li>`).join('') || '<li>Sin semanas asignadas.</li>';
+    .map(([c,i]) => `<li onclick="SEL=${i};render()"><b>Semana del ${lab(W[i])}</b><br><span style="color:var(--pers-blue);font-weight:700">${c} técnicos</span> (${Math.round(c/N*100)}% del total)</li>`).join('')
+    || '<li>Sin vacaciones programadas en este año.</li>';
 
   const det = SEL == null ? '' : `<div class="card tech-detail" style="margin:0"><h3>Detalle Semana ${lab(W[SEL])} (${DIST === 'ALL' ? 'Todos los Distritos' : 'Distrito ' + e(DIST)})</h3>${
     activeOffices.map(o => {
       const n = activeTechs.filter(t => t.o === o.n && t.w.includes(K[SEL]));
-      return n.length ? `<p style="margin:4px 0"><b>${e(o.n)}</b> [${e(o.d)}] (${n.length}): ${n.map(t => `<span class="wk-chip">${e(t.n)}</span>`).join(' ')}</p>` : '';
+      return n.length ? `<p style="margin:4px 0"><b>${e(o.n)}</b> [${e(o.d)}] (${n.length}):${n.map(t => `<span class="wk-chip">${e(t.n)}</span>`).join(' ')}</p>` : '';
     }).join('') || '<p>Sin personal de vacaciones esta semana.</p>'
   }</div>`;
 
   return `
-  <div class="card" style="background: linear-gradient(135deg, #0F1B2D 0%, #0B6BCB 100%); color:#fff;">
-    <h2 style="margin:0 0 6px; font-size:18px; font-weight:800;">
+  <div class="card" style="background: linear-gradient(135deg, #0B132B 0%, #0052FF 100%); color:#fff;">
+    <h2 style="margin:0 0 6px; font-size:20px; font-weight:800;">
       Resumen ${DIST === 'ALL' ? 'General Consolidado' : 'Distrito ' + e(DIST)} (${S.y})
     </h2>
     <p style="margin:0; opacity:0.9;">Monitoreo de ausentismo y dotación por oficina técnica.</p>
   </div>
 
   <div class="kp district">
-    <div class="card"><b>${calcTechs.length}</b><span>Técnicos Totales</span></div>
-    <div class="card"><b>${calcOffices.length}</b><span>Oficinas</span></div>
-    <div class="card"><b>${sum}</b><span>Semanas Asignadas</span></div>
+    <div class="card"><b>${calcTechs.length}</b><span>Técnicos Totales (Cálculo)</span></div>
+    <div class="card"><b>${calcOffices.length}</b><span>Oficinas Técnicas</span></div>
+    <div class="card"><b>${sum}</b><span>Semanas Asignadas (${S.y})</span></div>
     <div class="card"><b>${mx ? Math.round(mx/N*100) + '%' : '-'}</b><span>Pico Max: ${mx} téc. (${pk >= 0 ? fmt(W[pk]) : ''})</span></div>
     <div class="card" style="border-left-color:${over ? 'var(--danger)' : 'var(--pers-cyan)'}"><b>${over}</b><span>Semanas s/ umbral (${S.u}%)</span></div>
   </div>
@@ -669,45 +883,69 @@ function dash(){
         <tfoot>
           <tr class="district-total">
             <th class="r" style="background:var(--pers-navy); color:#fff">TOTAL TÉCNICOS <small style="color:#A5B4FC">${calcTechs.length}</small></th>
-            ${tot.map((c,i)=>cell(c, N, 'Total: ' + c + '/' + N + ' (' + Math.round(c/N*100) + '%) · ' + lab(W[i]), i, true)).join('')}
+            ${tot.map((c,i)=>cell(c, N, `Total: ${c}/${N} (${Math.round(c/N*100)}\%) ·${lab(W[i])}`, i, true)).join('')}
             <th style="background:var(--pers-navy); color:#fff">${sum}</th>
+          </tr>
+          <tr>
+            <th class="r">% Ausentismo</th>
+            ${tot.map(v => {
+              if(!v) return '<td></td>';
+              const p = v / N;
+              const [bg, fg] = heat(p);
+              return `<td style="background:${bg};color:${fg};font-weight:700">${Math.round(p*100)}%</td>`;
+            }).join('')}
+            <th></th>
           </tr>
         </tfoot>
       </table>
     </div>
+    <div class="lg">
+      <span><i style="background:#CFEFFF; border:1px solid #00577A"></i>Bajo (&lt;${Math.round(S.u*.9)}%)</span>
+      <span><i style="background:#FFE9A8; border:1px solid #8A4B00"></i>Cerca del Umbral</span>
+      <span><i style="background:#FFC9CB; border:1px solid #B3171C"></i>Alerta (&gt;${S.u}%)</span>
+      <span>Haz clic en cualquier celda de la fila TOTAL TÉCNICOS para ver el detalle de la semana.</span>
+    </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;">
     <div class="card" style="margin:0">
       <h3>Semanas con Mayor Salida</h3>
       <ol>${top}</ol>
     </div>
     ${det ? det : `<div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:center; color:var(--pers-muted);">
-      <h3 style="color:var(--pers-navy)">Detalle de Semana</h3>
-      <p style="margin:0">Haz clic en la fila de <b>TOTAL TÉCNICOS</b> en la tabla para ver el personal asignado.</p>
+      <h3 style="color:var(--pers-navy)">Detalle de Semana Seleccionada</h3>
+      <p style="margin:0">Haz clic en la fila de <b>TOTAL TÉCNICOS</b> en la tabla para ver qué técnicos están de vacaciones en esa semana específica.</p>
     </div>`}
   </div>`;
 }
 
-/* VISTA: PLANILLA POR OFICINA */
+/* --- VISTA: PLANILLA POR OFICINA --- */
 function plan(){
   const W = wk(S.y), K = W.map(iso);
-  const activeOffices = getFilteredOffices(), activeTechs = getFilteredTechs();
+  const activeOffices = getFilteredOffices();
+  const activeTechs = getFilteredTechs();
 
-  if (F !== 'ALL' && !activeOffices.some(o => o.n === F)) F = 'ALL';
+  if (F !== 'ALL' && !activeOffices.some(o => o.n === F)) {
+    F = 'ALL';
+  }
 
   const ts = (F === 'ALL') ? activeTechs : activeTechs.filter(t => t.o === F);
   const calcTs = (F === 'ALL') ? ts.filter(t => !isExcludedOffice(t.o)) : ts;
+  const n = calcTs.length || 1;
   const c = K.map(k => calcTs.filter(t => t.w.includes(k)).length);
 
   return `
   <div class="tabs">
-    <button class="${F==='ALL'?'on':''}" onclick="F='ALL';render()">🌐 TODAS LAS OFICINAS</button>
+    <button class="${F==='ALL'?'on':''}" onclick="F='ALL';render()">🌐 TODAS LAS OFICINAS (${DIST==='ALL'?'TODOS LOS DISTRITOS':e(DIST)})</button>
     ${activeOffices.map(o=>`<button class="${o.n===F?'on':''}" onclick="F='${e(o.n)}';render()">${e(o.n)}</button>`).join('')}
   </div>
 
   <div class="card">
-    <h3><span>${F==='ALL' ? 'Vista General' : 'Oficina: '+e(F)} (${S.y})</span></h3>
+    <h3>
+      <span>${F==='ALL' ? 'Vista General - ' + (DIST==='ALL'?'Todos los Distritos':'Distrito '+e(DIST)) : 'Oficina: '+e(F)} (${S.y})</span>
+      <span style="font-size:12px; font-weight:400; color:var(--pers-muted)">Haz clic en cualquier celda para activar/desactivar la semana</span>
+    </h3>
+
     <div class="wrap">
       <table class="hm">
         <thead>
@@ -728,16 +966,16 @@ function plan(){
                 <div style="font-weight:700">${e(t.n)}</div>
                 <span class="badge-off">${e(t.o)}</span>${DIST==='ALL' ? `<span class="badge-dist">${e(distName)}</span>` : ''}
                 <div style="font-weight:400; font-size:10px; color:var(--pers-muted); margin-top:2px;">
-                  ${userWeeks.length ? userWeeks.map(w => `<span class="wk-chip">${w}</span>`).join('') : 'Sin semanas'}
+                  ${userWeeks.length ? userWeeks.map(w => `<span class="wk-chip">${w}</span>`).join('') : 'Sin semanas programadas'}
                 </div>
               </th>
               ${K.map((k,i)=>{
                 const h=t.w.includes(k);
-                return `<td class="${h?'x':''}" title="${e(t.n)} · ${lab(W[i])}" onclick="tog(${t.id},'${k}')">${h?'✓':''}</td>`;
+                return `<td class="${h?'x':''}" title="${e(t.n)} · Semana ${lab(W[i])}" onclick="tog(${t.id},'${k}')">${h?'✓':''}</td>`;
               }).join('')}
               <th style="background:#F1F5F9">${K.filter(k=>t.w.includes(k)).length}</th>
             </tr>`;
-          }).join('') || '<tr><td colspan="55">Sin técnicos.</td></tr>'}
+          }).join('') || '<tr><td colspan="55">No hay técnicos asignados en esta vista.</td></tr>'}
         </tbody>
         <tfoot>
           <tr>
@@ -745,227 +983,269 @@ function plan(){
             ${c.map((v,i)=>cell(v, calcTs.length, `${v}/${calcTs.length} téc. · ${lab(W[i])}`, -1)).join('')}
             <th>${c.reduce((a,b)=>a+b,0)}</th>
           </tr>
+          <tr>
+            <th class="r">% Ausentismo</th>
+            ${c.map(v => {
+              if(!v) return '<td></td>';
+              const p = v / n;
+              const [bg, fg] = heat(p);
+              return `<td style="background:${bg};color:${fg};font-weight:700">${Math.round(p*100)}%</td>`;
+            }).join('')}
+            <th></th>
+          </tr>
         </tfoot>
       </table>
     </div>
   </div>`;
 }
 
-/* VISTA: ABM DE TÉCNICOS, OFICINAS Y DISTRITOS */
+/* --- VISTA: ABM TÉCNICOS, OFICINAS Y DISTRITOS --- */
 function abm(){
   const ts = [...S.t].sort((a,b) => a.o.localeCompare(b.o) || a.n.localeCompare(b.n));
+  const K = wk(S.y).map(iso);
+
   const distOpts = (sel) => S.d.map(d => `<option ${d===sel?'selected':''}>${e(d)}</option>`).join('');
   const offOpts = (sel) => S.o.map(o => `<option ${o.n===sel?'selected':''}>${e(o.n)} (${e(o.d)})</option>`).join('');
 
   return `
+  <!-- ALTA DE TÉCNICO -->
   <div class="card">
-    <h3>Alta de Técnico</h3>
+    <h3>Alta de Nuevo Técnico</h3>
     <div class="f">
-      <input id="nn" type="text" placeholder="APELLIDO, NOMBRE" style="width:240px">
+      <input id="nn" type="text" placeholder="APELLIDO, NOMBRE" style="width:280px">
       <label>Oficina:</label>
       <select id="no">${offOpts(S.o[0]?.n)}</select>
-      <button class="btn" onclick="addT()">➕ Agregar</button>
+      <button class="btn" onclick="addT()">➕ Agregar Técnico</button>
     </div>
   </div>
 
+  <!-- NOMINA DE TÉCNICOS -->
   <div class="card">
     <h3>Nómina de Técnicos (${S.t.length})</h3>
-    <div style="overflow-x:auto;">
-      <table class="tb">
-        <thead>
-          <tr><th>Nombre</th><th>Oficina</th><th>Acción</th></tr>
-        </thead>
-        <tbody>
-          ${ts.map(t=>`
-            <tr>
-              <td><input type="text" value="${e(t.n)}" onchange="editT(${t.id},'n',this.value)"></td>
-              <td><select onchange="editT(${t.id},'o',this.value)">${offOpts(t.o)}</select></td>
-              <td><button class="del" onclick="delT(${t.id})">Borrar</button></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
+    <table class="tb">
+      <thead>
+        <tr><th>Nombre Completo</th><th>Oficina / Distrito</th><th>Semanas ${S.y}</th><th>Semanas Programadas</th><th>Acción</th></tr>
+      </thead>
+      <tbody>
+        ${ts.map(t=>{
+          const assigned = wk(S.y).filter((_, idx) => t.w.includes(K[idx])).map(w => lab(w));
+          return `
+          <tr>
+            <td><input type="text" value="${e(t.n)}" onchange="editT(${t.id},'n',this.value)"></td>
+            <td>
+              <select onchange="editT(${t.id},'o',this.value)">${offOpts(t.o)}</select>
+            </td>
+            <td><b>${K.filter(k=>t.w.includes(k)).length}</b> sem.</td>
+            <td>${assigned.length ? assigned.map(a => `<span class="wk-chip">${a}</span>`).join(' ') : '<i>Ninguna</i>'}</td>
+            <td><button class="del" onclick="delT(${t.id})">Eliminar</button></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
   </div>
 
+  <!-- GESTIÓN DE DISTRITOS -->
   <div class="card">
-    <h3>Distritos</h3>
+    <h3>Gestión de Distritos</h3>
     ${S.d.map((d,i)=>`
       <div class="item-box">
         <input type="text" value="${e(d)}" onchange="renD(${i},this.value)">
-        <button class="del" onclick="delD(${i})">Borrar</button>
+        <span style="color:var(--pers-muted)">${S.o.filter(o=>o.d===d).length} oficinas asignadas</span>
+        <button class="del" onclick="delD(${i})">Eliminar Distrito</button>
       </div>
     `).join('')}
-    <div class="f" style="margin-top:10px">
-      <input id="nd" type="text" placeholder="Nuevo distrito">
-      <button class="btn" onclick="addD()">➕ Agregar</button>
+    <div class="f" style="margin-top:14px">
+      <input id="nd" type="text" placeholder="Nombre nuevo distrito (ej: Distrito Norte)">
+      <button class="btn" onclick="addD()">➕ Agregar Distrito</button>
     </div>
   </div>
 
+  <!-- GESTIÓN DE OFICINAS -->
   <div class="card">
-    <h3>Oficinas Técnicas</h3>
+    <h3>Gestión de Oficinas Técnicas</h3>
     ${S.o.map((o,i)=>`
       <div class="item-box">
-        <input type="text" value="${e(o.n)}" onchange="renO(${i},this.value)">
+        <input type="text" value="${e(o.n)}" onchange="renO(${i},this.value)" placeholder="Nombre Oficina">
+        <label style="margin-left:10px">Distrito:</label>
         <select onchange="changeDistO(${i},this.value)">${distOpts(o.d)}</select>
-        <button class="del" onclick="delO(${i})">Borrar</button>
+        <span style="color:var(--pers-muted); margin-left:10px;">${S.t.filter(t=>t.o===o.n).length} técnicos</span>
+        <button class="del" onclick="delO(${i})" style="margin-left:auto">Eliminar Oficina</button>
       </div>
     `).join('')}
-    <div class="f" style="margin-top:10px">
-      <input id="no2" type="text" placeholder="Nueva oficina">
+    <div class="f" style="margin-top:14px">
+      <input id="no2" type="text" placeholder="Nombre nueva oficina">
+      <label>Asignar a Distrito:</label>
       <select id="nd2">${distOpts(S.d[0])}</select>
-      <button class="btn" onclick="addO()">➕ Agregar</button>
+      <button class="btn" onclick="addO()">➕ Agregar Oficina</button>
     </div>
   </div>`;
 }
 
-/* VISTA: ABM DE USUARIOS Y CONFIGURACIÓN DE CORREO (SOLO ADMINS) */
+/* --- VISTA: ABM DE USUARIOS DE LOGGEO (SOLO ADMINS) --- */
 function usersAbm() {
-  if (!currentUser || currentUser.r !== 'admin') return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado.</p></div>`;
+  if (!currentUser || currentUser.r !== 'admin') {
+    return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden gestionar usuarios.</p></div>`;
+  }
 
   return `
   <div class="card">
-    <h3>Gestión de Usuarios</h3>
-    <div class="f" style="margin-bottom:16px; background:#F8FAFC; padding:10px; border-radius:8px;">
-      <input id="nu-u" type="text" placeholder="Usuario (ej: jperez)" style="width:140px">
-      <input id="nu-p" type="text" placeholder="Contraseña" style="width:140px">
-      <select id="nu-r"><option value="user">Usuario</option><option value="admin">Admin</option></select>
-      <button class="btn" onclick="addUser()">➕ Crear</button>
-    </div>
-
-    <div style="overflow-x:auto;">
-      <table class="tb">
-        <thead><tr><th>Usuario</th><th>Contraseña</th><th>Rol</th><th>Acciones</th></tr></thead>
-        <tbody>
-          ${S.users.map((u, idx) => `
-            <tr>
-              <td><b>${e(u.u)}</b></td>
-              <td><input type="text" value="${e(u.p)}" placeholder="(Sin clave)" onchange="editUser(${idx},'p',this.value)"></td>
-              <td>
-                <select onchange="editUser(${idx},'r',this.value)">
-                  <option value="user" ${u.r==='user'?'selected':''}>Usuario</option>
-                  <option value="admin" ${u.r==='admin'?'selected':''}>Admin</option>
-                </select>
-              </td>
-              <td>${u.u === currentUser.u ? '<i>Activo</i>' : `<button class="del" onclick="delUser(${idx})">Borrar</button>`}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:16px;">
-    <h3>📧 Alertas por Correo Electrónico (Solo Admin)</h3>
-    <p style="color:var(--pers-muted); font-size:12px; margin-bottom:12px;">
-      Al superar el umbral de ausentismo en cualquier oficina, el sistema enviará un aviso automáticamente por EmailJS.
+    <h3>Gestión de Usuarios de Acceso al Sistema</h3>
+    <p style="color:var(--pers-muted); margin-top:-8px; margin-bottom:16px;">
+      Creá y administrá las cuentas de los usuarios que pueden ingresar al sistema y asignales permisos de Administrador o Usuario.
     </p>
-    <div class="f" style="flex-direction:column; align-items:flex-start; gap:10px;">
-      <div style="width:100%;">
-        <label style="display:block; font-weight:700; font-size:11px; margin-bottom:4px;">Emails Destinatarios (separados por coma):</label>
-        <input id="cfg-emails" type="text" style="width:100%;" placeholder="ejemplo@telecom.com, jefe@telecom.com" value="${e(S.alertEmails || '')}">
-      </div>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <label style="font-weight:700; font-size:11px;">Umbral de Disparo (%):</label>
-        <input id="cfg-threshold" type="number" min="1" max="100" style="width:70px;" value="${S.u || 20}">
-        <button class="btn" onclick="saveEmailSettings()">💾 Guardar Configuración de Email</button>
-      </div>
+
+    <div class="f" style="margin-bottom:20px; background:#F8FAFC; padding:12px; border-radius:10px;">
+      <input id="nu-u" type="text" placeholder="Nombre de Usuario (ej: jperez)" style="width:180px">
+      <input id="nu-p" type="text" placeholder="Contraseña (opcional)" style="width:220px">
+      <label>Rol:</label>
+      <select id="nu-r">
+        <option value="user">Usuario (User)</option>
+        <option value="admin">Administrador (Admin)</option>
+      </select>
+      <button class="btn" onclick="addUser()">➕ Crear Usuario</button>
     </div>
+
+    <table class="tb">
+      <thead>
+        <tr><th>Usuario</th><th>Contraseña</th><th>Rol / Atributo</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        ${S.users.map((u, idx) => `
+          <tr>
+            <td><b>${e(u.u)}</b>${u.u === currentUser.u ? '<span class="wk-chip">Tu sesión</span>' : ''}</td>
+            <td>
+              <input type="text" value="${e(u.p)}" placeholder="(Sin contraseña)" onchange="editUser(${idx},'p',this.value)" style="width:200px">
+            </td>
+            <td>
+              <select onchange="editUser(${idx},'r',this.value)">
+                <option value="user" ${u.r==='user'?'selected':''}>Usuario (User)</option>
+                <option value="admin" ${u.r==='admin'?'selected':''}>Administrador (Admin)</option>
+              </select>
+            </td>
+            <td>
+              ${u.u === currentUser.u 
+                ? '<i style="color:var(--pers-muted)">Sesión activa</i>' 
+                : `<button class="del" onclick="delUser(${idx})">Eliminar</button>`
+              }
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
   </div>`;
 }
 
-function saveEmailSettings() {
-  const emails = $('#cfg-emails').value.trim();
-  const threshold = +$('#cfg-threshold').value || 20;
-
-  S.alertEmails = emails;
-  S.u = threshold;
-
-  logAction(`Actualizó la configuración de e-mails (${S.u}%, Destinos: ${S.alertEmails})`);
-  markUnsaved();
-  saveData();
-  alert('✅ Configuración de e-mail guardada correctamente.');
-}
-
 function addUser() {
-  const uVal = $('#nu-u').value.trim().toLowerCase(), pVal = $('#nu-p').value.trim(), rVal = $('#nu-r').value;
-  if (!uVal) return alert('Ingresá un usuario.');
-  if (S.users.some(x => x.u.toLowerCase() === uVal)) return alert('El usuario ya existe.');
+  const uVal = $('#nu-u').value.trim().toLowerCase();
+  const pVal = $('#nu-p').value.trim();
+  const rVal = $('#nu-r').value;
+
+  if (!uVal) return alert('Debes ingresar un nombre de usuario.');
+  if (S.users.some(x => x.u.toLowerCase() === uVal)) return alert('Ya existe un usuario con ese nombre.');
 
   S.users.push({ u: uVal, p: pVal, r: rVal });
-  logAction(`Creó al usuario "${uVal}"`);
-  markUnsaved(); saveData(); render();
+  logAction(`Creó al usuario "${uVal}" con rol [${rVal}]`);
+  markUnsaved();
+  $('#nu-u').value = '';
+  $('#nu-p').value = '';
+  render();
 }
 
 function editUser(idx, field, value) {
   if (S.users[idx]) {
-    if (field === 'p') S.users[idx].p = value.trim();
-    if (field === 'r') S.users[idx].r = value;
-    markUnsaved(); saveData(); render();
+    const target = S.users[idx];
+    if (field === 'p') {
+      target.p = value.trim();
+      logAction(`Cambió la contraseña del usuario "${target.u}"`);
+    }
+    if (field === 'r') {
+      target.r = value;
+      logAction(`Cambió el rol del usuario "${target.u}" a [${value}]`);
+    }
+    markUnsaved();
+    render();
   }
 }
 
 function delUser(idx) {
   const target = S.users[idx];
-  if (!target || target.u === currentUser.u) return alert('No podés eliminar tu propia cuenta.');
+  if (!target) return;
+  if (target.u === currentUser.u) return alert('No podés eliminar tu propio usuario en uso.');
+
   if (confirm(`¿Eliminar al usuario "${target.u}"?`)) {
     S.users.splice(idx, 1);
     logAction(`Eliminó al usuario "${target.u}"`);
-    markUnsaved(); saveData(); render();
+    markUnsaved();
+    render();
   }
 }
 
-/* VISTA: LOG DE AUDITORÍA */
+/* --- VISTA: LOG DE AUDITORÍA (SOLO ADMINS) --- */
 function logView() {
-  if (!currentUser || currentUser.r !== 'admin') return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado.</p></div>`;
+  if (!currentUser || currentUser.r !== 'admin') {
+    return `<div class="card"><p style="color:var(--danger)">⚠️ Acceso denegado. Solamente los administradores pueden ver el log de auditoría.</p></div>`;
+  }
   const logs = S.logs || [];
-  const filterTerm = ($('#log-filter')?.value || '').trim().toLowerCase();
-  const filtered = logs.filter(l => l.u.toLowerCase().includes(filterTerm) || l.a.toLowerCase().includes(filterTerm) || l.t.includes(filterTerm));
+  const filterInput = $('#log-filter');
+  const filterTerm = filterInput ? filterInput.value.trim().toLowerCase() : '';
+
+  const filtered = logs.filter(l => 
+    l.u.toLowerCase().includes(filterTerm) || 
+    l.a.toLowerCase().includes(filterTerm) || 
+    l.t.includes(filterTerm)
+  );
 
   return `
   <div class="card">
     <h3>
-      <span>📋 Historial de Auditoría (${logs.length})</span>
-      <button class="del" onclick="clearLogs()">🗑 Limpiar</button>
+      <span>📋 Historial de Actividad y Auditoría (${logs.length} registros)</span>
+      <button class="del" onclick="clearLogs()">🗑 Limpiar Historial</button>
     </h3>
+    <p style="color:var(--pers-muted); margin-top:-8px; margin-bottom:16px;">
+      Registro de auditoría en tiempo real de todas las acciones, asignaciones y modificaciones realizadas por los usuarios.
+    </p>
 
-    <div class="f" style="margin-bottom:12px;">
-      <input id="log-filter" type="text" placeholder="🔍 Buscar..." value="${e(filterTerm)}" oninput="render()" style="width:100%;">
+    <div class="f" style="margin-bottom:14px;">
+      <input id="log-filter" type="text" placeholder="🔍 Buscar por usuario, acción o fecha..." value="${e(filterTerm)}" oninput="render()" style="width:340px;">
     </div>
 
-    <div style="overflow-x:auto;">
-      <table class="tb">
-        <thead><tr><th>Fecha</th><th>Usuario</th><th>Evento</th></tr></thead>
-        <tbody>
-          ${filtered.map(l => `
-            <tr>
-              <td><span style="font-size:10px; color:var(--pers-muted)">${e(l.t)}</span></td>
-              <td><b>${e(l.u)}</b></td>
-              <td>${e(l.a)}</td>
-            </tr>
-          `).join('') || '<tr><td colspan="3">Sin registros.</td></tr>'}
-        </tbody>
-      </table>
-    </div>
+    <table class="tb">
+      <thead>
+        <tr><th style="width:170px">Fecha y Hora</th><th style="width:140px">Usuario</th><th>Acción / Evento Registrado</th></tr>
+      </thead>
+      <tbody>
+        ${filtered.map(l => `
+          <tr>
+            <td><span style="font-family:monospace; font-size:11px; color:var(--pers-muted)">${e(l.t)}</span></td>
+            <td><b>${e(l.u)}</b></td>
+            <td>${e(l.a)}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="3">No se encontraron registros en el historial.</td></tr>'}
+      </tbody>
+    </table>
   </div>`;
 }
 
 function clearLogs() {
-  if (confirm('¿Vaciar el historial?')) {
-    S.logs = []; logAction('Limpió el historial'); markUnsaved(); saveData(); render();
+  if (confirm('¿Estás seguro de vaciar todo el log de auditoría del sistema?')) {
+    S.logs = [];
+    logAction('Limpió todo el historial de auditoría');
+    markUnsaved();
+    render();
   }
 }
 
 function renderHeaderSelects(){
-  $('#ds').innerHTML = `<option value="ALL">🌐 TODOS</option>` + S.d.map(d => `<option value="${e(d)}" ${d===DIST?'selected':''}>${e(d)}</option>`).join('');
+  $('#ds').innerHTML = `<option value="ALL">🌐 TODOS LOS DISTRITOS</option>` + S.d.map(d => `<option value="${e(d)}" ${d===DIST?'selected':''}>${e(d)}</option>`).join('');
   $('#ys').innerHTML = [2026,2027,2028,2029,2030].map(y => `<option ${y==S.y?'selected':''}>${y}</option>`).join('');
   $('#u').value = S.u;
 
   if (currentUser) {
     const isAdm = currentUser.r === 'admin';
-    $('#u-badge').innerHTML = `👤 ${e(currentUser.u)}`;
+    $('#u-badge').innerHTML = `👤 ${e(currentUser.u)} <span class="role-chip">${e(currentUser.r)}</span>`;
     $('#btn-u-nav').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-l-nav').style.display = isAdm ? 'inline-flex' : 'none';
+    
     $('#btn-admin-csv').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-admin-backup').style.display = isAdm ? 'inline-flex' : 'none';
     $('#btn-admin-load').style.display = isAdm ? 'inline-flex' : 'none';
@@ -975,16 +1255,17 @@ function renderHeaderSelects(){
 
 function render(){
   renderHeaderSelects();
-  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];
-  $('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : V==='u' ? usersAbm() : V==='l' ? logView() : abm();
+  const w=$('.wrap'), s=w&&[w.scrollLeft, w.scrollTop];$('#app').innerHTML = V==='d' ? dash() : V==='p' ? plan() : V==='u' ? usersAbm() : V==='l' ? logView() : abm();
   document.querySelectorAll('header button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===V));
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
+/* TOGGLE CON CONTROL DE LÍMITES Y LOGGING */
 function tog(id, k){
   const t = S.t.find(t => t.id == id);
   if (!t) return;
   const i = t.w.indexOf(k);
+
   const W = wk(S.y);
   const K = W.map(iso);
   const weekIndex = K.indexOf(k);
@@ -993,25 +1274,19 @@ function tog(id, k){
   if (i < 0) {
     if (!isExcludedOffice(t.o)) {
       const officeCount = S.t.filter(x => x.o === t.o && x.w.includes(k)).length;
-      if (officeCount >= 2) return alert(`⚠️ La oficina "${t.o}" ya tiene 2 técnicos en vacaciones esa semana.`);
-      
-      const globalCount = S.t.filter(x => !isExcludedOffice(x.o) && x.w.includes(k)).length;
-      if (globalCount >= 9) return alert(`⚠️ Cupo máximo de 9 técnicos alcanzado en esta semana.`);
-    }
+      if (officeCount >= 2) {
+        alert(`⚠️ Límite por Oficina Alcanzado:\nLa oficina "${t.o}" ya tiene 2 técnicos en vacaciones en esta semana.`);
+        return;
+      }
 
+      const globalCount = S.t.filter(x => !isExcludedOffice(x.o) && getTechDistrict(x) === getTechDistrict(t) && x.w.includes(k)).length;
+      if (globalCount >= 9) {
+        alert(`⚠️ Límite General Alcanzado:\nSe ha alcanzado el cupo máximo de 9 técnicos simultáneos en vacaciones en el distrito para esta semana (excluyendo Supervisores y MS).`);
+        return;
+      }
+    }
     t.w.push(k);
     logAction(`Asignó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
-
-    // VERIFICACIÓN Y DISPARO DE CORREO AUTOMÁTICO
-    const officeTechs = S.t.filter(x => x.o === t.o && !isExcludedOffice(x.o));
-    const absentTechs = officeTechs.filter(x => x.w.includes(k));
-    const currentPercent = officeTechs.length ? (absentTechs.length / officeTechs.length) : 0;
-
-    if (currentPercent >= (S.u / 100)) {
-      const absentNames = absentTechs.map(x => x.n);
-      sendThresholdAlert(t.o, weekLabel, currentPercent, S.u, absentNames);
-    }
-
   } else {
     t.w.splice(i, 1);
     logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
@@ -1021,88 +1296,140 @@ function tog(id, k){
   render();
 }
 
+/* FUNCIONES ABM TÉCNICOS */
 function addT(){
   const n=$('#nn').value.trim().toUpperCase();
-  if(!n || !S.o.length) return alert('Ingresá un nombre y una oficina válida.');
+  if(!n || !S.o.length) return alert('Debes cargar un nombre e ingresar una oficina válida.');
   const selectedOff = $('#no').value.split(' (')[0];
   S.t.push({id:++nid, n, o:selectedOff, w:[]});
-  logAction(`Agregó nuevo técnico "${n}"`);
-  markUnsaved(); $('#nn').value = ''; render();
+  logAction(`Agregó nuevo técnico "${n}" en oficina "${selectedOff}"`);
+  markUnsaved();
+  $('#nn').value = '';
+  render();
 }
 
 function delT(id){
   const t = S.t.find(x => x.id == id);
   if(!t) return;
-  if(confirm(`¿Eliminar técnico "${t.n}"?`)){
+  if(confirm(`¿Eliminar técnico "${t.n}" y sus semanas de vacaciones?`)){
     S.t=S.t.filter(x=>x.id!=id);
-    logAction(`Eliminó al técnico "${t.n}"`);
-    markUnsaved(); render();
+    logAction(`Eliminó al técnico "${t.n}" (${t.o})`);
+    markUnsaved();
+    render();
   }
 }
 
 function editT(id,f,v){
   const t=S.t.find(t=>t.id==id);
   if(!t) return;
-  if(f==='n') t.n = v.trim().toUpperCase();
-  if(f==='o') t.o = v.split(' (')[0];
-  markUnsaved(); render();
+  if(f==='n') {
+    const oldName = t.n;
+    t.n = v.trim().toUpperCase();
+    logAction(`Cambió nombre de técnico "${oldName}" a "${t.n}"`);
+  }
+  if(f==='o') {
+    const oldOff = t.o;
+    t.o = v.split(' (')[0];
+    logAction(`Reasignó técnico "${t.n}" de "${oldOff}" a "${t.o}"`);
+  }
+  markUnsaved();
+  render();
 }
 
+/* FUNCIONES ABM DISTRITOS */
 function addD(){
   const n=$('#nd').value.trim();
-  if(!n || S.d.includes(n)) return;
-  S.d.push(n); logAction(`Creó el distrito "${n}"`); markUnsaved(); $('#nd').value = ''; render();
+  if(!n) return;
+  if(S.d.includes(n)) return alert('El distrito ya existe.');
+  S.d.push(n);
+  logAction(`Creó el distrito "${n}"`);
+  markUnsaved();
+  $('#nd').value = '';
+  render();
 }
 
 function renD(i,v){
-  v=v.trim(); if(!v || S.d.includes(v)) return render();
-  const old=S.d[i]; S.d[i]=v;
+  v=v.trim();
+  if(!v || S.d.includes(v)) return render();
+  const old=S.d[i];
+  S.d[i]=v;
   S.o.forEach(o=>{ if(o.d===old) o.d=v; });
   if(DIST===old) DIST=v;
-  markUnsaved(); render();
+  logAction(`Renombró el distrito "${old}" a "${v}"`);
+  markUnsaved();
+  render();
 }
 
 function delD(i){
   const distName = S.d[i];
-  if(S.o.some(o=>o.d===distName)) return alert('No podés eliminar un distrito con oficinas asociadas.');
-  if(S.d.length<=1) return alert('Debe haber al menos un distrito.');
+  if(S.o.some(o=>o.d===distName)) return alert('No puedes eliminar un distrito que tiene oficinas asociadas.');
+  if(S.d.length<=1) return alert('Debe existir al menos un distrito.');
   if(confirm(`¿Eliminar el distrito "${distName}"?`)){
-    S.d.splice(i,1); if(DIST===distName) DIST='ALL'; markUnsaved(); render();
+    S.d.splice(i,1);
+    if(DIST===distName) DIST='ALL';
+    logAction(`Eliminó el distrito "${distName}"`);
+    markUnsaved();
+    render();
   }
 }
 
+/* FUNCIONES ABM OFICINAS */
 function addO(){
-  const n=$('#no2').value.trim(), d=$('#nd2').value;
-  if(!n || S.o.some(o=>o.n===n)) return;
-  S.o.push({n, d}); logAction(`Creó la oficina "${n}"`); markUnsaved(); $('#no2').value = ''; render();
+  const n=$('#no2').value.trim();
+  const d=$('#nd2').value;
+  if(!n) return;
+  if(S.o.some(o=>o.n===n)) return alert('Ya existe una oficina con ese nombre.');
+  S.o.push({n, d});
+  logAction(`Creó la oficina "${n}" en el distrito "${d}"`);
+  markUnsaved();
+  $('#no2').value = '';
+  render();
 }
 
 function renO(i,v){
-  v=v.trim(); if(!v) return render();
+  v=v.trim();
+  if(!v) return render();
   const old=S.o[i].n;
   if(S.o.some((o,idx)=>idx!==i && o.n===v)) return alert('Ya existe otra oficina con ese nombre.');
-  S.o[i].n=v; S.t.forEach(t=>{ if(t.o===old) t.o=v; });
-  if(F===old) F=v; markUnsaved(); render();
+  S.o[i].n=v;
+  S.t.forEach(t=>{ if(t.o===old) t.o=v; });
+  if(F===old) F=v;
+  logAction(`Renombró la oficina "${old}" a "${v}"`);
+  markUnsaved();
+  render();
 }
 
-function changeDistO(i, v){ S.o[i].d = v; markUnsaved(); render(); }
+function changeDistO(i, v){
+  const off = S.o[i];
+  const oldD = off.d;
+  off.d = v;
+  logAction(`Cambió oficina "${off.n}" del distrito "${oldD}" al distrito "${v}"`);
+  markUnsaved();
+  render();
+}
 
 function delO(i){
   const offName = S.o[i].n;
-  if(S.t.some(t=>t.o===offName)) return alert('Debes reasignar los técnicos de esta oficina primero.');
+  if(S.t.some(t=>t.o===offName)) return alert('Debes reasignar o eliminar los técnicos de esta oficina primero.');
   if(confirm(`¿Eliminar la oficina "${offName}"?`)){
-    S.o.splice(i,1); if(F===offName) F='ALL'; markUnsaved(); render();
+    S.o.splice(i,1);
+    if(F===offName) F='ALL';
+    logAction(`Eliminó la oficina "${offName}"`);
+    markUnsaved();
+    render();
   }
 }
 
 function dl(n,x,t){
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([x],{type:t}));
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([x],{type:t}));
   a.download=n; a.click();
 }
 
 function csv(){
   const W=wk(S.y), K=W.map(iso);
   const activeTechs = getFilteredTechs();
+  logAction(`Exportó la planilla de vacaciones a CSV`);
   dl('vacaciones-personal-'+S.y+'.csv', '\ufeff'+[
     ['Técnico','Oficina','Distrito',...W.map(lab)].join(';'),
     ...activeTechs.map(t=>[t.n, t.o, getTechDistrict(t), ...K.map(k=>t.w.includes(k)?'X':'')].join(';'))
@@ -1113,23 +1440,326 @@ function imp(i){
   const r=new FileReader();
   r.onload=async ()=>{
     try {
-      const d=JSON.parse(r.result); S=d; normalizeData(); nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; DIST='ALL';
-      markUnsaved(); render();
-    } catch(x){ alert('Archivo no válido.'); }
+      const d=JSON.parse(r.result);
+      S=d; normalizeData(); nid=Math.max(0,...S.t.map(t=>t.id)); F='ALL'; DIST='ALL';
+      logAction(`Restauró una copia de seguridad JSON`);
+      markUnsaved();
+      render();
+    } catch(x){ alert('Archivo de backup no válido.'); }
   };
   r.readAsText(i.files[0]); i.value='';
 }
 
 function init(){
   checkSavedSession();
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    });
-  }
 }
 
 window.onload = init;
+</script>
+<script>
+/* Skin de escritorio · cargar DESPUÉS del <script> original (antes de </body>) */
+(function(){
+const LOGO=(w,h)=>`<svg width="${w}" height="${h}" viewBox="0 0 120 34" fill="none"><text x="0" y="26" fill="#019DF4" font-family="'Segoe UI Variable Display','Segoe UI',Inter,Arial,sans-serif" font-weight="700" font-size="29" letter-spacing="-1.4">movistar</text></svg>`;
+document.querySelectorAll('.login-logos>svg:first-child,.brand-logos-hdr>svg:first-child').forEach(s=>s.outerHTML=LOGO(150,42));
+
+const IC={
+ d:'<path d="M4 20V11M10 20V4M16 20v-7M22 20H2"/>',
+ p:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',
+ a:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6M17 5a3.5 3.5 0 010 7M19 14c2 1 3 3 3 6"/>',
+ u:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/>',
+ l:'<path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/>'};
+const item=(v,t)=>`<button class="nav-i" data-nv="${v}" onclick="V='${v}';SEL=null;render()"><svg viewBox="0 0 24 24">${IC[v]}</svg>${t}</button>`;
+const sb=document.createElement('aside');sb.id='sb';
+sb.innerHTML=`<div class="sb-brand">${LOGO(130,36)}<small>Sistema de vacaciones</small></div>${item('d','Resumen')}${item('p','Planilla de carga')}${item('a','Técnicos')}<div class="adm"><div class="sb-grp">Administración</div>${item('u','Usuarios')}${item('l','Registro')}</div><div class="sb-foot"><b id="sb-user"></b><span id="sb-role"></span></div><div class="sb-credit">Desarrollado por<b onmouseenter="openContact()" onmouseleave="leaveContact()" onclick="openContact()" title="Contacto">Iván Javier Kruk Losada</b></div>`;
+document.body.appendChild(sb);
+const MAIL='ivan.kruk@tmoviles.com.ar';
+const ct=document.createElement('div');ct.id='ct-modal';
+ct.innerHTML=`<div class="ct-box"><div class="ct-av">IK</div><h3>Iván Javier Kruk Losada</h3><p>Desarrollador del Sistema de Vacaciones</p><a class="ct-mail" href="mailto:${MAIL}">${MAIL}</a><div class="ct-act"><a class="ct-btn" href="mailto:${MAIL}?subject=Sistema%20de%20Vacaciones">Enviar correo</a><button onclick="closeContact()">Cerrar</button></div></div>`;
+let ctT;ct.onmouseenter=()=>clearTimeout(ctT);ct.onmouseleave=()=>{ctT=setTimeout(()=>ct.classList.remove('open'),250);};
+document.body.appendChild(ct);
+window.openContact=()=>{clearTimeout(ctT);ct.classList.add('open');};
+window.leaveContact=()=>{ctT=setTimeout(()=>ct.classList.remove('open'),250);};
+window.closeContact=()=>ct.classList.remove('open');
+const ttl=document.createElement('span');ttl.id='pg-title';
+document.getElementById('main-header').prepend(ttl);
+
+const TT={d:'Resumen',p:'Planilla de carga',a:'Gestión de técnicos',u:'Usuarios',l:'Registro de actividad'};
+window.PQ='';
+
+/* quita emojis al inicio de textos */
+const EMO=/^[\s\u200d\ufe0f\p{Extended_Pictographic}]+/u;
+function clean(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
+  while(n=w.nextNode()){if(EMO.test(n.nodeValue)&&n.nodeValue.trim()){n.nodeValue=n.nodeValue.replace(EMO,'');}}
+  root.querySelectorAll('[placeholder]').forEach(i=>i.placeholder=i.placeholder.replace(EMO,''));
+}
+
+/* ---------- Nuevo Resumen ---------- */
+const _dash=dash;
+function dashD(){
+  const W=wk(S.y),K=W.map(iso),offs=getFilteredOffices(),techs=getFilteredTechs();
+  const calc=techs.filter(t=>!isExcludedOffice(t.o)),N=calc.length||1,u=S.u/100;
+  const tot=K.map(k=>calc.filter(t=>t.w.includes(k)).length);
+  const sum=tot.reduce((a,b)=>a+b,0),mx=Math.max(...tot),pk=tot.indexOf(mx),over=tot.filter(x=>x/N>u).length;
+  const now=Date.now(),cw=W.findIndex(w=>now>=w&&now<w+7*864e5);
+  const sel=SEL!=null?SEL:(cw>=0?cw:Math.max(pk,0));
+  const col=p=>p>u?'var(--bad)':p>=.9*u?'var(--mid)':'var(--ok)';
+
+  /* gráfico semanal */
+  const CW=960,CH=150,bw=CW/52,mxp=Math.max(u*1.4,...tot.map(x=>x/N));
+  const bars=tot.map((c,i)=>{const p=c/N,h=Math.max(c?3:1.5,p/mxp*CH),x=40+i*bw;
+    return `<g onclick="SEL=${i};render()" style="cursor:pointer"><rect class="hit ${i===sel?'on':''}" x="${x}" y="0" width="${bw}" height="${CH+4}"/><rect x="${x+2}" y="${CH-h}" width="${bw-4}" height="${h}" rx="2" fill="${c?col(p):'#E3E6EB'}"><title>${lab(W[i])} · ${c} téc. (${Math.round(p*100)}%)</title></rect></g>`}).join('');
+  const mon=W.map((w,i)=>i===0||new Date(w).getUTCMonth()!==new Date(W[i-1]).getUTCMonth()?`<text x="${40+i*bw}" y="${CH+20}">${MES[new Date(w).getUTCMonth()]}</text>`:'').join('');
+  const ty=CH-u/mxp*CH;
+  const chart=`<svg viewBox="0 0 1000 ${CH+28}"><line x1="40" x2="1000" y1="${CH}" y2="${CH}" stroke="#E3E6EB"/><line x1="40" x2="1000" y1="${ty}" y2="${ty}" stroke="#D13438" stroke-dasharray="4 4" opacity=".7"/><text x="34" y="${ty+4}" text-anchor="end" style="fill:#D13438">${S.u}%</text><text x="34" y="${CH+4}" text-anchor="end">0</text>${bars}${mon}</svg>`;
+
+  /* detalle semana */
+  const sp=tot[sel]/N;
+  const grp=offs.map(o=>{const n=techs.filter(t=>t.o===o.n&&t.w.includes(K[sel]));return n.length?`<div class="dg"><b>${e(o.n)}<i>${n.length}</i></b>${n.map(t=>`<span>${e(t.n)}</span>`).join('')}</div>`:''}).join('')||'<p class="mut">Nadie de vacaciones esta semana.</p>';
+  const det=`<div class="det-h"><div><div class="mut" style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">${sel===cw?'Semana actual':'Semana'}</div><b>${lab(W[sel])}</b></div><div><button ${sel<=0?'disabled':''} onclick="SEL=${sel-1};render()">‹</button> <button ${sel>=51?'disabled':''} onclick="SEL=${sel+1};render()">›</button></div></div><div class="det-big">${tot[sel]}<small>de ${N} técnicos · ${Math.round(sp*100)}%</small></div><div class="pbar2"><i style="width:${Math.min(100,sp/(u*1.4)*100)}%;background:${col(sp)}"></i></div>${grp}`;
+
+  /* críticas */
+  const top=tot.map((c,i)=>[c,i]).filter(x=>x[0]).sort((a,b)=>b[0]-a[0]).slice(0,6)
+    .map(([c,i])=>`<div class="crit" onclick="SEL=${i};render()"><span>${lab(W[i])}</span><b style="color:${col(c/N)}">${c} téc. · ${Math.round(c/N*100)}%</b></div>`).join('')||'<p class="mut">Sin vacaciones programadas.</p>';
+
+  /* por oficina */
+  const rows=offs.map(o=>{const ts=techs.filter(t=>t.o===o.n),c=K.map(k=>ts.filter(t=>t.w.includes(k)).length);
+    return `<tr><td><b>${e(o.n)}</b></td><td class="n">${ts.length}</td><td class="n">${c.reduce((a,b)=>a+b,0)}</td><td class="n">${Math.max(0,...c)}</td><td class="n">${vs(ts).tk}</td><td class="n">${vs(ts).pd}</td><td><div class="strip">${c.map((v,i)=>`<i onclick="SEL=${i};render()" title="${lab(W[i])}: ${v}" style="${v?`background:${v>=2?'#0B6BCB':'#7CC4F7'}`:''};${i===sel?'outline:1.5px solid #1A2230;outline-offset:1px':''}"></i>`).join('')}</div></td></tr>`}).join('');
+
+  const V0=vs(techs);
+  const vacKpis=`<div class="kpis c4"><div class="k"><small>Vacaciones tomadas</small><b>${V0.tk*7}</b><span>días · ${V0.tk} sem.</span></div><div class="k"><small>Programadas a futuro</small><b>${V0.sc*7}</b><span>días · ${V0.sc} sem.</span></div><div class="k"><small>Pendientes de programar</small><b>${V0.pd}</b><span>días · ≈ ${Math.floor(V0.pd/7)} sem.</span></div><div class="k"><small>Saldo cargado</small><b>${V0.tot}</b><span>${V0.sin?V0.sin+' técnicos sin saldo cargado':'todos con saldo cargado'}</span></div></div>`;
+  /* matriz original, colapsada */
+  const doc=new DOMParser().parseFromString(_dash(),'text/html');
+  const m=[...doc.querySelectorAll('.card')].find(c=>c.querySelector('h3')&&c.querySelector('h3').textContent.includes('Matriz'));
+
+  return `<div class="kpis">
+   <div class="k"><small>Técnicos</small><b>${calc.length}</b><span>${offs.filter(o=>!isExcludedOffice(o.n)).length} oficinas</span></div>
+   <div class="k"><small>Semana actual</small><b>${cw>=0?tot[cw]:'–'}</b><span>${cw>=0?'de vacaciones ahora':'fuera de '+S.y}</span></div>
+   <div class="k"><small>Semanas asignadas</small><b>${sum}</b><span>en ${S.y}</span></div>
+   <div class="k"><small>Pico</small><b>${mx?Math.round(mx/N*100)+'%':'–'}</b><span>${mx} téc. · ${pk>=0?fmt(W[pk]):''}</span></div>
+   <div class="k ${over?'warn':''}"><small>Sobre umbral</small><b>${over}</b><span>semanas &gt; ${S.u}%</span></div></div>
+  ${vacKpis}<div class="dgrid"><div class="card chart"><h3>Ocupación semanal <span class="mut" style="font-weight:400;font-size:12px">tocá una barra para ver el detalle</span></h3>${chart}</div><div class="card">${det}</div></div>
+  <div class="dgrid"><div class="card"><h3>Por oficina</h3><div style="overflow:auto"><table class="otab"><thead><tr><th>Oficina</th><th class="n">Téc.</th><th class="n">Sem.</th><th class="n">Pico</th><th class="n">Tomadas (sem.)</th><th class="n">Pend. (días)</th><th>Distribución anual</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class="card"><h3>Semanas críticas</h3>${top}</div></div>
+  ${m?m.outerHTML:''}`;
+}
+dash=function(){return dashD();};
+
+/* ---------- Planilla: buscador, semana actual ---------- */
+window.applyPQ=function(){const q=PQ.trim().toLowerCase();document.querySelectorAll('.hm tbody tr.pl').forEach(r=>r.style.display=!q||r.textContent.toLowerCase().includes(q)?'':'none');};
+window.goToday=function(){const w=document.querySelector('.wrap'),c=document.querySelector('.hm th.cur');if(w&&c)w.scrollTo({left:c.offsetLeft-300,behavior:'smooth'});};
+function markCur(){
+  const W=wk(S.y),now=Date.now(),i=W.findIndex(w=>now>=w&&now<w+7*864e5);if(i<0)return;
+  document.querySelectorAll('.hm').forEach(t=>{
+    const h=t.querySelectorAll('thead tr')[1];if(h&&h.children[i])h.children[i].classList.add('cur');
+    t.querySelectorAll('tbody tr,tfoot tr').forEach(r=>{const c=r.children[i+1];if(c)c.classList.add('cur');});
+  });
+}
+function planBar(){
+  const tabs=document.querySelector('#app .tabs');if(!tabs||V!=='p')return;
+  const b=document.createElement('div');b.className='pbar';
+  const dt=S.d.length>1?`<div class="tabs" style="margin-right:6px">${S.d.map(d=>`<button class="${d===DIST?'on':''}" onclick="DIST='${e(d)}';F='ALL';render()">${e(d)}</button>`).join('')}</div>`:'';
+  b.innerHTML=dt+`<input type="search" placeholder="Buscar técnico" value="${e(PQ)}" oninput="PQ=this.value;applyPQ()"><button onclick="goToday()">Ir a la semana actual</button>${currentUser&&currentUser.r==='admin'?'<button class="ap" onclick="openAuto()">Programación automática</button>':''}`;
+  tabs.parentNode.insertBefore(b,tabs);
+}
+
+/* técnicos: oficinas en su orden, A-Z dentro de cada una */
+getFilteredTechs=function(){
+  const offs=getFilteredOffices().map(o=>o.n);
+  return S.t.filter(t=>offs.includes(t.o)).sort((a,b)=>offs.indexOf(a.o)-offs.indexOf(b.o)||a.n.localeCompare(b.n,'es'));
+};
+
+/* saldos de vacaciones por técnico y año: t.b[año]={p:año anterior, l:licencia} en días; cada semana = 7 días, se descuenta primero año anterior */
+function bal(t,y){
+  const b=t.b&&t.b[y];if(!b)return null;
+  const used=wk(y).map(iso).filter(k=>t.w.includes(k)).length*7,p=+b.p||0,l=+b.l||0,up=Math.min(p,used);
+  return{p,l,used,rp:p-up,rl:l-(used-up)};
+}
+window.setBal=function(id,f,v){
+  const t=S.t.find(x=>x.id==id);if(!t)return;
+  const n=Math.max(0,Math.round(+v)||0);
+  t.b=t.b||{};t.b[S.y]=t.b[S.y]||{p:0,l:0};t.b[S.y][f]=n;
+  logAction(`Cargó ${f==='p'?'vacaciones año anterior':'licencia por vacaciones'} de "${t.n}" (${S.y}): ${n} días`);
+  markUnsaved();render();
+};
+const _tog=tog;
+tog=function(id,k){
+  const t=S.t.find(x=>x.id==id);
+  if(t&&!t.w.includes(k)){
+    const y=+k.slice(0,4),b=bal(t,y);
+    if(b&&b.used+7>b.p+b.l){alert(`⚠️ Saldo insuficiente:\n"${t.n}" tiene ${b.rp+b.rl} días disponibles en ${y} y una semana necesita 7.\n\nCargá o corregí su saldo en Gestión de técnicos.`);return;}
+  }
+  _tog(id,k);
+};
+function fillCounts(){
+  document.querySelectorAll('.hm tbody tr.pl').forEach(r=>{
+    const th=r.querySelector('th.r'),d=th&&th.querySelector('div:last-child'),n=r.lastElementChild.textContent.trim();
+    if(!d||d===th.firstElementChild)return;
+    const td=r.querySelector('td[onclick]'),m=td&&/tog\((\d+),/.exec(td.getAttribute('onclick')),t=m&&S.t.find(x=>x.id==m[1]),b=t&&bal(t,S.y);
+    d.innerHTML='<b>'+n+'</b> '+(n==1?'semana':'semanas')+(b?` · Ant. <b>${b.rp}</b> · Lic. <b class="${b.rl<0?'neg':''}">${b.rl}</b> días`:'');
+  });
+}
+function balCols(){
+  const tb=document.querySelector('#app .tb');if(!tb)return;
+  const hr=tb.querySelector('thead tr'),last=hr.lastElementChild;
+  ['Vacaciones año anterior (días)','Licencia por vacaciones (días)','Saldo restante'].forEach(x=>{const th=document.createElement('th');th.textContent=x;hr.insertBefore(th,last);});
+  tb.querySelectorAll('tbody tr').forEach(r=>{
+    const bt=r.querySelector('button.del'),m=bt&&/delT\((\d+)\)/.exec(bt.getAttribute('onclick')),t=m&&S.t.find(x=>x.id==m[1]);if(!t)return;
+    const b=bal(t,S.y),cell=h=>{const td=document.createElement('td');td.innerHTML=h;r.insertBefore(td,r.lastElementChild);};
+    cell(`<input type="number" min="0" style="width:90px" placeholder="–" value="${b?b.p:''}" onchange="setBal(${t.id},'p',this.value)">`);
+    cell(`<input type="number" min="0" style="width:90px" placeholder="–" value="${b?b.l:''}" onchange="setBal(${t.id},'l',this.value)">`);
+    cell(b?`Ant. <b>${b.rp}</b> · Lic. <b class="${b.rl<0?'neg':''}">${b.rl}</b>`:'<span class="mut">Sin cargar</span>');
+  });
+  const n=document.createElement('p');n.className='bal-note';n.textContent='Saldos en días para el año '+S.y+' (cada semana descuenta 7 días, primero de año anterior). Cambiá el año arriba para cargar otro período.';
+  tb.parentNode.insertBefore(n,tb);
+}
+
+/* matriz: clic en oficina -> planilla de carga de esa oficina */
+function linkOffices(){
+  document.querySelectorAll('.hm tbody tr').forEach(r=>{
+    const th=r.querySelector('th.r');if(!th||!th.firstChild)return;
+    const nm=(th.firstChild.nodeValue||'').trim(),o=S.o.find(x=>x.n===nm);if(!o)return;
+    th.classList.add('go');th.title='Abrir planilla de carga de '+nm;
+    th.onclick=()=>{DIST=o.d;F=nm;V='p';SEL=null;render();};
+  });
+}
+
+/* resumen de vacaciones: tomadas / programadas / pendientes */
+const PAL=['#0B6BCB','#5CB615','#7C5CFC','#F59E0B','#E5484D','#0EA5A4','#D946A8','#64748B'];
+const oc=n=>{const i=S.o.findIndex(o=>o.n===n);return PAL[(i<0?0:i)%PAL.length];};
+function paint(){
+  document.querySelectorAll('.badge-off').forEach(b=>{const c=oc(b.textContent.trim()),th=b.closest('th.r');b.style.background=c+'1F';b.style.color=c;if(th)th.style.boxShadow='inset 4px 0 0 '+c;});
+  document.querySelectorAll('.hm tbody tr:not(.pl) th.r').forEach(th=>{const nm=th.firstChild&&(th.firstChild.nodeValue||'').trim();if(nm&&S.o.some(o=>o.n===nm))th.style.boxShadow='inset 4px 0 0 '+oc(nm);});
+  document.querySelectorAll('.otab tbody tr').forEach(r=>{const td=r.firstElementChild,nm=td.textContent.trim();if(S.o.some(o=>o.n===nm))td.style.boxShadow='inset 4px 0 0 '+oc(nm);});
+  document.querySelectorAll('.abm-t tr.grp td').forEach(td=>{const nm=td.firstChild&&(td.firstChild.nodeValue||'').trim();if(nm&&S.o.some(o=>o.n===nm))td.style.boxShadow='inset 4px 0 0 '+oc(nm);});
+}
+
+function vs(ts){
+  const y=S.y,W=wk(y),now=Date.now();let tk=0,sc=0,pd=0,tot=0,sin=0;
+  ts.forEach(t=>{
+    W.filter(w=>t.w.includes(iso(w))).forEach(w=>{if(w+6*864e5<now)tk++;else sc++;});
+    const b=bal(t,y);if(b){tot+=b.p+b.l;pd+=Math.max(0,b.rp+b.rl);}else sin++;
+  });
+  return{tk,sc,pd,tot,sin};
+}
+
+/* gestión: técnicos / oficinas / distritos con pestañas */
+window.ABT='t';window.TF='';window.TQ='';
+window.filtRows=q=>{
+  TQ=q;const s=q.trim().toLowerCase();let g=null,v=0;
+  document.querySelectorAll('.abm-t tbody tr').forEach(r=>{
+    if(r.classList.contains('grp')){if(g)g.style.display=v?'':'none';g=r;v=0;return;}
+    r.style.display=!s||(r.dataset.n||'').includes(s)?'':'none';if(r.style.display!=='none')v++;
+  });
+  if(g)g.style.display=v?'':'none';
+};
+window.toggleAdd=()=>{const b=document.querySelector('.addbox');if(!b)return;b.classList.toggle('open');const i=b.querySelector('input');if(i)i.focus();};
+function abm2(){
+  const offIdx=n=>{const i=S.o.findIndex(o=>o.n===n);return i<0?99:i;};
+  const cnt={t:S.t.length,o:S.o.length,d:S.d.length};
+  const tabs=`<div class="tabs">${[['t','Técnicos'],['o','Oficinas'],['d','Distritos']].map(([k,l])=>`<button class="${ABT===k?'on':''}" onclick="ABT='${k}';render()">${l} <span class="cnt">${cnt[k]}</span></button>`).join('')}</div>`;
+  const distOpts=sel=>S.d.map(d=>`<option ${d===sel?'selected':''}>${e(d)}</option>`).join('');
+  const offOpts=sel=>S.o.map(o=>`<option ${o.n===sel?'selected':''}>${e(o.n)} (${e(o.d)})</option>`).join('');
+  let body='';
+  if(ABT==='t'){
+    const K=wk(S.y).map(iso);
+    const list=[...S.t].filter(t=>!TF||t.o===TF).sort((a,b)=>offIdx(a.o)-offIdx(b.o)||a.n.localeCompare(b.n,'es'));
+    let last=null,rows='';
+    list.forEach(t=>{
+      if(t.o!==last){last=t.o;rows+=`<tr class="grp"><td colspan="7">${e(t.o)} <span class="cnt">${list.filter(x=>x.o===t.o).length}</span></td></tr>`;}
+      const b=bal(t,S.y),wn=K.filter(k=>t.w.includes(k)).length;
+      rows+=`<tr data-n="${e(t.n.toLowerCase())}"><td><input type="text" value="${e(t.n)}" onchange="editT(${t.id},'n',this.value)"></td><td><select onchange="editT(${t.id},'o',this.value)">${offOpts(t.o)}</select></td><td class="c"><input class="num" type="number" min="0" placeholder="–" value="${b?b.p:''}" onchange="setBal(${t.id},'p',this.value)"></td><td class="c"><input class="num" type="number" min="0" placeholder="–" value="${b?b.l:''}" onchange="setBal(${t.id},'l',this.value)"></td><td class="c">${b?`<b>${b.rp}</b> / <b class="${b.rl<0?'neg':''}">${b.rl}</b>`:'<span class="mut">–</span>'}</td><td class="c">${wn}</td><td class="c"><button class="del" onclick="delT(${t.id})">Eliminar</button></td></tr>`;
+    });
+    body=`<div class="abm-bar"><input type="search" placeholder="Buscar técnico" value="${e(TQ)}" oninput="filtRows(this.value)"><select onchange="TF=this.value;render()"><option value="">Todas las oficinas</option>${S.o.map(o=>`<option ${o.n===TF?'selected':''}>${e(o.n)}</option>`).join('')}</select><span class="sp"></span><span class="mut">Saldos de ${S.y} en días</span><button class="btn" onclick="toggleAdd()">+ Nuevo técnico</button></div>
+    <div class="addbox"><input id="nn" type="text" placeholder="APELLIDO, NOMBRE"><select id="no">${offOpts(S.o[0]&&S.o[0].n)}</select><button class="btn" onclick="addT()">Agregar técnico</button></div>
+    <div class="abm-wrap"><table class="abm-t"><thead><tr><th>Nombre</th><th>Oficina</th><th class="c">Vacaciones año anterior</th><th class="c">Licencia por vacaciones</th><th class="c">Saldo (ant. / lic.)</th><th class="c">Sem.</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="7" class="mut" style="padding:16px">No hay técnicos.</td></tr>'}</tbody></table></div>`;
+  }else if(ABT==='o'){
+    body=`<div class="abm-bar"><span class="mut">${S.o.length} oficinas</span><span class="sp"></span><button class="btn" onclick="toggleAdd()">+ Nueva oficina</button></div>
+    <div class="addbox"><input id="no2" type="text" placeholder="Nombre de la oficina"><select id="nd2">${distOpts(S.d[0])}</select><button class="btn" onclick="addO()">Agregar oficina</button></div>
+    <div class="abm-wrap"><table class="abm-t"><thead><tr><th>Oficina</th><th>Distrito</th><th class="c">Técnicos</th><th></th></tr></thead><tbody>${S.o.map((o,i)=>`<tr><td><input type="text" value="${e(o.n)}" onchange="renO(${i},this.value)"></td><td><select onchange="changeDistO(${i},this.value)">${distOpts(o.d)}</select></td><td class="c">${S.t.filter(t=>t.o===o.n).length}</td><td class="c"><button class="del" onclick="delO(${i})">Eliminar</button></td></tr>`).join('')}</tbody></table></div>`;
+  }else{
+    body=`<div class="abm-bar"><span class="mut">${S.d.length} distritos</span><span class="sp"></span><button class="btn" onclick="toggleAdd()">+ Nuevo distrito</button></div>
+    <div class="addbox"><input id="nd" type="text" placeholder="Nombre del distrito"><button class="btn" onclick="addD()">Agregar distrito</button></div>
+    <div class="abm-wrap"><table class="abm-t"><thead><tr><th>Distrito</th><th class="c">Oficinas</th><th class="c">Técnicos</th><th></th></tr></thead><tbody>${S.d.map((d,i)=>`<tr><td><input type="text" value="${e(d)}" onchange="renD(${i},this.value)"></td><td class="c">${S.o.filter(o=>o.d===d).length}</td><td class="c">${S.t.filter(t=>getTechDistrict(t)===d).length}</td><td class="c"><button class="del" onclick="delD(${i})">Eliminar</button></td></tr>`).join('')}</tbody></table></div>`;
+  }
+  return tabs+body;
+}
+abm=abm2;
+
+/* programación automática (solo administradores) */
+const as=document.createElement('div');as.id='as-modal';
+as.innerHTML=`<div class="as-box"><h3>Programación automática</h3><p>Asigna al azar las vacaciones pendientes de cada técnico, respetando lo ya cargado y los límites de 2 por oficina y 9 por distrito.</p><label>Oficinas</label><select id="as-sc"></select><label>Tipo de vacaciones a programar</label><select id="as-ty"><option value="all">Año anterior y luego licencia (todo lo pendiente)</option><option value="p">Solo vacaciones año anterior</option><option value="l">Solo licencia por vacaciones</option></select><div class="as-r"><div><label>Desde la semana</label><select id="as-f"></select></div><div><label>Hasta la semana</label><select id="as-t"></select></div></div><div class="ct-act" style="justify-content:flex-end;margin-top:18px"><button onclick="document.getElementById('as-modal').classList.remove('open')">Cancelar</button><button class="btn" onclick="runAuto()">Generar</button></div></div>`;
+document.body.appendChild(as);
+window.openAuto=function(){
+  if(!currentUser||currentUser.r!=='admin')return;
+  const W=wk(S.y),now=Date.now(),offs=getFilteredOffices();
+  let f=W.findIndex(w=>w+6*864e5>=now);if(f<0)f=0;
+  document.getElementById('as-sc').innerHTML='<option value="">Todas las oficinas'+(DIST==='ALL'?'':' · '+e(DIST))+'</option>'+offs.map(o=>`<option ${o.n===F?'selected':''}>${e(o.n)}</option>`).join('');
+  const opts=sel=>W.map((w,i)=>`<option value="${i}" ${i===sel?'selected':''}>${lab(w)}</option>`).join('');
+  document.getElementById('as-f').innerHTML=opts(f);
+  document.getElementById('as-t').innerHTML=opts(W.length-1);
+  as.classList.add('open');
+};
+window.runAuto=function(){
+  if(!currentUser||currentUser.r!=='admin')return alert('Solo los administradores pueden usar la programación automática.');
+  const W=wk(S.y),K=W.map(iso),f=+document.getElementById('as-f').value,t2=+document.getElementById('as-t').value,sc=document.getElementById('as-sc').value;
+  if(f>t2)return alert('El rango de semanas no es válido.');
+  const scope=getFilteredTechs().filter(t=>!sc||t.o===sc);
+  const cOff={},cDist={};
+  S.t.forEach(t=>{if(isExcludedOffice(t.o))return;const d=getTechDistrict(t);K.forEach((k,i)=>{if(t.w.includes(k)){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}});});
+  const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  const ty=document.getElementById('as-ty').value,need=new Map();let skipped=0,withPrev=0;
+  scope.forEach(t=>{
+    const b=bal(t,S.y);if(!b){skipped++;return;}
+    let days;
+    if(ty==='p')days=b.rp;
+    else if(ty==='l'){if(b.rp>0){withPrev++;return;}days=b.rl;}
+    else days=b.rp+b.rl;
+    const n=Math.floor(Math.max(0,days)/7);if(n>0)need.set(t,n);
+  });
+  const got=new Map(),techs=[...need.keys()],maxN=Math.max(0,...need.values());
+  for(let r=0;r<maxN;r++){
+    shuffle(techs.slice()).forEach(t=>{
+      const mine=got.get(t)||[];if(mine.length>=need.get(t))return;
+      const ex=isExcludedOffice(t.o),d=getTechDistrict(t);
+      const cand=shuffle(K.map((_,i)=>i).filter(i=>i>=f&&i<=t2&&!t.w.includes(K[i])&&!mine.includes(i)&&(ex||((cOff[t.o+'|'+i]||0)<2&&(cDist[d+'|'+i]||0)<9))));
+      if(!cand.length)return;
+      const i=cand[0];mine.push(i);got.set(t,mine);
+      if(!ex){cOff[t.o+'|'+i]=(cOff[t.o+'|'+i]||0)+1;cDist[d+'|'+i]=(cDist[d+'|'+i]||0)+1;}
+    });
+  }
+  let total=0,missing=0;got.forEach(a=>total+=a.length);need.forEach((n,t)=>missing+=n-(got.get(t)||[]).length);
+  if(!total)return alert('No hay semanas para asignar: los técnicos del alcance elegido no tienen saldo pendiente cargado, o no hay lugar en ese rango por los límites.');
+  const msg='Programación automática '+S.y+'\n\n• Tipo: '+({all:'año anterior y luego licencia',p:'solo año anterior',l:'solo licencia'})[ty]+'\n• Técnicos con pendientes: '+need.size+'\n• Semanas a asignar: '+total+'\n'+(missing?'• Sin lugar por los límites: '+missing+' (probá con un rango más amplio)\n':'')+(skipped?'• Omitidos por no tener saldo cargado: '+skipped+'\n':'')+(withPrev?'• Omitidos por tener año anterior pendiente (se usa primero): '+withPrev+'\n':'')+'\nSe respetan los límites de 2 por oficina y 9 por distrito.\n¿Aplicar la programación?';
+  if(!confirm(msg))return;
+  got.forEach((arr,t)=>{arr.forEach(i=>t.w.push(K[i]));t.w.sort();});
+  logAction('Programación automática: '+total+' semanas asignadas a '+need.size+' técnicos (rango '+lab(W[f])+' a '+lab(W[t2])+')');
+  markUnsaved();as.classList.remove('open');render();
+};
+
+/* ---------- Hooks ---------- */
+const _render=render;let lv=null,savedAll=false;
+render=function(){
+  if(V==='p'&&DIST==='ALL'&&S.d&&S.d.length){savedAll=true;DIST=S.d[0];F='ALL';}
+  else if(V!=='p'&&savedAll){DIST='ALL';savedAll=false;}
+  _render();
+  const first=V!==lv;lv=V;
+  if(V==='p'){planBar();applyPQ();fillCounts();}
+  markCur();
+  if(V==='d')linkOffices();
+  if(V==='a'&&ABT==='t'&&TQ)filtRows(TQ);
+  const adm=currentUser&&currentUser.r==='admin';
+  sb.querySelector('.adm').style.display=adm?'':'none';
+  sb.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('on',b.dataset.nv===V));
+  ttl.textContent=(TT[V]||'')+' · '+S.y;
+  if(currentUser){document.getElementById('sb-user').textContent=currentUser.u;document.getElementById('sb-role').textContent=adm?'Administrador':'Usuario';}
+  paint();
+  clean(document.body);
+  if(first&&V==='p')setTimeout(goToday,60);
+};
+const _sa=showAppUI;showAppUI=function(){document.body.classList.add('in-app');_sa();};
+const _sl=showLoginUI;showLoginUI=function(){document.body.classList.remove('in-app');_sl();};
+})();
+
 </script>
 </body>
 </html>
