@@ -7,6 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- SDK de EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 <style>
 :root {
   --pers-navy: #0B132B;
@@ -502,8 +506,16 @@ const BIN_ID = "6abd1918ffd5d160533f46f2";
 const MASTER_KEY = "$2a$10$RBYWKS9nR5ypehogRtWvSu1/R1qEQAlA8VtN9iQUynH5fzC3czXUK";
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
+// CONFIGURACIÓN EMAILJS
+const EMAILJS_PUBLIC_KEY = "lNrom6fz8aCfUhH_i";
+const EMAILJS_TEMPLATE_ID = "template_ybyll0o";
+const EMAILJS_SERVICE_ID = "service_nyvfvps";
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
 const SEED = {
   u: 20, y: 2026,
+  alertEmails: "",
   users: [
     { u: "kruki", p: "", r: "admin" }
   ],
@@ -522,7 +534,7 @@ const SEED = {
 };
 
 const $=s=>document.querySelector(s), MES=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const e=s=>String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
 const isExcludedOffice = o => {
   const s = String(o || '').trim().toLowerCase();
@@ -533,6 +545,7 @@ let S = JSON.parse(JSON.stringify(SEED));
 let V='d', F='ALL', DIST='ALL', SEL=null, nid=45;
 let currentUser = null;
 let hasUnsavedChanges = false;
+let sentAlertsCache = new Set();
 
 function markUnsaved() {
   hasUnsavedChanges = true;
@@ -575,6 +588,7 @@ function normalizeData() {
     }
   }
   if (!Array.isArray(S.logs)) S.logs = [];
+  if (!S.alertEmails) S.alertEmails = "";
   if (Array.isArray(S.o)) {
     S.o = S.o.map(of => {
       if (typeof of === 'string') return { n: of, d: "Bella Vista" };
@@ -649,6 +663,34 @@ async function saveData() {
     setSyncStatus('err', 'Error al guardar');
     alert('❌ Ocurrió un error al intentar guardar en la nube. Revisa tu conexión a internet.');
   }
+}
+
+/* ENVÍO AUTOMÁTICO DE ALERTAS POR CORREO CON EMAILJS (CÁLCULO GLOBAL DISTRITAL) */
+function sendThresholdAlert(districtName, weekLabel, currentPercent, thresholdPercent, techNames) {
+  if (!S.alertEmails || S.alertEmails.trim() === '') return;
+
+  const alertKey = `${districtName}_${weekLabel}_${Math.round(currentPercent * 100)}`;
+  if (sentAlertsCache.has(alertKey)) return;
+
+  const triggerUser = currentUser ? currentUser.u : 'Sistema';
+
+  const templateParams = {
+    to_emails: S.alertEmails,
+    office: `Distrito: ${districtName} (Global)`,
+    week: weekLabel,
+    percent: Math.round(currentPercent * 100) + '%',
+    threshold: thresholdPercent + '%',
+    technicians: techNames.join(', '),
+    user_action: triggerUser
+  };
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+    .then(function() {
+       logAction(`Alerta enviada por mail a (${S.alertEmails}) por ausentismo GLOBAL del ${Math.round(currentPercent * 100)}% en ${districtName} (Acción por: ${triggerUser})`);
+       sentAlertsCache.add(alertKey);
+    }, function(error) {
+       console.error('❌ Error EmailJS:', error);
+    });
 }
 
 /* MANEJO DE SESIÓN PERSISTENTE */
@@ -1132,7 +1174,38 @@ function usersAbm() {
         `).join('')}
       </tbody>
     </table>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>📧 Configuración de Alertas por Correo Electrónico (Solo Admin)</h3>
+    <p style="color:var(--pers-muted); font-size:12px; margin-bottom:12px;">
+      Cuando el ausentismo global distrital alcance o supere el % de umbral, se enviará un correo automático a las casillas indicadas.
+    </p>
+    <div class="f" style="flex-direction:column; align-items:flex-start; gap:10px;">
+      <div style="width:100%;">
+        <label style="display:block; font-weight:700; font-size:11px; margin-bottom:4px;">Correos Destinatarios (separados por coma):</label>
+        <input id="cfg-emails" type="text" style="width:100%;" placeholder="ejemplo@telecom.com, jefe@telecom.com" value="${e(S.alertEmails || '')}">
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <label style="font-weight:700; font-size:11px;">Umbral de Disparo (%):</label>
+        <input id="cfg-threshold" type="number" min="1" max="100" style="width:70px;" value="${S.u || 20}">
+        <button class="btn" onclick="saveEmailSettings()">💾 Guardar Configuración de Correo</button>
+      </div>
+    </div>
   </div>`;
+}
+
+function saveEmailSettings() {
+  const emails = $('#cfg-emails').value.trim();
+  const threshold = +$('#cfg-threshold').value || 20;
+
+  S.alertEmails = emails;
+  S.u = threshold;
+
+  logAction(`Actualizó la configuración de e-mails (${S.u}%, Destinos: ${S.alertEmails})`);
+  markUnsaved();
+  saveData();
+  alert('✅ Configuración de alertas por correo guardada correctamente.');
 }
 
 function addUser() {
@@ -1260,7 +1333,7 @@ function render(){
   const w2=$('.wrap'); if(s&&w2){ w2.scrollLeft=s[0]; w2.scrollTop=s[1]; }
 }
 
-/* TOGGLE CON CONTROL DE LÍMITES Y LOGGING */
+/* TOGGLE CON CONTROL DE LÍMITES, LOGGING Y DISPARO DE CORREO GLOBAL */
 function tog(id, k){
   const t = S.t.find(t => t.id == id);
   if (!t) return;
@@ -1287,6 +1360,18 @@ function tog(id, k){
     }
     t.w.push(k);
     logAction(`Asignó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
+
+    // CÁLCULO DE UMBRAL GLOBAL (DISTRITAL EXCLUYENDO MS Y SUPERVISORES)
+    const techDistrict = getTechDistrict(t);
+    const globalDistrictTechs = S.t.filter(x => !isExcludedOffice(x.o) && getTechDistrict(x) === techDistrict);
+    const absentDistrictTechs = globalDistrictTechs.filter(x => x.w.includes(k));
+    const globalPercent = globalDistrictTechs.length ? (absentDistrictTechs.length / globalDistrictTechs.length) : 0;
+
+    if (globalPercent >= (S.u / 100)) {
+      const absentNames = absentDistrictTechs.map(x => `${x.n} (${x.o})`);
+      sendThresholdAlert(techDistrict, weekLabel, globalPercent, S.u, absentNames);
+    }
+
   } else {
     t.w.splice(i, 1);
     logAction(`Quitó vacaciones a "${t.n}" (${t.o}) - Semana: ${weekLabel}`);
